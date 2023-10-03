@@ -20,7 +20,6 @@ return new class extends Migration
             $table->integer('usu_ult_mod');
             $table->timestamp('fec_reg')->useCurrent();
             $table->timestamp('fec_ult_mod')->useCurrent();
-
         });
     }
 
@@ -29,7 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rols');
         Schema::dropIfExists('rol');
     }
 };
