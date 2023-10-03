@@ -11,25 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('mascota', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-
             $table->string('nombre', 250);
-            $table->string('apellido', 250);
+            $table->string('raza', 250);
+            $table->integer('edad');
+            $table->integer('sexo');
+            $table->double('peso', 8, 2);
+            $table->string('direccion', 250);
             $table->integer('estado');
-            $table->unsignedInteger('rol_id');
+            $table->unsignedInteger('cliente_id');
             $table->integer('usu_registro');
             $table->integer('usu_ult_mod');
             $table->timestamp('fec_reg')->useCurrent();
             $table->timestamp('fec_ult_mod')->useCurrent();
 
-            $table->foreign('rol_id')->references('id')
-            ->on('rol');
+            $table->foreign('cliente_id')->references('id')
+                ->on('cliente');
         });
     }
 
@@ -38,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('mascota');
     }
 };
