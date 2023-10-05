@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="mt-5">
-            <button type="button" class="btn btn-primary px-4">Nuevo Rol</button>
+            <button type="button" class="btn btn-primary px-4">Nuevo Rol </button>
         </div>
         <div class="mt-5">
             <table class="table table-hover">

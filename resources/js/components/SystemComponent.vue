@@ -26,7 +26,7 @@
                         <td></td>
                         <td>
                             <div class="row g-1">
-                                <div class="col"> <button type="button" class="btn btn-warning w-100">Editar</button></div>
+                                <div class="col"> <button type="button" class="btn btn-warning w-100"> Editar</button></div>
                                 <div class="col"> <button type="button" class="btn btn-danger w-100">Eliminar</button></div>
                             </div>
                         </td>

@@ -17,6 +17,7 @@
                         <th scope="col">Horario de Atención</th>
                         <th scope="col">Estado</th>
                         <th>Acciones</th>
+
                     </tr>
                 </thead>
                 <tbody>
