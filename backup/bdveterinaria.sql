@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-09-2023 a las 04:54:30
+-- Tiempo de generación: 03-10-2023 a las 02:55:16
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -54,12 +54,14 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2014_10_12_000000_create_users_table', 1),
-(2, '2014_10_12_100000_create_password_reset_tokens_table', 1),
-(3, '2014_10_12_100000_create_password_resets_table', 1),
-(4, '2019_08_19_000000_create_failed_jobs_table', 1),
-(5, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(7, '2023_09_25_024402_create_rols_table', 2);
+(1, '2013_09_25_024402_create_rol_table', 1),
+(2, '2014_10_12_000000_create_users_table', 1),
+(3, '2014_10_12_100000_create_password_reset_tokens_table', 1),
+(4, '2014_10_12_100000_create_password_resets_table', 1),
+(5, '2019_08_19_000000_create_failed_jobs_table', 1),
+(6, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(7, '2023_10_02_220524_create_cliente_table', 1),
+(8, '2023_10_02_220544_create_mascota_table', 1);
 
 -- --------------------------------------------------------
 
@@ -107,40 +109,25 @@ CREATE TABLE `personal_access_tokens` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `rols`
---
-
-CREATE TABLE `rols` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `moduls` text NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `users`
 --
 
 CREATE TABLE `users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `nombre` varchar(250) NOT NULL,
+  `apellido` varchar(250) NOT NULL,
+  `estado` int(11) NOT NULL,
+  `rol_id` int(10) UNSIGNED NOT NULL,
+  `usu_registro` int(11) NOT NULL,
+  `usu_ult_mod` int(11) NOT NULL,
+  `fec_reg` timestamp NOT NULL DEFAULT current_timestamp(),
+  `fec_ult_mod` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `users`
---
-
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Elizabeth', 'eli21@gmail.com', NULL, '$2y$10$.hdBa6uTWXtqAyUw.XYyK.9EZrezBxsAMjepS1oj0cAQPWdo4P/TG', NULL, '2023-09-25 07:12:20', '2023-09-25 07:12:20');
 
 --
 -- Índices para tablas volcadas
@@ -180,17 +167,12 @@ ALTER TABLE `personal_access_tokens`
   ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
--- Indices de la tabla `rols`
---
-ALTER TABLE `rols`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD KEY `users_rol_id_foreign` (`rol_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -206,7 +188,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `personal_access_tokens`
@@ -215,16 +197,20 @@ ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `rols`
---
-ALTER TABLE `rols`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_rol_id_foreign` FOREIGN KEY (`rol_id`) REFERENCES `rol` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
