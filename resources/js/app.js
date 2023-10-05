@@ -16,7 +16,14 @@ import { createApp } from 'vue';
 const app = createApp({});
 
 import ExampleComponent from './components/ExampleComponent.vue';
+import RolesComponent from './components/RolesComponent.vue';
+import SystemComponent from './components/SystemComponent.vue';
+import VeterinariosComponent from './components/VeterinariosComponent.vue';
+
 app.component('example-component', ExampleComponent);
+app.component('roles-component', RolesComponent);
+app.component('system-component', SystemComponent);
+app.component('veterinarios-component', VeterinariosComponent);
 
 /**
  * The following block of code may be used to automatically register your
