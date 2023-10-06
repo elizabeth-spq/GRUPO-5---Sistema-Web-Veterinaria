@@ -55,7 +55,8 @@
                         @else
                             <li class="nav-item"><a href="{{ url('/roles') }}" class="nav-link">Roles</a></li>
                             <li class="nav-item"><a href="{{ url('/system') }}" class="nav-link">Usuarios del Sistema</a></li>
-                            <li class="nav-item"><a href="{{ url('/veterinarios') }}" class="nav-link">Veterinarios</a></li>
+                            <li class="nav-item"><a href="{{ url('/admin/veterinarios') }}" class="nav-link">Veterinarios</a></li>
+                            <li class="nav-item"><a href="{{ url('/admin/clientes') }}" class="nav-link">Clientes</a></li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
