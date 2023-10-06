@@ -22,14 +22,21 @@ Route::get('/roles', function () {
 Route::get('/system', function () {
     return view('admin/systems/index');
 });
-Route::get('/veterinarios', function () {
+Route::get('/admin/veterinarios', function () {
     return view('admin/veterinarios/index');
+});
+Route::get('/admin/clientes', function () {
+    return view('admin/clientes/index');
 });
 
 Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('index');
 Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'show']);
 Route::post('/users', [App\Http\Controllers\UserController::class, 'store']);
 
+Route::get('/horarios', [App\Http\Controllers\HorarioController::class, 'index'])->name('index');
+Route::post('/horarios', [App\Http\Controllers\HorarioController::class, 'store'])->name('store');
+
+Route::get('/veterinarios', [App\Http\Controllers\VeterinarioController::class, 'index'])->name('index');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

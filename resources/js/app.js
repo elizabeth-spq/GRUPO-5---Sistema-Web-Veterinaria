@@ -19,11 +19,13 @@ import ExampleComponent from './components/ExampleComponent.vue';
 import RolesComponent from './components/RolesComponent.vue';
 import SystemComponent from './components/SystemComponent.vue';
 import VeterinariosComponent from './components/VeterinariosComponent.vue';
+import ClienteComponent from './components/ClienteComponent.vue';
 
 app.component('example-component', ExampleComponent);
 app.component('roles-component', RolesComponent);
 app.component('system-component', SystemComponent);
 app.component('veterinarios-component', VeterinariosComponent);
+app.component('cliente-component', ClienteComponent);
 
 /**
  * The following block of code may be used to automatically register your
