@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/roles', function () {
+Route::get('/admin/roles', function () {
     return view('admin/roles/index');
 });
-Route::get('/system', function () {
-    return view('admin/systems/index');
+Route::get('/admin/users', function () {
+    return view('admin/users/index');
 });
 Route::get('/admin/veterinarios', function () {
     return view('admin/veterinarios/index');
@@ -30,8 +30,10 @@ Route::get('/admin/clientes', function () {
 });
 
 Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('index');
-Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'show']);
-Route::post('/users', [App\Http\Controllers\UserController::class, 'store']);
+Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('show');
+Route::post('/users', [App\Http\Controllers\UserController::class, 'store'])->name('store');
+Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('update');
+Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
 
 Route::get('/horarios', [App\Http\Controllers\HorarioController::class, 'index'])->name('index');
 Route::post('/horarios', [App\Http\Controllers\HorarioController::class, 'store'])->name('store');
@@ -42,6 +44,9 @@ Route::post('/veterinarios', [App\Http\Controllers\VeterinarioController::class,
 Route::put('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::class, 'update'])->name('update');
 Route::delete('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::class, 'destroy'])->name('destroy');
 
+Route::get('/roles', [App\Http\Controllers\RolController::class, 'index'])->name('index');
+
+
 /*Route::resource('veterinarios', App\Http\Controllers\VeterinarioController::class)->only([
     'index', 'show', 'store','update','destroy'
 ]);*/
@@ -49,3 +54,6 @@ Route::delete('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController:
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+

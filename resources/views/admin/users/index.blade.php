@@ -2,6 +2,6 @@
 
 @section('content')
     <div class="container-fluid">
-        <system-component/>
+        <users-component/>
     </div>
 @endsection

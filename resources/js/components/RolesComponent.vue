@@ -1,31 +1,20 @@
 <template>
     <div class="container">
-        <div class="mt-5">
-            <button type="button" class="btn btn-primary px-4">Nuevo Rol </button>
-        </div>
+
         <div class="mt-5">
             <table class="table table-hover">
                 <thead>
                     <tr class="table-dark">
                         <th scope="col">#</th>
                         <th scope="col">Nombre</th>
-                        <th scope="col">Modulos</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
+                        <th scope="col">Descripción</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <div class="row g-1">
-                                <div class="col"> <button type="button" class="btn btn-warning w-100">Editar</button></div>
-                                <div class="col"> <button type="button" class="btn btn-danger w-100">Eliminar</button></div>
-                            </div>
-                        </td>
+                    <tr v-for="(role, index) in roles" class="text-center align-middle">
+                        <th scope="row">{{ index + 1 }}</th>
+                        <td class="text-start">{{ role.name }}</td>
+                        <td class="text-start">{{ role.descripcion }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -33,10 +22,25 @@
     </div>
 </template>
 
-<script>
-export default {
+  <script>
+  export default {
+    data() {
+      return {
+        roles: [],
+      };
+    },
     mounted() {
-        console.log('Component mounted.')
-    }
-}
-</script>
+      this.getRoles();
+    },
+    methods: {
+      getRoles() {
+
+        this.roles = [
+          { id: 1, name: 'Administrador', descripcion: 'Es el usuario administrador del sistema.' },
+          { id: 2, name: 'Veterinario',  descripcion: 'El usuario solo tiene acceso a los modulos de usuarios, veterinaria y cliente.' },
+          { id: 3, name: 'Recepcionista',  descripcion: 'El usuario solo tiene acceso al modulo cliente.' },
+        ];
+      },
+    },
+  };
+  </script>
