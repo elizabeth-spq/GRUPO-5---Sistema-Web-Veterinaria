@@ -9,7 +9,7 @@
                     <tr class="table-dark">
                         <th scope="col">#</th>
                         <th scope="col">Usuario</th>
-                        <th scope="col">email</th>
+                        <th scope="col">Correo Electrónico</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>

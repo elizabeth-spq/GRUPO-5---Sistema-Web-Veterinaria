@@ -44,6 +44,9 @@ Route::post('/veterinarios', [App\Http\Controllers\VeterinarioController::class,
 Route::put('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::class, 'update'])->name('update');
 Route::delete('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::class, 'destroy'])->name('destroy');
 
+Route::get('/roles', [App\Http\Controllers\RolController::class, 'index'])->name('index');
+
+
 /*Route::resource('veterinarios', App\Http\Controllers\VeterinarioController::class)->only([
     'index', 'show', 'store','update','destroy'
 ]);*/
@@ -51,3 +54,6 @@ Route::delete('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController:
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+
