@@ -26,7 +26,7 @@
                         <td class="text-start">{{ veterinario.nombre }}</td>
                         <td class="text-start">{{ veterinario.apellido }}</td>
                         <td>
-                            <input type="datetime" disabled v-model="veterinario.fec_nac">
+                            <input type="datetime-local" disabled v-model="veterinario.fec_nac">
                         </td>
                         <td>
                             <span v-if="veterinario.tip_doc == 1">DNI</span>
