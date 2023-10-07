@@ -7,11 +7,18 @@ use Illuminate\Http\Request;
 
 class VeterinarioController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $veterinario = Veterinario::all();
+        $veterinario = Veterinario::whereIn('estado',[1,2])->get();
         return response()->json($veterinario);
     }
+
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $veterinario = new Veterinario();
@@ -28,8 +35,24 @@ class VeterinarioController extends Controller
         $veterinario->usu_ult_mod = $request->usu_ult_mod;
 
         $veterinario->save();
+
+        return response()->json($veterinario);
     }
-    public function update(Request $request, $id)
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $veterinario = Veterinario::find($id);
+
+        return response()->json($veterinario);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
     {
         $veterinario = Veterinario::find($id);
         $veterinario->nombre=$request->nombre;
@@ -42,6 +65,33 @@ class VeterinarioController extends Controller
         $veterinario->estado = $request->estado;
         $veterinario->horario_id = $request->horario_id;
 
-        $veterinario->save();
+        if( $veterinario->save()){
+            $message = "El registro ha sido actualizado";
+        }else {
+            $message = "El registro no ha sido actualizado";
+        }
+
+        $response = [
+            'message' => $message
+        ];
+
+        return response()->json($response);
     }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $veterinario = Veterinario::find($id);
+        $veterinario->estado =  3;
+        $veterinario->save();
+
+        $response = [
+            'message' => "El registro ha sido eliminado"
+        ];
+
+        return response()->json($response);
+    }
+
 }
