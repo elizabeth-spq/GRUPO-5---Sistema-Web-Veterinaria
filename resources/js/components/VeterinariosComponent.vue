@@ -198,10 +198,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" v-if="veterinario.id > 0"
-                        @click="guardarVeterinario()">Guardar registro</button>
-                    <button type="button" class="btn btn-primary" v-else
+                    <button type="button" class="btn btn-primary"  v-if="veterinario.id > 0"
                         @click="actualizarVeterinario(veterinario.id)">Actualizar registro</button>
+                    <button type="button" class="btn btn-primary" v-else
+                        @click="guardarVeterinario()">Guardar registro</button>
 
                 </div>
             </div>
@@ -235,7 +235,7 @@ export default {
             usu_ult_mod: 0,
         })
         function actualizarVeterinario(Id) {
-
+            console.log(veterinario)
             fetch("http://127.0.0.1:8000/veterinarios/" + Id, {
                 method: "PUT",
                 headers: {

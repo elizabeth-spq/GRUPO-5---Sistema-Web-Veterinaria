@@ -37,8 +37,14 @@ Route::get('/horarios', [App\Http\Controllers\HorarioController::class, 'index']
 Route::post('/horarios', [App\Http\Controllers\HorarioController::class, 'store'])->name('store');
 
 Route::get('/veterinarios', [App\Http\Controllers\VeterinarioController::class, 'index'])->name('index');
+Route::get('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::class, 'show'])->name('show');
 Route::post('/veterinarios', [App\Http\Controllers\VeterinarioController::class, 'store'])->name('store');
 Route::put('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::class, 'update'])->name('update');
+Route::delete('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::class, 'destroy'])->name('destroy');
+
+/*Route::resource('veterinarios', App\Http\Controllers\VeterinarioController::class)->only([
+    'index', 'show', 'store','update','destroy'
+]);*/
 
 Auth::routes();
 
