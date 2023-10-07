@@ -65,7 +65,8 @@
                             <div class="row g-1">
                                 <div class="col"> <button type="button" class="btn btn-warning w-100"
                                         @click="editarVeterinario(veterinario)">Editar</button></div>
-                                <div class="col"> <button type="button" class="btn btn-danger w-100">Eliminar</button></div>
+                                <div class="col"> <button type="button" class="btn btn-danger w-100"
+                                        @click="eliminarVeterinario(veterinario.id)">Eliminar</button></div>
                             </div>
                         </td>
                     </tr>
@@ -198,11 +199,30 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary"  v-if="veterinario.id > 0"
+                    <button type="button" class="btn btn-primary" v-if="veterinario.id > 0"
                         @click="actualizarVeterinario(veterinario.id)">Actualizar registro</button>
-                    <button type="button" class="btn btn-primary" v-else
-                        @click="guardarVeterinario()">Guardar registro</button>
+                    <button type="button" class="btn btn-primary" v-else @click="guardarVeterinario()">Guardar
+                        registro</button>
 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" id="mdl-delete">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Eliminar veterinario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body align-self-center">
+                    <span class="text-center text-danger">Esta acción NO se puede REVERTIR</span> <br>
+                    <span class="text-center">¿Esta seguro de eliminar este registro?</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="eliminarRegistro(veterinario.id)">Eliminar
+                        registro</button>
                 </div>
             </div>
         </div>
@@ -218,6 +238,9 @@ export default {
         const error_message = ref("")
         const modal_vet = reactive({
             mdl_vet: null,
+        })
+        const modal_delete = reactive({
+            mdl_delete: null,
         })
         const veterinarios = ref([])
         const veterinario = reactive({
@@ -278,6 +301,9 @@ export default {
             modal_vet.mdl_vet.hide()
             cleanForm()
         }
+        function closeModalDelete() {
+            modal_delete.mdl_delete.hide()
+        }
         function editarVeterinario(veterinario_tabla) {
             cleanForm()
             veterinario.id = veterinario_tabla.id
@@ -291,6 +317,33 @@ export default {
             veterinario.estado = veterinario_tabla.estado
             veterinario.horario_id = veterinario_tabla.horario_id
             openModal()
+        }
+        function eliminarVeterinario(Id) {
+            veterinario.id = Id
+            openModalDetele()
+        }
+        function eliminarRegistro(Id) {
+            fetch("http://127.0.0.1:8000/veterinarios/" + Id, {
+                method: "DELETE",
+                headers: {
+                    Accept: "Application/json",
+                    "Content-Type": "application/json",
+                },
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    getVerinarios();
+                    closeModalDelete()
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
         }
         function getVerinarios() {
             fetch("http://127.0.0.1:8000/veterinarios", {
@@ -343,16 +396,22 @@ export default {
         function openModal() {
             modal_vet.mdl_vet.show()
         }
+        function openModalDetele() {
+            modal_delete.mdl_delete.show()
+        }
 
 
         return {
             error_message,
             modal_vet,
+            modal_delete,
             veterinario,
             veterinarios,
             actualizarVeterinario,
             nuevoVeterinario,
             editarVeterinario,
+            eliminarVeterinario,
+            eliminarRegistro,
             getVerinarios,
             guardarVeterinario
         }
@@ -360,11 +419,8 @@ export default {
     mounted() {
         console.log('Component mounted.')
         this.getVerinarios();
-        /*const myModal = new bootstrap.Modal(
-          document.getElementById("mdl-veterinario")
-        );*/
         this.modal_vet.mdl_vet = new bootstrap.Modal('#mdl-veterinario', {})
-
+        this.modal_delete.mdl_delete = new bootstrap.Modal('#mdl-delete', {})
     }
 }
 </script>
