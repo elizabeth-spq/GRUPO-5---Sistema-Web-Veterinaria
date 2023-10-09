@@ -2,78 +2,86 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $user = User::all();
+        $user = User::with('roles')->get();
+        //return response()->json(['users' => $user]);
         return response()->json($user);
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $user = new User();
-        $user->name=$request->name;
-        $user->email=$request->email;
-        $user->save();
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
+            'roles' => 'required|array',
+        ]);
 
-        return response()->json($user);
-    }
+        try {
+            $user = new User([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+            ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $user = user::find($id);
+            $user->save();
 
-        return response()->json($user);
-    }
+            $user->syncRoles($request->input('roles'));
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $user = User::find($id);
-        $user->name=$request->name;
-        $user->email=$request->email;
-
-        if( $user->save()){
-            $message = "El registro ha sido actualizado";
-        }else {
-            $message = "El registro no ha sido actualizado";
+            return response()->json(['message' => 'User created successfully'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'User creation failed', 'error' => $e->getMessage()], 500);
         }
-
-        $response = [
-            'message' => $message
-        ];
-
-        return response()->json($response);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function update(Request $request, User $user)
     {
-        $user = User::find($id);
-        $user->estado =  3;
-        $user->save();
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($user->id),
+            ],
+            'password' => 'nullable|string|min:8',
+            'roles' => 'required|array',
+        ]);
 
-        $response = [
-            'message' => "El registro ha sido eliminado"
-        ];
+        try {
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
 
-        return response()->json($response);
+            if ($request->has('password')) {
+                $user->password = Hash::make($request->input('password'));
+            }
+
+            $user->save();
+
+            $user->syncRoles($request->input('roles'));
+
+            return response()->json(['message' => 'User updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'User update failed', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function destroy(User $user)
+    {
+        try {
+            $user->delete();
+            return response()->json(['message' => 'User deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'User deletion failed', 'error' => $e->getMessage()], 500);
+        }
     }
 }

@@ -45,6 +45,7 @@ Route::put('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::cl
 Route::delete('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::class, 'destroy'])->name('destroy');
 
 Route::get('/roles', [App\Http\Controllers\RolController::class, 'index'])->name('index');
+Route::post('/roles', [App\Http\Controllers\RolController::class, 'store'])->name('store');
 
 
 /*Route::resource('veterinarios', App\Http\Controllers\VeterinarioController::class)->only([

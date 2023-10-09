@@ -3,6 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\RolController;
+
+Route::middleware('auth:api')->get('/roles', [RolController::class, 'index']);
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
