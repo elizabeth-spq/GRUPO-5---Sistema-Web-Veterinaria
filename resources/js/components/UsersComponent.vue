@@ -8,20 +8,23 @@
           <thead>
             <tr class="table-dark">
               <th scope="col">#</th>
-              <th scope="col">Usuario</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Apellidos</th>
               <th scope="col">Correo Electrónico</th>
               <th scope="col">Rol</th>
               <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(user, index) in users" :key="user.id" class="text-center align-middle">
+            <tr v-for="(user, index) in users">
               <th scope="row">{{ index + 1 }}</th>
-              <td class="text-start">{{ user.name }}</td>
-              <td class="text-start">{{ user.email }}</td>
-              <!-- <td> {{ user.role ? user.role.name : 'Sin Rol' }}</td> Mostramos el rol o 'Sin Rol' si no tiene uno -->
+              <td>{{ user.name }}</td>
+              <td>{{ user.apellido }}</td>
+              <td>{{ user.email }}</td> 
               <td>
-                <span v-for="role in user.roles" :key="role.id">{{ role.name }}</span>
+                  <span v-if="user.rol_id==1">administrador</span>
+                  <span v-if="user.rol_id==2">veterinario</span>
+                  <span v-if="user.rol_id==3">recepcionista</span>
               </td>
               <td>
                 <div class="row g-1">
@@ -55,35 +58,57 @@
                                     aria-describedby="requiredNombre" v-model="user.name">
                                 <label class="ms-2" for="floatingInput">Nombre *</label>
                                 <div id="requiredNombre" class="form-text text-danger" v-if="user.name == ''">
-                                    Obligtorio, ejemplo: Ana Lucía
+                                    Obligtorio
                                 </div>
                             </div>
                             <div class="col-12 form-floating mb-3">
-                                <input type="text" class="form-control" id="email" placeholder="Correo *"
+                                <input type="text" class="form-control" id="apellido" placeholder="Apellido *"
+                                    aria-describedby="requiredApellido" v-model="user.apellido">
+                                <label class="ms-2" for="floatingInput">Apellido *</label>
+                                <div id="requiredApellido" class="form-text text-danger" v-if="user.apellido == ''">
+                                    Obligtorio
+                                </div>
+                            </div>
+                            <div class="col-12 form-floating mb-3">
+                                <input type="email" class="form-control" id="email" placeholder="Correo *"
                                     aria-describedby="requiredEmail" v-model="user.email">
                                 <label class="ms-2" for="floatingInput">Email *</label>
                                 <div id="requiredEmail" class="form-text text-danger" v-if="user.email== ''">
-                                    Obligtorio, ejemplo: López Rojas
+                                    Obligtorio
+                                </div>
+                            </div>
+                            <div class="col-12 form-floating mb-3">
+                                <input type="password" class="form-control" id="password" placeholder="Contraseña *"
+                                    aria-describedby="requiredPassword" v-model="user.password">
+                                <label class="ms-2" for="floatingInput">Cambiar Contraseña *</label>
+                                <div id="requiredPassword" class="form-text text-danger" v-if="user.password== ''">
+                                    Obligtorio
+                                </div>
+                            </div>
+                            <div class="col-12 form-floating mb-3">
+                                <input type="password" class="form-control" id="password" placeholder="Contraseña *"
+                                    aria-describedby="requiredPassword" v-model="user.password">
+                                <label class="ms-2" for="floatingInput">Repita su nueva Contraseña *</label>
+                                <div id="requiredPassword" class="form-text text-danger" v-if="user.password_confirmation== ''">
+                                    Obligtorio
                                 </div>
                             </div>
                             <div class=" form-floating col-12">
                                 <select class="form-select" id="id" aria-label="Floating label select example"
-                                    aria-describedby="requiredRol" v-model="roles.name">
+                                    aria-describedby="requiredRol" v-model="user.rol_id">
                                     <option value="0" selected disabled>Seleccione ...</option>
-                                    <option value="1">administrador</option>
                                     <option value="2">veterinario</option>
                                     <option value="3">recepcionista</option>
                                 </select>
-                                <label for="id" class="ms-2">Rol *</label>
+                                <label for="rol" class="ms-2">Rol *</label>
                                 <div id="requiredRol" class="form-text text-danger"
-                                    v-if="roles.name == 0">
+                                    v-if="user.name == 0">
                                     Obligtorio
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary"  v-if="user.id > 0"
@@ -94,6 +119,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal" tabindex="-1" id="mdl-delete">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -116,203 +142,189 @@
 </template>
 
 <script>
-  import { ref, reactive, onMounted } from 'vue';
-  import * as bootstrap from 'bootstrap';
-
-  export default {
+import { ref, reactive } from 'vue';
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap;
+export default {
     setup() {
-      const modalUser = ref(null);
-      const modalDelete = ref(null);
-
-      const error_message = ref("");
-      const users = ref([]);
-      const user = reactive({
-        id: 0,
-        name: "",
-        email: "",
-        role_id: 0, // Agregamos un campo para el rol
-      });
-
-      const roles = ref([]);
-      const role = ref({
-        id: 0,
-        name: "",
-      });
-
-      function actualizarUsuario() {
-      fetch(`/api/usuarios/${user.id}`, {
-        method: "PUT",
-        headers: {
-          Accept: "Application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      })
-        .then(async (response) => {
-          if (!response.ok) {
-            const data = await response.json();
-            const error = data && data.detail ? data.detail : response.statusText;
-            return Promise.reject(error);
-          }
-          // Actualizamos el usuario en la lista
-          const updatedUserIndex = users.value.findIndex((u) => u.id === user.id);
-          if (updatedUserIndex !== -1) {
-            users.value[updatedUserIndex] = {
-              ...user,
-              role: roles.value.find((r) => r.id === user.role_id),
-            };
-          }
-          closeModal();
-        })
-        .catch((error) => {
-          error_message.value = error;
-          console.error("Hubo un error al actualizar el usuario.", error);
-        });
-    }
-
-      function cleanForm() {
-        user.id = 0;
-        user.name = "";
-        user.email = "";
-        user.role_id = 0; // Limpiamos el campo de rol
-      }
-
-      function closeModal() {
-        modalUser.value.hide();
-        cleanForm();
-      }
-
-      function closeModalDelete() {
-        modalDelete.value.hide();
-      }
-
-      function editarUsuario(selectedUser) {
-        user.id = selectedUser.id;
-        user.name = selectedUser.name;
-        user.email = selectedUser.email;
-        user.role_id = selectedUser.role_id; // Asignamos el rol del usuario
-        modalUser.value.show();
-      }
-
-      function eliminarUsuario(userId) {
-        user.id = userId;
-        modalDelete.value.show();
-      }
-
-      function eliminarRegistro(userId) {
-      fetch(`/api/usuarios/${userId}`, {
-        method: "DELETE",
-        headers: {
-          Accept: "Application/json",
-          "Content-Type": "application/json",
-        },
-      })
-        .then(async (response) => {
-          if (!response.ok) {
-            const data = await response.json();
-            const error = data && data.detail ? data.detail : response.statusText;
-            return Promise.reject(error);
-          }
-          // Eliminamos el usuario de la lista
-          users.value = users.value.filter((u) => u.id !== userId);
-          closeModalDelete();
-        })
-        .catch((error) => {
-          error_message.value = error;
-          console.error("Hubo un error al eliminar el usuario.", error);
-        });
-    }
-
-      function getUsers() {
-        fetch("http://127.0.0.1:8000/users", {
-          method: "GET",
-        })
-          .then(async (response) => {
-            const data = await response.json();
-            if (!response.ok) {
-              const error = data && data.detail ? data.detail : response.statusText;
-              return Promise.reject(error);
-            }
-            users.value = data;
+      const error_message = ref("")
+          const modal_usu = reactive({
+              mdl_usu: null,
           })
-          .catch((error) => {
-            error_message.value = error;
-            console.error("Hubo un error al obtener la lista de usuarios.", error);
-          });
-
-        fetch("http://127.0.0.1:8000/roles", {
-          method: "GET",
-        })
-          .then(async (response) => {
-            const data = await response.json();
-            if (!response.ok) {
-              const error = data && data.detail ? data.detail : response.statusText;
-              return Promise.reject(error);
-            }
-            roles.value = data;
+          const modal_delete = reactive({
+              mdl_delete: null,
           })
-          .catch((error) => {
-            error_message.value = error;
-            console.error("Hubo un error al obtener la lista de roles.", error);
-          });
-      }
+            const users = ref([])
+            const user = reactive({
+                id: 0,
+                name: "",
+                apellido: "",
+                email: "",
+                password: '',
+                password_confirmation: '',
+                rol_id: 0            
+            })
 
-      function guardarUsuario() {
-        fetch("http://127.0.0.1:8000/users", {
-          method: "POST",
-          headers: {
-            Accept: "Application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        })
-          .then(async (response) => {
-            if (!response.ok) {
-              const data = await response.json();
-              const error = data && data.detail ? data.detail : response.statusText;
-              return Promise.reject(error);
-            }
-            getUsers();
+            function actualizarUsuario(Id) {
+            //console.log(usuario)
+            fetch("http://127.0.0.1:8000/users/" + Id, {
+                method: "PUT",
+                headers: {
+                    Accept: "Application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(user),
+            })
+                .then(async (response) => {
+                    //const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            "error"
+                        return Promise.reject(error);
+                    }
+
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+            obtenerUsuario();
             closeModal();
-          })
-          .catch((error) => {
-            error_message.value = error;
-            console.error("Hubo un error al guardar el usuario.", error);
-          });
-      }
+        }
+        function cleanForm() {
+                user.id = 0
+                user.name = ""
+                user.apellido = ""
+                user.email = ""
+                user.password = '',
+                user.password_confirmation = '',
+                user.rol_id = 0   
+        }
+        function closeModal() {
+            modal_usu.mdl_usu.hide()
+            cleanForm()
+        }
+        function closeModalDelete() {
+            modal_delete.mdl_delete.hide()
+        }
+        function editarUsuario(user_tabla) {
+            cleanForm()
+            user.id = user_tabla.id
+            user.name = user_tabla.name
+            user.apellido = user_tabla.apellido
+            user.email = user_tabla.email
+            user.password = user_tabla.password
+            user.password_confirmation = user_tabla.password_confirmation
+            user.rol_id = user_tabla.rol_id
+            openModal()
+        }
+        function eliminarUsuario(Id) {
+            user.id = Id
+            openModalDetele()
+        }
+        function eliminarRegistro(Id) {
+            fetch("http://127.0.0.1:8000/users/" + Id, {
+                method: "DELETE",
+                headers: {
+                    Accept: "Application/json",
+                    "Content-Type": "application/json",
+                },
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    obtenerUsuario();
+                    closeModalDelete()
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    //console.error("There was an error!", error);
+                });
+        }
 
-      function nuevoUsuario() {
-        cleanForm();
-        modalUser.value.show();
-      }
+            function obtenerUsuario() {
+                fetch("http://127.0.0.1:8000/users", {
+                method: "GET",
+                })
+                    .then(async (response) => {
+                        const data = await response.json();
+                        if (!response.ok) {
+                            const error =
+                                data && data.detail ? data.detail : response.statusText;
+                            return Promise.reject(error);
+                        }
+                        //console.log(data)
+                        users.value = data;
+                    })
+                    .catch((error) => {
+                        error_message.value = error;
+                        console.error("There was an error!", error);
+                    });
+            }
 
-      // Inicializar modales
-      onMounted(() => {
-        modalUser.value = new bootstrap.Modal('#mdl-user', {});
-        modalDelete.value = new bootstrap.Modal('#mdl-delete', {});
-      });
+            function guardarUsuario() {
+            fetch("http://127.0.0.1:8000/users", {
+                method: "POST",
+                headers: {
+                    Accept: "Application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(user),
+            })
+                .then(async (response) => {
+                    if (!response.ok) {
+                        const error =
+                            "error";
+                        return Promise.reject(error);
+                    }
 
-      // Cargar la lista de usuarios y roles al montar el componente
-      getUsers();
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
 
-      return {
-        error_message,
-        user,
-        users,
-        roles,
-        actualizarUsuario,
-        nuevoUsuario,
-        editarUsuario,
-        eliminarUsuario,
-        eliminarRegistro,
-        getUsers,
-        guardarUsuario,
-        cleanForm,
-        closeModal,
-        closeModalDelete,
-      };
-    },
-  };
-  </script>
+            obtenerUsuario();
+            closeModal();
+        }
+        function nuevoUsuario() {
+            cleanForm()
+            openModal()
+        }
+        function openModal() {
+            modal_usu.mdl_usu.show()
+        }
+        function openModalDetele() {
+            modal_delete.mdl_delete.show()
+        }
+
+            return{
+                error_message,
+                modal_usu,
+                modal_delete,
+                user,
+                users,
+
+                actualizarUsuario,
+                nuevoUsuario,
+                editarUsuario,
+                eliminarUsuario,
+                eliminarRegistro,
+                obtenerUsuario,
+                guardarUsuario
+            }
+        },
+        mounted() {
+        //console.log('Component mounted.')
+        this.obtenerUsuario();
+        this.modal_usu.mdl_usu = new bootstrap.Modal('#mdl-user', {})
+        this.modal_delete.mdl_delete = new bootstrap.Modal('#mdl-delete', {})
+    }      
+}
+</script>
 
 

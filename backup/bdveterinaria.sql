@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-10-2023 a las 17:30:59
+-- Tiempo de generación: 12-10-2023 a las 00:36:08
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -252,6 +252,15 @@ CREATE TABLE `roles` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `roles`
+--
+
+INSERT INTO `roles` (`id`, `nombre`, `modulos`, `estado`, `usu_registro`, `usu_ult_mod`, `created_at`, `updated_at`) VALUES
+(1, 'administrador', 'todos', 1, NULL, NULL, '2023-10-11 21:18:18', '2023-10-11 21:18:18'),
+(2, 'veterinario', 'modulos_veterinario', 1, NULL, NULL, '2023-10-11 21:18:18', '2023-10-11 21:18:18'),
+(3, 'recepcionista', 'modulos_recepcionista', 1, NULL, NULL, '2023-10-11 21:18:18', '2023-10-11 21:18:18');
+
 -- --------------------------------------------------------
 
 --
@@ -273,6 +282,16 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `apellido`, `estado`, `rol_id`, `usu_registro`, `usu_ult_mod`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(2, 'docVet', 'Ruiz Caro', 0, 2, NULL, NULL, 'vetRuizCarog@gmail.com', NULL, '$2y$10$PanJ0SHeANnFrNbEcikK.OU4ouXYxznzQBY/lO8wZyM4bADTSYhc.', NULL, '2023-10-11 21:57:47', '2023-10-11 21:57:47'),
+(3, 'admin', 'admin', 0, 1, NULL, NULL, 'admin@gmail.com', NULL, '$2y$10$QfwQBfD47UJphRlsEf9Oxe1mnP9bW5X0fzdYkuXGnB02AsaeTG3Ni', NULL, '2023-10-11 21:59:41', '2023-10-11 21:59:41'),
+(4, 'usuario01', 'prueba', 3, 1, NULL, NULL, 'upuebra01@gmail.com', NULL, '$2y$10$zlbcs1JPhWUWvWNT9Q5rg.ldYeJgV.RfHpq7E8KwSK6v9.JC8zceC', NULL, '2023-10-11 23:27:27', '2023-10-12 03:15:29'),
+(5, 'usuario02', 'prueba', 0, 3, NULL, NULL, 'uPrueba02@gmail.com', NULL, '$2y$10$Z2fOWt1lQZvPsVEEcadEG.jLe8QrH6gKwK3SR6tQsIq5BZphskX/q', NULL, '2023-10-12 03:33:43', '2023-10-12 03:33:43');
 
 -- --------------------------------------------------------
 
@@ -445,13 +464,13 @@ ALTER TABLE `razas`
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `veterinarios`
