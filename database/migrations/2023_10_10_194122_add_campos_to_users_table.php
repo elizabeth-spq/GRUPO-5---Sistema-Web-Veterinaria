@@ -11,21 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cliente', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('nombre', 250);
+        Schema::table('users', function (Blueprint $table) {
             $table->string('apellido', 250);
-            $table->string('documento',15);
-            $table->string('telefono', 11);
-            $table->string('direccion', 250);
-            $table->string('email', 250);
             $table->integer('estado');
+            $table->unsignedInteger('rol_id');
             $table->integer('usu_registro');
             $table->integer('usu_ult_mod');
-            $table->timestamp('fec_reg')->useCurrent();
-            $table->timestamp('fec_ult_mod')->useCurrent();
 
-
+            $table->foreign('rol_id')->references('id')->on('rol');
         });
     }
 
@@ -34,6 +27,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cliente');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['apellido', 'estado', 'rol_id', 'usu_registro', 'usu_ult_mod']);
+            $table->dropForeign(['rol_id']);
+        });
     }
 };

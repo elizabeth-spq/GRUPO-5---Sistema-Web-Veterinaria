@@ -1,0 +1,203 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Veterinaria",
+    "dateExported": "2023-10-11T01:21:31.136Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "cca5bf6f-5dba-485e-8957-d2ce2bd73abc",
+            "name": "Horario",
+            "containerId": "",
+            "created": "2023-10-05T22:38:43.796Z",
+            "sortNum": 20000
+        },
+        {
+            "_id": "090bed16-8527-4003-9fd1-3dbc1f9eb7ed",
+            "name": "veterinario",
+            "containerId": "",
+            "created": "2023-10-05T23:24:08.442Z",
+            "sortNum": 30000
+        },
+        {
+            "_id": "9497c9ad-0be3-47b0-bdeb-dd5c9adb82c1",
+            "name": "clientes",
+            "containerId": "",
+            "created": "2023-10-10T21:13:23.464Z",
+            "sortNum": 40000
+        },
+        {
+            "_id": "5cded89a-b222-480f-bf62-3f88c4b4d437",
+            "name": "mascotas",
+            "containerId": "",
+            "created": "2023-10-11T01:01:10.631Z",
+            "sortNum": 50000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "42def738-b6e9-4361-93c4-e0d9237c1208",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "9497c9ad-0be3-47b0-bdeb-dd5c9adb82c1",
+            "name": "Mostrar clientes",
+            "url": "http://127.0.0.1:8000/clientes",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-10-10T21:13:29.031Z",
+            "modified": "2023-10-10T21:21:55.488Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "c169c3b0-1501-4ed0-b6d1-e301f8626af1",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "5cded89a-b222-480f-bf62-3f88c4b4d437",
+            "name": "Mostrar mascotas",
+            "url": "http://127.0.0.1:8000/mascotas",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-10-11T01:01:22.185Z",
+            "modified": "2023-10-11T01:01:48.213Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "2d3be7b3-ca12-4345-aadc-cdf5ee8b06a3",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "9497c9ad-0be3-47b0-bdeb-dd5c9adb82c1",
+            "name": "Obtener cliente por id",
+            "url": "http://127.0.0.1:8000/clientes/1",
+            "method": "GET",
+            "sortNum": 15000,
+            "created": "2023-10-10T21:46:40.284Z",
+            "modified": "2023-10-10T22:04:48.461Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "92072e0e-e3c6-49ee-a450-bf70add931bb",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "cca5bf6f-5dba-485e-8957-d2ce2bd73abc",
+            "name": "Crear Horario",
+            "url": "http://127.0.0.1:8000/horarios",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-10-05T22:39:06.194Z",
+            "modified": "2023-10-05T22:52:18.913Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{ \n   \"jornada\" :\"Completa\", \n   \"turno\": 0, \n   \"horas\": 8\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "0492313e-384b-4e26-ba79-3d636dbd2051",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "9497c9ad-0be3-47b0-bdeb-dd5c9adb82c1",
+            "name": "Crear clientes",
+            "url": "http://127.0.0.1:8000/clientes",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-10-10T21:22:12.676Z",
+            "modified": "2023-10-10T23:02:34.330Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{ \n    \"nombre\": \"Juan\",\n    \"apellido\": \"Perez\",\n    \"tip_doc\": 1,\n    \"documento\": \"55555555\",\n    \"telefono\": \"947511255\",\n    \"direccion\": \"Av. Las Palmeras\",\n    \"email\": \"juan@gmail.com\",\n    \"estado\": 0,\n    \"usu_registro\": 1,\n    \"usu_ult_mod\": 1\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "5907f093-4d85-4cc1-bd44-7a1a530ab963",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "090bed16-8527-4003-9fd1-3dbc1f9eb7ed",
+            "name": "get veterinario",
+            "url": "http://127.0.0.1:8000/api/veterinarios",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2023-10-05T23:24:19.155Z",
+            "modified": "2023-10-06T21:17:28.442Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "8dc729ea-d64d-41f3-88b5-5fb62f38df39",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "9497c9ad-0be3-47b0-bdeb-dd5c9adb82c1",
+            "name": "Actualizar Clientes",
+            "url": "http://127.0.0.1:8000/clientes/1",
+            "method": "PUT",
+            "sortNum": 30000,
+            "created": "2023-10-10T21:35:51.085Z",
+            "modified": "2023-10-10T22:53:46.577Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{ \n    \"nombre\": \"Maggi Carol\",\n    \"apellido\": \"Green\",\n    \"tip_doc\": 1,\n    \"documento\": \"1111111\",\n    \"telefono\": \"947511255\",\n    \"direccion\": \"Av. Las Flores\",\n    \"email\": \"maggi@gmail.com\",\n    \"estado\": 1\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "45217af1-0861-460c-a84b-ccd244a312ce",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "090bed16-8527-4003-9fd1-3dbc1f9eb7ed",
+            "name": "Crear veterinario",
+            "url": "http://127.0.0.1:8000/veterinarios",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2023-10-06T04:25:56.187Z",
+            "modified": "2023-10-07T04:38:08.373Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{ \n    \"nombre\": \"Naruto\",\n    \"apellido\": \"Uzumaki\",\n    \"fec_nac\": \"2000-10-05 18:18:01\",\n    \"tip_doc\": 1,\n    \"documento\": \"11445555\",\n    \"num_telefono\": \"947511255\",\n    \"especialidad\": 2,\n    \"estado\": 1,\n    \"horario_id\": 1,\n    \"usu_registro\": 1,\n    \"usu_ult_mod\": 1\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "a3b2fdea-6aef-4c8c-816f-2a64ba5cd16d",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "9497c9ad-0be3-47b0-bdeb-dd5c9adb82c1",
+            "name": "Eliminar Clientes",
+            "url": "http://127.0.0.1:8000/clientes/1",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2023-10-10T21:42:27.981Z",
+            "modified": "2023-10-10T21:43:15.371Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "ef5b78f6-82b7-4a94-a7eb-96a50829fe8e",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "090bed16-8527-4003-9fd1-3dbc1f9eb7ed",
+            "name": "Actualizar Veterinario",
+            "url": "http://127.0.0.1:8000/veterinarios/1",
+            "method": "PUT",
+            "sortNum": 50000,
+            "created": "2023-10-06T05:18:02.648Z",
+            "modified": "2023-10-07T02:42:17.901Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{ \n    \"nombre\": \"Román Bonifacio\",\n    \"apellido\": \"García Cueva\",\n    \"fec_nac\": \"2000-10-01 18:18:01\",\n    \"tip_doc\": 1,\n    \"documento\": \"11445510\",\n    \"num_telefono\": \"947511205\",\n    \"especialidad\": 1,\n    \"estado\": 1,\n    \"horario_id\": 1\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}

@@ -407,6 +407,7 @@ export default {
             modal_delete,
             veterinario,
             veterinarios,
+
             actualizarVeterinario,
             nuevoVeterinario,
             editarVeterinario,
@@ -414,6 +415,7 @@ export default {
             eliminarRegistro,
             getVerinarios,
             guardarVeterinario
+
         }
     },
     mounted() {
