@@ -12,7 +12,7 @@ class VeterinarioController extends Controller
      */
     public function index()
     {
-        $veterinario = Veterinario::whereIn('estado',[1,2])->get();
+        $veterinario = Veterinario::whereIn('estado',[0,1])->get();
         return response()->json($veterinario);
     }
 

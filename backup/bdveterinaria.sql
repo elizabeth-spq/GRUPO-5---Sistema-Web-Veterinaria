@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-10-2023 a las 03:50:35
+-- Tiempo de generación: 11-10-2023 a las 03:15:55
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -24,23 +24,55 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cliente`
+-- Estructura de tabla para la tabla `animales`
 --
 
-CREATE TABLE `cliente` (
+CREATE TABLE `animales` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `nombre` varchar(250) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `animales`
+--
+
+INSERT INTO `animales` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
+(1, 'Perro', '2023-10-11 01:05:56', '2023-10-11 01:05:56'),
+(2, 'Gato', '2023-10-11 01:06:54', '2023-10-11 01:06:54'),
+(3, 'Conejo', '2023-10-11 01:06:54', '2023-10-11 01:06:54');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `clientes`
+--
+
+CREATE TABLE `clientes` (
   `id` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(250) NOT NULL,
   `apellido` varchar(250) NOT NULL,
+  `tip_doc` int(11) NOT NULL,
   `documento` varchar(15) NOT NULL,
   `telefono` varchar(11) NOT NULL,
-  `direccion` varchar(250) NOT NULL,
-  `email` varchar(250) NOT NULL,
-  `estado` int(11) NOT NULL,
-  `usu_registro` int(11) NOT NULL,
-  `usu_ult_mod` int(11) NOT NULL,
-  `fec_reg` timestamp NOT NULL DEFAULT current_timestamp(),
-  `fec_ult_mod` timestamp NOT NULL DEFAULT current_timestamp()
+  `direccion` varchar(250) NOT NULL DEFAULT '',
+  `email` varchar(250) NOT NULL DEFAULT '',
+  `estado` int(11) NOT NULL DEFAULT 0,
+  `usu_registro` int(11) DEFAULT NULL,
+  `usu_ult_mod` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `clientes`
+--
+
+INSERT INTO `clientes` (`id`, `nombre`, `apellido`, `tip_doc`, `documento`, `telefono`, `direccion`, `email`, `estado`, `usu_registro`, `usu_ult_mod`, `created_at`, `updated_at`) VALUES
+(1, 'Maggi Carol', 'Green', 1, '1111111', '947511255', 'Av. Las Flores', 'maggi@gmail.com', 3, 1, 1, '2023-10-11 03:50:25', '2023-10-11 03:55:42'),
+(2, 'Juan', 'Rojas', 1, '44444444', '947511255', 'Av. Las Palmeras', 'juan@gmail.com', 1, 1, 1, '2023-10-11 03:51:29', '2023-10-11 03:51:29'),
+(3, 'Juan', 'Perez', 1, '55555555', '947511255', 'Av. Las Palmeras', 'juan@gmail.com', 0, 1, 1, '2023-10-11 04:02:34', '2023-10-11 04:02:34');
 
 -- --------------------------------------------------------
 
@@ -73,36 +105,39 @@ CREATE TABLE `horarios` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Volcado de datos para la tabla `horarios`
---
-
-INSERT INTO `horarios` (`id`, `jornada`, `turno`, `horas`, `created_at`, `updated_at`) VALUES
-(1, 'Completa', 0, 8, '2023-10-05 23:11:36', '2023-10-05 23:11:36'),
-(3, 'Parcial/M', 1, 5, '2023-10-06 04:32:49', '2023-10-06 04:32:49'),
-(4, 'Parcial/T', 2, 5, '2023-10-06 05:48:20', '2023-10-06 05:48:20');
-
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `mascota`
+-- Estructura de tabla para la tabla `mascotas`
 --
 
-CREATE TABLE `mascota` (
+CREATE TABLE `mascotas` (
   `id` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(250) NOT NULL,
-  `raza` varchar(250) NOT NULL,
-  `edad` int(11) NOT NULL,
-  `sexo` int(11) NOT NULL,
-  `peso` double(8,2) NOT NULL,
-  `direccion` varchar(250) NOT NULL,
-  `estado` int(11) NOT NULL,
   `cliente_id` int(10) UNSIGNED NOT NULL,
-  `usu_registro` int(11) NOT NULL,
-  `usu_ult_mod` int(11) NOT NULL,
-  `fec_reg` timestamp NOT NULL DEFAULT current_timestamp(),
-  `fec_ult_mod` timestamp NOT NULL DEFAULT current_timestamp()
+  `animal_id` int(10) UNSIGNED NOT NULL,
+  `raza_id` int(10) UNSIGNED NOT NULL,
+  `fec_nac` date DEFAULT NULL,
+  `sexo` int(11) NOT NULL,
+  `color` varchar(250) NOT NULL,
+  `altura` double(8,2) NOT NULL,
+  `peso` double(8,2) NOT NULL,
+  `estirilizado` int(11) NOT NULL,
+  `vacunas` int(11) NOT NULL,
+  `estado` int(11) NOT NULL DEFAULT 0,
+  `usu_registro` int(11) DEFAULT NULL,
+  `usu_ult_mod` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `mascotas`
+--
+
+INSERT INTO `mascotas` (`id`, `nombre`, `cliente_id`, `animal_id`, `raza_id`, `fec_nac`, `sexo`, `color`, `altura`, `peso`, `estirilizado`, `vacunas`, `estado`, `usu_registro`, `usu_ult_mod`, `created_at`, `updated_at`) VALUES
+(1, 'Benito', 1, 2, 1, '2022-09-13', 1, 'negro y blanco', 15.00, 2.50, 0, 1, 1, 1, 1, '2023-10-11 01:12:09', '2023-10-11 01:12:09'),
+(2, 'Kala', 2, 1, 2, '2022-09-13', 1, 'blanco', 60.00, 15.50, 1, 0, 1, 1, 1, '2023-10-11 01:12:09', '2023-10-11 01:12:09');
 
 -- --------------------------------------------------------
 
@@ -121,16 +156,19 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(11, '2014_10_12_000000_create_users_table', 1),
-(12, '2014_10_12_100000_create_password_reset_tokens_table', 1),
-(13, '2014_10_12_100000_create_password_resets_table', 1),
-(14, '2019_08_19_000000_create_failed_jobs_table', 1),
-(15, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(16, '2023_10_02_220524_create_cliente_table', 1),
-(17, '2023_10_02_220544_create_mascota_table', 1),
-(18, '2023_10_05_042415_create_permission_tables', 1),
-(19, '2023_10_05_220851_create_horarios_table', 1),
-(20, '2023_10_05_220910_create_veterinarios_table', 1);
+(40, '2014_10_12_000000_create_users_table', 1),
+(41, '2014_10_12_100000_create_password_reset_tokens_table', 1),
+(42, '2014_10_12_100000_create_password_resets_table', 1),
+(43, '2019_08_19_000000_create_failed_jobs_table', 1),
+(44, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(45, '2023_10_05_042415_create_permission_tables', 1),
+(46, '2023_10_05_220851_create_horarios_table', 1),
+(47, '2023_10_05_220910_create_veterinarios_table', 1),
+(48, '2023_10_08_015914_add_descripcion_to_roles_table', 1),
+(49, '2023_10_09_221052_create_clientes_table', 1),
+(50, '2023_10_09_230557_create_animales_table', 1),
+(51, '2023_10_09_230608_create_razas_table', 1),
+(52, '2023_10_09_230630_create_mascotas_table', 1);
 
 -- --------------------------------------------------------
 
@@ -216,12 +254,35 @@ CREATE TABLE `personal_access_tokens` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `razas`
+--
+
+CREATE TABLE `razas` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `nombre` varchar(250) NOT NULL,
+  `animal_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `razas`
+--
+
+INSERT INTO `razas` (`id`, `nombre`, `animal_id`, `created_at`, `updated_at`) VALUES
+(1, 'Siameses', 2, '2023-10-11 01:09:47', '2023-10-11 01:09:47'),
+(2, 'Pequines', 1, '2023-10-11 01:09:47', '2023-10-11 01:09:47');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `roles`
 --
 
 CREATE TABLE `roles` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
   `guard_name` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -260,7 +321,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Elizabeth', 'eli21@gmail.com', NULL, '$2y$10$pGSBqqhkf2GWYUxDTAmHFuffFuhJPbjwOMxCa/.HIFfQRwhF4iany', NULL, '2023-10-06 04:54:58', '2023-10-06 04:54:58');
+(1, 'Ruiz Caro', 'adminVet@gmail.com', NULL, '$2y$10$KDjhqdWnsZ4cA.pAAhokw.Phaw1zywcKuW.HS5Ez6JxVIUUqA5OUC', NULL, '2023-10-11 04:07:31', '2023-10-11 04:07:31');
 
 -- --------------------------------------------------------
 
@@ -272,12 +333,12 @@ CREATE TABLE `veterinarios` (
   `id` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(250) NOT NULL,
   `apellido` varchar(250) NOT NULL,
-  `fec_nac` timestamp NOT NULL DEFAULT current_timestamp(),
+  `fec_nac` timestamp NULL DEFAULT NULL,
   `tip_doc` int(11) NOT NULL,
   `documento` varchar(20) NOT NULL,
   `num_telefono` varchar(20) NOT NULL,
   `especialidad` int(11) NOT NULL,
-  `estado` int(11) NOT NULL,
+  `estado` int(11) NOT NULL DEFAULT 0,
   `horario_id` int(10) UNSIGNED NOT NULL,
   `usu_registro` int(11) DEFAULT NULL,
   `usu_ult_mod` int(11) DEFAULT NULL,
@@ -286,20 +347,19 @@ CREATE TABLE `veterinarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `veterinarios`
---
-
-INSERT INTO `veterinarios` (`id`, `nombre`, `apellido`, `fec_nac`, `tip_doc`, `documento`, `num_telefono`, `especialidad`, `estado`, `horario_id`, `usu_registro`, `usu_ult_mod`, `created_at`, `updated_at`) VALUES
-(1, 'Román', 'García Cueva', '2000-10-01 23:18:01', 1, '11445510', '947511205', 1, 1, 1, 1, 1, '2023-10-05 23:18:01', '2023-10-05 23:18:01');
-
---
 -- Índices para tablas volcadas
 --
 
 --
--- Indices de la tabla `cliente`
+-- Indices de la tabla `animales`
 --
-ALTER TABLE `cliente`
+ALTER TABLE `animales`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `clientes`
+--
+ALTER TABLE `clientes`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -316,11 +376,13 @@ ALTER TABLE `horarios`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `mascota`
+-- Indices de la tabla `mascotas`
 --
-ALTER TABLE `mascota`
+ALTER TABLE `mascotas`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `mascota_cliente_id_foreign` (`cliente_id`);
+  ADD KEY `mascotas_cliente_id_foreign` (`cliente_id`),
+  ADD KEY `mascotas_animal_id_foreign` (`animal_id`),
+  ADD KEY `mascotas_raza_id_foreign` (`raza_id`);
 
 --
 -- Indices de la tabla `migrations`
@@ -370,6 +432,13 @@ ALTER TABLE `personal_access_tokens`
   ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
+-- Indices de la tabla `razas`
+--
+ALTER TABLE `razas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `razas_animal_id_foreign` (`animal_id`);
+
+--
 -- Indices de la tabla `roles`
 --
 ALTER TABLE `roles`
@@ -402,10 +471,16 @@ ALTER TABLE `veterinarios`
 --
 
 --
--- AUTO_INCREMENT de la tabla `cliente`
+-- AUTO_INCREMENT de la tabla `animales`
 --
-ALTER TABLE `cliente`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `animales`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `clientes`
+--
+ALTER TABLE `clientes`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `failed_jobs`
@@ -417,19 +492,19 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT de la tabla `horarios`
 --
 ALTER TABLE `horarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `mascota`
+-- AUTO_INCREMENT de la tabla `mascotas`
 --
-ALTER TABLE `mascota`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `mascotas`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT de la tabla `permissions`
@@ -442,6 +517,12 @@ ALTER TABLE `permissions`
 --
 ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `razas`
+--
+ALTER TABLE `razas`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -459,17 +540,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `veterinarios`
 --
 ALTER TABLE `veterinarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
 --
 
 --
--- Filtros para la tabla `mascota`
+-- Filtros para la tabla `mascotas`
 --
-ALTER TABLE `mascota`
-  ADD CONSTRAINT `mascota_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `cliente` (`id`);
+ALTER TABLE `mascotas`
+  ADD CONSTRAINT `mascotas_animal_id_foreign` FOREIGN KEY (`animal_id`) REFERENCES `animales` (`id`),
+  ADD CONSTRAINT `mascotas_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
+  ADD CONSTRAINT `mascotas_raza_id_foreign` FOREIGN KEY (`raza_id`) REFERENCES `razas` (`id`);
 
 --
 -- Filtros para la tabla `model_has_permissions`
@@ -482,6 +565,12 @@ ALTER TABLE `model_has_permissions`
 --
 ALTER TABLE `model_has_roles`
   ADD CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `razas`
+--
+ALTER TABLE `razas`
+  ADD CONSTRAINT `razas_animal_id_foreign` FOREIGN KEY (`animal_id`) REFERENCES `animales` (`id`);
 
 --
 -- Filtros para la tabla `role_has_permissions`

@@ -11,23 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('veterinarios', function (Blueprint $table) {
+        Schema::create('clientes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre', 250);
             $table->string('apellido', 250);
-            $table->timestamp('fec_nac')->nullable();
             $table->integer('tip_doc');
-            $table->string('documento', 20)->unique();
-            $table->string('num_telefono', 20);
-            $table->integer('especialidad');
+            $table->string('documento',15)->unique();
+            $table->string('telefono', 11);
+            $table->string('direccion', 250)->default('');
+            $table->string('email', 250)->default('');
             $table->integer('estado')->default(0);
-            $table->unsignedInteger('horario_id');
             $table->integer('usu_registro')->nullable();
             $table->integer('usu_ult_mod')->nullable();
             $table->timestamps();
-
-            $table->foreign('horario_id')->references('id')
-                ->on('horarios');
         });
     }
 
@@ -36,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('veterinarios');
+        Schema::dropIfExists('clientes');
     }
 };

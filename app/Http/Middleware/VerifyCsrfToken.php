@@ -17,6 +17,8 @@ class VerifyCsrfToken extends Middleware
         "/users/*",
         "/horarios/",
         "/veterinarios/",
-        "/veterinarios/*"
+        "/veterinarios/*",
+        "/clientes/",
+        "/clientes/*",
     ];
 }
