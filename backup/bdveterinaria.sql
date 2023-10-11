@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-10-2023 a las 03:15:55
+-- Tiempo de generación: 11-10-2023 a las 17:30:59
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -161,38 +161,14 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (42, '2014_10_12_100000_create_password_resets_table', 1),
 (43, '2019_08_19_000000_create_failed_jobs_table', 1),
 (44, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(45, '2023_10_05_042415_create_permission_tables', 1),
 (46, '2023_10_05_220851_create_horarios_table', 1),
 (47, '2023_10_05_220910_create_veterinarios_table', 1),
-(48, '2023_10_08_015914_add_descripcion_to_roles_table', 1),
 (49, '2023_10_09_221052_create_clientes_table', 1),
 (50, '2023_10_09_230557_create_animales_table', 1),
 (51, '2023_10_09_230608_create_razas_table', 1),
-(52, '2023_10_09_230630_create_mascotas_table', 1);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `model_has_permissions`
---
-
-CREATE TABLE `model_has_permissions` (
-  `permission_id` bigint(20) UNSIGNED NOT NULL,
-  `model_type` varchar(255) NOT NULL,
-  `model_id` bigint(20) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `model_has_roles`
---
-
-CREATE TABLE `model_has_roles` (
-  `role_id` bigint(20) UNSIGNED NOT NULL,
-  `model_type` varchar(255) NOT NULL,
-  `model_id` bigint(20) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+(52, '2023_10_09_230630_create_mascotas_table', 1),
+(53, '2023_10_10_193739_create_roles_table', 2),
+(54, '2023_10_11_152106_add_campos_to_users_table', 3);
 
 -- --------------------------------------------------------
 
@@ -216,20 +192,6 @@ CREATE TABLE `password_reset_tokens` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `permissions`
---
-
-CREATE TABLE `permissions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `guard_name` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -280,23 +242,14 @@ INSERT INTO `razas` (`id`, `nombre`, `animal_id`, `created_at`, `updated_at`) VA
 --
 
 CREATE TABLE `roles` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `descripcion` varchar(255) DEFAULT NULL,
-  `guard_name` varchar(255) NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `nombre` varchar(250) NOT NULL,
+  `modulos` text NOT NULL,
+  `estado` int(11) NOT NULL DEFAULT 0,
+  `usu_registro` int(11) DEFAULT NULL,
+  `usu_ult_mod` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `role_has_permissions`
---
-
-CREATE TABLE `role_has_permissions` (
-  `permission_id` bigint(20) UNSIGNED NOT NULL,
-  `role_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -308,6 +261,11 @@ CREATE TABLE `role_has_permissions` (
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
+  `apellido` varchar(250) NOT NULL,
+  `estado` int(11) NOT NULL DEFAULT 0,
+  `rol_id` int(10) UNSIGNED NOT NULL,
+  `usu_registro` int(11) DEFAULT NULL,
+  `usu_ult_mod` int(11) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) NOT NULL,
@@ -315,13 +273,6 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `users`
---
-
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Ruiz Caro', 'adminVet@gmail.com', NULL, '$2y$10$KDjhqdWnsZ4cA.pAAhokw.Phaw1zywcKuW.HS5Ez6JxVIUUqA5OUC', NULL, '2023-10-11 04:07:31', '2023-10-11 04:07:31');
 
 -- --------------------------------------------------------
 
@@ -391,20 +342,6 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `model_has_permissions`
---
-ALTER TABLE `model_has_permissions`
-  ADD PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
-  ADD KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`);
-
---
--- Indices de la tabla `model_has_roles`
---
-ALTER TABLE `model_has_roles`
-  ADD PRIMARY KEY (`role_id`,`model_id`,`model_type`),
-  ADD KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`);
-
---
 -- Indices de la tabla `password_resets`
 --
 ALTER TABLE `password_resets`
@@ -415,13 +352,6 @@ ALTER TABLE `password_resets`
 --
 ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
-
---
--- Indices de la tabla `permissions`
---
-ALTER TABLE `permissions`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `permissions_name_guard_name_unique` (`name`,`guard_name`);
 
 --
 -- Indices de la tabla `personal_access_tokens`
@@ -442,22 +372,15 @@ ALTER TABLE `razas`
 -- Indices de la tabla `roles`
 --
 ALTER TABLE `roles`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `roles_name_guard_name_unique` (`name`,`guard_name`);
-
---
--- Indices de la tabla `role_has_permissions`
---
-ALTER TABLE `role_has_permissions`
-  ADD PRIMARY KEY (`permission_id`,`role_id`),
-  ADD KEY `role_has_permissions_role_id_foreign` (`role_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD KEY `users_rol_id_foreign` (`rol_id`);
 
 --
 -- Indices de la tabla `veterinarios`
@@ -504,13 +427,7 @@ ALTER TABLE `mascotas`
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
-
---
--- AUTO_INCREMENT de la tabla `permissions`
---
-ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT de la tabla `personal_access_tokens`
@@ -528,7 +445,7 @@ ALTER TABLE `razas`
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
@@ -555,29 +472,16 @@ ALTER TABLE `mascotas`
   ADD CONSTRAINT `mascotas_raza_id_foreign` FOREIGN KEY (`raza_id`) REFERENCES `razas` (`id`);
 
 --
--- Filtros para la tabla `model_has_permissions`
---
-ALTER TABLE `model_has_permissions`
-  ADD CONSTRAINT `model_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `model_has_roles`
---
-ALTER TABLE `model_has_roles`
-  ADD CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
-
---
 -- Filtros para la tabla `razas`
 --
 ALTER TABLE `razas`
   ADD CONSTRAINT `razas_animal_id_foreign` FOREIGN KEY (`animal_id`) REFERENCES `animales` (`id`);
 
 --
--- Filtros para la tabla `role_has_permissions`
+-- Filtros para la tabla `users`
 --
-ALTER TABLE `role_has_permissions`
-  ADD CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_rol_id_foreign` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`);
 
 --
 -- Filtros para la tabla `veterinarios`
