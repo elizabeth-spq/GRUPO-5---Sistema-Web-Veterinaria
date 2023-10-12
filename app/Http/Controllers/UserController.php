@@ -18,16 +18,27 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'apellido' => 'required|string|max:250',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8', 
+            'rol_id' => 'required|integer',
+            'usu_registro' => 'integer',
+            'usu_ult_mod' => 'integer',
+        ]);
+    
         $user = new User();
-        $user->name=$request->name;
-        $user->apellido=$request->apellido;
+        $user->name = $request->name;
+        $user->apellido = $request->apellido;
         $user->email = $request->email;
+        $user->password = Hash::make($request->password); 
         $user->rol_id = $request->rol_id;
         $user->usu_registro = $request->usu_registro;
         $user->usu_ult_mod = $request->usu_ult_mod;
-
+    
         $user->save();
-
+    
         return response()->json($user);
     }
 
@@ -41,19 +52,38 @@ class UserController extends Controller
 
     public function update(Request $request, string $id)
     {
+        
         $user = User::find($id);
-        $user->name=$request->name;
-        $user->apellido=$request->apellido;
+
+        if (!$user) {
+            
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'apellido' => 'required|string|max:250',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+            'rol_id' => 'required|integer',
+            'usu_registro' => 'integer',
+            'usu_ult_mod' => 'integer',
+        ]);
+
+        $user->name = $request->name;
+        $user->apellido = $request->apellido;
         $user->email = $request->email;
-        $user->password = $request->password;
-        $user->password = $request->password;
         $user->rol_id = $request->rol_id;
         $user->usu_registro = $request->usu_registro;
         $user->usu_ult_mod = $request->usu_ult_mod;
 
-        if( $user->save()){
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+        }
+
+        if ($user->save()) {
             $message = "El registro ha sido actualizado";
-        }else {
+        } else {
             $message = "El registro no ha sido actualizado";
         }
 

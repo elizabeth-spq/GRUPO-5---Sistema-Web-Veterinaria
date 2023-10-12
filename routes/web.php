@@ -35,8 +35,8 @@ Route::get('/admin/mascotas', function () {
 Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('index');
 Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('show');
 Route::post('/users', [App\Http\Controllers\UserController::class, 'store'])->name('store');
-Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('update');
-Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
+Route::put('/users/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('update');
+Route::delete('/users/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
 
 Route::get('/horarios', [App\Http\Controllers\HorarioController::class, 'index'])->name('index');
 Route::post('/horarios', [App\Http\Controllers\HorarioController::class, 'store'])->name('store');

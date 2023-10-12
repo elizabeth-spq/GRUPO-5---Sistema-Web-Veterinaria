@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-10-2023 a las 05:46:47
+-- Tiempo de generación: 12-10-2023 a las 19:16:22
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -288,10 +288,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `apellido`, `estado`, `rol_id`, `usu_registro`, `usu_ult_mod`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(2, 'docVet', 'Ruiz Caro', 0, 2, NULL, NULL, 'vetRuizCarog@gmail.com', NULL, '$2y$10$PanJ0SHeANnFrNbEcikK.OU4ouXYxznzQBY/lO8wZyM4bADTSYhc.', NULL, '2023-10-11 21:57:47', '2023-10-11 21:57:47'),
+(2, 'docVet', 'Ruiz Caro', 0, 2, NULL, NULL, 'vetRuizCaro@gmail.com', NULL, '$2y$10$PanJ0SHeANnFrNbEcikK.OU4ouXYxznzQBY/lO8wZyM4bADTSYhc.', NULL, '2023-10-11 21:57:47', '2023-10-12 22:11:18'),
 (3, 'admin', 'admin', 0, 1, NULL, NULL, 'admin@gmail.com', NULL, '$2y$10$QfwQBfD47UJphRlsEf9Oxe1mnP9bW5X0fzdYkuXGnB02AsaeTG3Ni', NULL, '2023-10-11 21:59:41', '2023-10-11 21:59:41'),
-(4, 'usuario01', 'prueba', 3, 1, NULL, NULL, 'upuebra01@gmail.com', NULL, '$2y$10$zlbcs1JPhWUWvWNT9Q5rg.ldYeJgV.RfHpq7E8KwSK6v9.JC8zceC', NULL, '2023-10-11 23:27:27', '2023-10-12 03:15:29'),
-(5, 'usuario02', 'prueba', 0, 3, NULL, NULL, 'uPrueba02@gmail.com', NULL, '$2y$10$Z2fOWt1lQZvPsVEEcadEG.jLe8QrH6gKwK3SR6tQsIq5BZphskX/q', NULL, '2023-10-12 03:33:43', '2023-10-12 03:33:43');
+(4, 'usuario01', 'prueba', 0, 3, NULL, NULL, 'upuebra01@gmail.com', NULL, '$2y$10$zlbcs1JPhWUWvWNT9Q5rg.ldYeJgV.RfHpq7E8KwSK6v9.JC8zceC', NULL, '2023-10-11 23:27:27', '2023-10-12 03:15:29'),
+(5, 'usuario02', 'prueba', 0, 3, NULL, NULL, 'uPrueba02@gmail.com', NULL, '$2y$10$jvE./gKXuWPVpvPXcetsouTD1oUdiwhdJPqH5W3HDIe32BeScU2t6', NULL, '2023-10-12 03:33:43', '2023-10-12 21:48:43'),
+(6, 'usuario03', 'prueba', 0, 3, NULL, NULL, 'uPrueba03@gmail.com', NULL, '$2y$10$HYZyjgsqTQkitJbpgRF2SOidKvcCbOhcvBMMA4VIbtV6bluJGA7.i', NULL, '2023-10-12 21:37:44', '2023-10-12 22:11:00');
 
 -- --------------------------------------------------------
 
@@ -470,7 +471,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `veterinarios`

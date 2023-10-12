@@ -81,17 +81,20 @@
                                 <input type="password" class="form-control" id="password" placeholder="Contraseña *"
                                     aria-describedby="requiredPassword" v-model="user.password">
                                 <label class="ms-2" for="floatingInput">Contraseña *</label>
-                                <div id="requiredPassword" class="form-text text-danger" v-if="user.password== ''">
+                                <div id="requiredPassword" class="form-text text-danger" v-if="user.password == '' && user.confirmPassword == ''">
                                     Obligtorio
                                 </div>
                             </div>
                             <div class="col-12 form-floating mb-3">
-                                <input type="password" class="form-control" id="password" placeholder="Contraseña *"
-                                    aria-describedby="requiredPassword" v-model="user.password">
-                                <label class="ms-2" for="floatingInput">Confirmar Contraseña *</label>
-                                <div id="requiredPassword" class="form-text text-danger" v-if="user.password_confirmation== ''">
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Contraseña *"
+                                    aria-describedby="requiredConfirmPassword" v-model="user.confirmPassword">
+                                <label class="ms-2" for="floatingInput">Confirme la Contraseña *</label>
+                                <div id="requiredConfirmPassword" class="form-text text-danger" v-if="user.password !== '' && user.confirmPassword == ''">
                                     Obligtorio
                                 </div>
+                            </div>
+                            <div class="form-text text-danger" v-if="user.password !== '' && user.confirmPassword !== user.password">
+                                Las contraseñas no coinciden
                             </div>
                             <div class=" form-floating col-12">
                                 <select class="form-select" id="id" aria-label="Floating label select example"
@@ -133,7 +136,6 @@
                                     aria-describedby="requiredNombre" v-model="user.name">
                                 <label class="ms-2" for="floatingInput">Nombre *</label>
                                 <div id="requiredNombre" class="form-text text-danger" v-if="user.name == ''">
-                                    Obligtorio
                                 </div>
                             </div>
                             <div class="col-12 form-floating mb-3">
@@ -141,7 +143,6 @@
                                     aria-describedby="requiredApellido" v-model="user.apellido">
                                 <label class="ms-2" for="floatingInput">Apellido *</label>
                                 <div id="requiredApellido" class="form-text text-danger" v-if="user.apellido == ''">
-                                    Obligtorio
                                 </div>
                             </div>
                             <div class="col-12 form-floating mb-3">
@@ -149,7 +150,6 @@
                                     aria-describedby="requiredEmail" v-model="user.email">
                                 <label class="ms-2" for="floatingInput">Email *</label>
                                 <div id="requiredEmail" class="form-text text-danger" v-if="user.email== ''">
-                                    Obligtorio
                                 </div>
                             </div>
                             <div class="col-12 form-floating mb-3">
@@ -157,16 +157,17 @@
                                     aria-describedby="requiredPassword" v-model="user.password">
                                 <label class="ms-2" for="floatingInput">Nueva Contraseña *</label>
                                 <div id="requiredPassword" class="form-text text-danger" v-if="user.password== ''">
-                                    Obligtorio
                                 </div>
                             </div>
                             <div class="col-12 form-floating mb-3">
-                                <input type="password" class="form-control" id="password" placeholder="Contraseña *"
-                                    aria-describedby="requiredPassword" v-model="user.confirmPassword">
-                                <label class="ms-2" for="floatingInput">Repita la nueva Contraseña *</label>
-                                <div id="requiredPassword" class="form-text text-danger" v-if="user.confirmPassword== ''">
-                                    Obligtorio
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Contraseña *"
+                                    aria-describedby="requiredConfirmPassword" v-model="user.confirmPassword">
+                                <label class="ms-2" for="floatingInput">Confirme la Contraseña *</label>
+                                <div id="requiredConfirmPassword" class="form-text text-danger" v-if="user.confirmPassword== ''">
                                 </div>
+                            </div>
+                            <div class="form-text text-danger" v-if="user.password !== '' && user.confirmPassword !== user.password">
+                                Las contraseñas no coinciden
                             </div>
                             <div class=" form-floating col-12">
                                 <select class="form-select" id="id" aria-label="Floating label select example"
@@ -178,7 +179,6 @@
                                 <label for="rol" class="ms-2">Rol *</label>
                                 <div id="requiredRol" class="form-text text-danger"
                                     v-if="user.name == 0">
-                                    Obligtorio
                                 </div>
                             </div>
                         </div>
@@ -241,7 +241,7 @@ export default {
             })
 
             function actualizarUsuario(Id) {
-                if (user.password !== user.confirmPassword) {
+                if (user.password !== '' && user.password !== user.confirmPassword) {
                     error_message.value = "Las contraseñas no coinciden";
                     return;
                 }
@@ -257,14 +257,14 @@ export default {
                         //const data = await response.json();
                         if (!response.ok) {
                             const error =
-                                "error"
+                                "Hubo un erro al actualizar el usuario"
                             return Promise.reject(error);
                         }
 
                     })
                     .catch((error) => {
                         error_message.value = error;
-                        console.error("There was an error!", error);
+                        console.error("Hubo un error en la actualización del usuario:", error);
                     });
                 obtenerUsuario();
                 closeModalEdit();
@@ -295,8 +295,8 @@ export default {
                 user.name = user_tabla.name
                 user.apellido = user_tabla.apellido
                 user.email = user_tabla.email
-                user.password = user_tabla.password
-                user.confirmPassword = user_tabla.confirmPassword
+                user.password = ''
+                user.confirmPassword = ''
                 user.rol_id = user_tabla.rol_id
                 openModalEdit()
             }
@@ -349,7 +349,7 @@ export default {
             }
 
             function guardarUsuario() {
-                if (user.password !== user.confirmPassword) {
+                if (user.password !== '' && user.password !== user.confirmPassword) {
                     error_message.value = "Las contraseñas no coinciden";
                     return;
                 }
