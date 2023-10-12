@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Rol::class, 'rol_id');
     }
+
+    public function hasRol($rol)
+    {
+        return $this->roles->contains('nombre', $rol);
+    }
 }

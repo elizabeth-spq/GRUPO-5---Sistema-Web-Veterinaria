@@ -16,7 +16,7 @@ class Rol extends Model
     {
         $validacion = validator($datos, [
             'nombre' => 'required|string|max:250',
-            'modulos' => 'required|string', 
+            'modulos' => 'required|string',
             'estado' => 'integer',
             'usu_registro' => 'integer|nullable',
             'usu_ult_mod' => 'integer|nullable',
@@ -30,6 +30,7 @@ class Rol extends Model
         $rol = self::create($datos);
 
         return $rol;
+
     }
 
 }
