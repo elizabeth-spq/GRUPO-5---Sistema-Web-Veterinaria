@@ -371,7 +371,7 @@ export default {
                     })
                     .catch((error) => {
                         error_message.value = error;
-                        console.error("There was an error!", error);
+                        console.error("Hubo un error al guardar el usuario creado:", error);
                     });
 
                 obtenerUsuario();

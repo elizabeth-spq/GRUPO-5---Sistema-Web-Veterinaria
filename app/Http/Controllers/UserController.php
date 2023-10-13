@@ -22,23 +22,22 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'apellido' => 'required|string|max:250',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8', 
+            'password' => 'required|string|min:8',
             'rol_id' => 'required|integer',
             'usu_registro' => 'integer',
             'usu_ult_mod' => 'integer',
         ]);
-    
+
         $user = new User();
         $user->name = $request->name;
         $user->apellido = $request->apellido;
         $user->email = $request->email;
-        $user->password = Hash::make($request->password); 
+        $user->password = Hash::make($request->password);
         $user->rol_id = $request->rol_id;
-        $user->usu_registro = $request->usu_registro;
-        $user->usu_ult_mod = $request->usu_ult_mod;
-    
+        $user->usu_registro = auth()->user()->id;
+
         $user->save();
-    
+
         return response()->json($user);
     }
 
@@ -52,11 +51,11 @@ class UserController extends Controller
 
     public function update(Request $request, string $id)
     {
-        
+
         $user = User::find($id);
 
         if (!$user) {
-            
+
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
 
@@ -74,8 +73,7 @@ class UserController extends Controller
         $user->apellido = $request->apellido;
         $user->email = $request->email;
         $user->rol_id = $request->rol_id;
-        $user->usu_registro = $request->usu_registro;
-        $user->usu_ult_mod = $request->usu_ult_mod;
+        $user->usu_ult_mod = auth()->user()->id;
 
         if ($request->password) {
             $user->password = Hash::make($request->password);
