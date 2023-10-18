@@ -18,9 +18,12 @@ class UserController extends Controller
 
             return response()->json($user);
 
-        }else {
-
+        } elseif (Gate::allows('veterinario') || Gate::allows('recepcionista')) {
+            
             return response()->json(['error' => 'Acceso denegado'], 403);
+            
+        } else {
+            return view('access-denied');
         }
     }
 
