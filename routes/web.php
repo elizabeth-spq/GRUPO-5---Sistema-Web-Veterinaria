@@ -32,7 +32,7 @@ Route::get('/admin/mascotas', function () {
     return view('admin/mascotas/index');
 });
 
-Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('index');
+Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('index')->middleware('can:administrador');;
 Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('show');
 Route::post('/users', [App\Http\Controllers\UserController::class, 'store'])->name('store');
 Route::put('/users/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('update');
@@ -63,9 +63,9 @@ Route::get('/razas', [App\Http\Controllers\RazaController::class, 'index'])->nam
 
 Route::get('/animales', [App\Http\Controllers\AnimalController::class, 'index'])->name('index');
 
-Route::get('/roles', [App\Http\Controllers\RolController::class, 'index'])->name('index');
+Route::get('/roles', [App\Http\Controllers\RoleController::class, 'index'])->name('index');
 
-Route::post('/roles', [App\Http\Controllers\RolController::class, 'store'])->name('store');
+Route::post('/roles', [App\Http\Controllers\RoleController::class, 'store'])->name('store');
 
 
 /*Route::resource('veterinarios', App\Http\Controllers\VeterinarioController::class)->only([

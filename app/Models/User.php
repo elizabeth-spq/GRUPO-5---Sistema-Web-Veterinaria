@@ -44,11 +44,11 @@ class User extends Authenticatable
 
     public function rol()
     {
-        return $this->belongsTo(Rol::class, 'rol_id');
+        return $this->belongsTo(Role::class, 'rol_id');
     }
 
-    public function hasRol($rol)
+    public function hasRole($role)
     {
-        return $this->roles->contains('nombre', $rol);
+        return $this->rol->nombre === $role;
     }
 }

@@ -54,14 +54,11 @@
                             @endif
                         @else
 
-                        <li class="nav-item"><a href="{{ url('/admin/roles') }}" class="nav-link">Roles</a></li>
-
-
-                            <li class="nav-item"><a href="{{ url('/admin/users') }}" class="nav-link">Usuarios del Sistema</a></li>
-
+                            @can('administrador')
+                            <li class="nav-item"><a href="{{ url('/admin/users') }}" class="nav-link">Usuarios</a></li>
+                            @endcan
 
                             <li class="nav-item"><a href="{{ url('/admin/veterinarios') }}" class="nav-link">Veterinarios</a></li>
-
                             <li class="nav-item"><a href="{{ url('/admin/clientes') }}" class="nav-link">Clientes</a></li>
                             <li class="nav-item"><a href="{{ url('/admin/mascotas') }}" class="nav-link">Mascotas</a></li>
                             <li class="nav-item dropdown">

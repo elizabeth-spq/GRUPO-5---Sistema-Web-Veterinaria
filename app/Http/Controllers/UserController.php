@@ -4,16 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Rol;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $user = User::whereIn('estado',[0,1])->get();
-        return response()->json($user);
+        if (Gate::allows('administrador')){
+
+            $user = User::whereIn('estado',[0,1])->get();
+
+            return response()->json($user);
+
+        }else {
+
+            return response()->json(['error' => 'Acceso denegado'], 403);
+        }
     }
 
     public function store(Request $request)
