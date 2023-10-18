@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
-    "collectionName": "Veterinaria",
-    "dateExported": "2023-10-11T01:21:31.136Z",
+    "collectionName": "Veterinaria (1)",
+    "dateExported": "2023-10-17T01:29:51.816Z",
     "version": "1.1",
     "folders": [
         {
@@ -77,6 +77,20 @@
             "tests": []
         },
         {
+            "_id": "9cd1e7a4-3f47-4f19-9970-dbbe3cc96f98",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "5cded89a-b222-480f-bf62-3f88c4b4d437",
+            "name": "Obtener mascota por id",
+            "url": "http://127.0.0.1:8000/mascotas/1",
+            "method": "GET",
+            "sortNum": 15000,
+            "created": "2023-10-17T01:10:16.200Z",
+            "modified": "2023-10-17T01:11:24.744Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
             "_id": "92072e0e-e3c6-49ee-a450-bf70add931bb",
             "colId": "58431221-b025-4c3a-a41f-659440239151",
             "containerId": "cca5bf6f-5dba-485e-8957-d2ce2bd73abc",
@@ -112,6 +126,58 @@
                 "raw": "{ \n    \"nombre\": \"Juan\",\n    \"apellido\": \"Perez\",\n    \"tip_doc\": 1,\n    \"documento\": \"55555555\",\n    \"telefono\": \"947511255\",\n    \"direccion\": \"Av. Las Palmeras\",\n    \"email\": \"juan@gmail.com\",\n    \"estado\": 0,\n    \"usu_registro\": 1,\n    \"usu_ult_mod\": 1\n}",
                 "form": []
             },
+            "tests": []
+        },
+        {
+            "_id": "1e1199df-c7f1-43cd-b01d-b1f8ae0ad3df",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "5cded89a-b222-480f-bf62-3f88c4b4d437",
+            "name": "Crear mascotas",
+            "url": "http://127.0.0.1:8000/mascotas",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-10-17T00:41:20.512Z",
+            "modified": "2023-10-17T00:48:39.208Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{ \n    \"nombre\": \"Faris\",\n    \"cliente_id\": 1,\n    \"animal_id\": 2,\n    \"raza_id\": 1,\n    \"fec_nac\": \"2020-09-13\",\n    \"sexo\": 2,\n    \"color\": \"blanco\",\n    \"altura\": 15,\n    \"peso\": 2.5,\n    \"estirilizado\": 1,\n    \"vacunas\": 1,\n    \"estado\": 1\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "093a8e58-96b7-4ae0-8a88-d5f863347dad",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "5cded89a-b222-480f-bf62-3f88c4b4d437",
+            "name": "Actualizar Clientes Copy",
+            "url": "http://127.0.0.1:8000/mascotas/1",
+            "method": "PUT",
+            "sortNum": 22500,
+            "created": "2023-10-17T01:22:01.000Z",
+            "modified": "2023-10-17T01:24:23.870Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{ \n    \"nombre\": \"Faris Dog\",\n  \"cliente_id\": 1,\n  \"animal_id\": 2,\n  \"raza_id\": 1,\n  \"fec_nac\": \"2020-09-13\",\n  \"sexo\": 2,\n  \"color\": \"blanco\",\n  \"altura\": 15,\n  \"peso\": 2.5,\n  \"estirilizado\": 1,\n  \"vacunas\": 1,\n  \"estado\": 1\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "8901d0ae-5e2c-45e1-bcd7-292b5cdbe27f",
+            "colId": "58431221-b025-4c3a-a41f-659440239151",
+            "containerId": "5cded89a-b222-480f-bf62-3f88c4b4d437",
+            "name": "Eliminar Clientes Copy",
+            "url": "http://127.0.0.1:8000/mascotas/1",
+            "method": "DELETE",
+            "sortNum": 25000,
+            "created": "2023-10-17T01:26:23.472Z",
+            "modified": "2023-10-17T01:26:39.502Z",
+            "headers": [],
+            "params": [],
             "tests": []
         },
         {

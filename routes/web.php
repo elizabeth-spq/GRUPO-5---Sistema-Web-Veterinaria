@@ -54,8 +54,17 @@ Route::put('/clientes/{id}', [App\Http\Controllers\ClienteController::class, 'up
 Route::delete('/clientes/{id}', [App\Http\Controllers\ClienteController::class, 'destroy'])->name('destroy');
 
 Route::get('/mascotas', [App\Http\Controllers\MascotaController::class, 'index'])->name('index');
+Route::get('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'show'])->name('show');
+Route::post('/mascotas', [App\Http\Controllers\MascotaController::class, 'store'])->name('store');
+Route::put('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'update'])->name('update');
+Route::delete('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'destroy'])->name('destroy');
+
+Route::get('/razas', [App\Http\Controllers\RazaController::class, 'index'])->name('index');
+
+Route::get('/animales', [App\Http\Controllers\AnimalController::class, 'index'])->name('index');
 
 Route::get('/roles', [App\Http\Controllers\RolController::class, 'index'])->name('index');
+
 Route::post('/roles', [App\Http\Controllers\RolController::class, 'store'])->name('store');
 
 

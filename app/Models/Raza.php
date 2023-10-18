@@ -5,14 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Mascota extends Model
+class Raza extends Model
 {
     use HasFactory;
-
-
-    protected $table = 'mascotas';
+    protected $table = 'razas';
     protected $primaryKey = 'id';
     protected $foreingKey = 'animal_id';
 

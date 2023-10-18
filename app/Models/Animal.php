@@ -7,18 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Mascota extends Model
+class Animal extends Model
 {
     use HasFactory;
-
-
-    protected $table = 'mascotas';
+    protected $table = 'animales';
     protected $primaryKey = 'id';
-    protected $foreingKey = 'animal_id';
 
-    public function animal(): BelongsTo
+    public function mascota(): HasMany
     {
-        return $this->belongsTo(Animal::class);
+        return $this->hasMany(Mascota::class);
+    }
+
+    public function raza(): HasMany
+    {
+        return $this->hasMany(Raza::class);
     }
 
 }

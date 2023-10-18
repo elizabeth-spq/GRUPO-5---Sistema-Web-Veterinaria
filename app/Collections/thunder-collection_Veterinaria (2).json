@@ -1,0 +1,52 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Veterinaria (2)",
+    "dateExported": "2023-10-18T01:24:12.920Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "96989767-c461-471a-a1c4-57184595139d",
+            "name": "Animal ",
+            "containerId": "",
+            "created": "2023-10-17T01:30:27.588Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "e5b1c0e0-d79b-4d92-ae5f-0362fd476b85",
+            "name": "Razas",
+            "containerId": "",
+            "created": "2023-10-18T01:23:16.903Z",
+            "sortNum": 20000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "bac5b8c3-ebad-4b13-ac62-a2a74cf08b38",
+            "colId": "59521c57-fa17-4b9f-a367-012b2f07b347",
+            "containerId": "96989767-c461-471a-a1c4-57184595139d",
+            "name": "Obtener Animales",
+            "url": "http://127.0.0.1:8000/animales",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-10-18T01:21:58.565Z",
+            "modified": "2023-10-18T01:22:16.672Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "37a4c362-e446-40dc-9c66-f3e3aed8f641",
+            "colId": "59521c57-fa17-4b9f-a367-012b2f07b347",
+            "containerId": "e5b1c0e0-d79b-4d92-ae5f-0362fd476b85",
+            "name": "Obtener Razas",
+            "url": "http://127.0.0.1:8000/razas",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-10-18T01:23:20.257Z",
+            "modified": "2023-10-18T01:23:38.628Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
