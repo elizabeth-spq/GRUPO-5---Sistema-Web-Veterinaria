@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-10-2023 a las 19:16:22
+-- Tiempo de generación: 18-10-2023 a las 03:38:17
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -72,7 +72,8 @@ CREATE TABLE `clientes` (
 INSERT INTO `clientes` (`id`, `nombre`, `apellido`, `tip_doc`, `documento`, `telefono`, `direccion`, `email`, `estado`, `usu_registro`, `usu_ult_mod`, `created_at`, `updated_at`) VALUES
 (1, 'Maggi Carol', 'Green', 1, '1111111', '947511255', 'Av. Las Flores', 'maggi@gmail.com', 3, 1, 1, '2023-10-11 03:50:25', '2023-10-11 03:55:42'),
 (2, 'Juan', 'Rojas', 1, '44444444', '947511255', 'Av. Las Palmeras', 'juan@gmail.com', 1, 1, 1, '2023-10-11 03:51:29', '2023-10-11 03:51:29'),
-(3, 'Juan', 'Perez', 1, '55555555', '947511255', 'Av. Las Palmeras', 'juan@gmail.com', 0, 1, 1, '2023-10-11 04:02:34', '2023-10-11 04:02:34');
+(3, 'Juan', 'Perez', 1, '55555555', '947511255', 'Av. Las Palmeras', 'juan@gmail.com', 0, 1, 1, '2023-10-11 04:02:34', '2023-10-11 04:02:34'),
+(4, 'Megan', 'López Rojas', 1, '77777777', '954122009', 'Av. lima', 'adminVet@gmail.com', 1, 1, 1, '2023-10-18 06:36:57', '2023-10-18 06:36:57');
 
 -- --------------------------------------------------------
 
@@ -136,8 +137,10 @@ CREATE TABLE `mascotas` (
 --
 
 INSERT INTO `mascotas` (`id`, `nombre`, `cliente_id`, `animal_id`, `raza_id`, `fec_nac`, `sexo`, `color`, `altura`, `peso`, `estirilizado`, `vacunas`, `estado`, `usu_registro`, `usu_ult_mod`, `created_at`, `updated_at`) VALUES
-(1, 'Benito', 1, 2, 1, '2022-09-13', 1, 'negro y blanco', 15.00, 2.50, 0, 1, 1, 1, 1, '2023-10-11 01:12:09', '2023-10-11 01:12:09'),
-(2, 'Kala', 2, 1, 2, '2022-09-13', 1, 'blanco', 60.00, 15.50, 1, 0, 1, 1, 1, '2023-10-11 01:12:09', '2023-10-11 01:12:09');
+(1, 'Faris Dog', 1, 2, 1, '2020-09-13', 2, 'blanco', 15.00, 2.50, 1, 1, 3, 1, 1, '2023-10-11 01:12:09', '2023-10-17 06:26:39'),
+(2, 'Kala', 2, 1, 2, '2022-09-13', 1, 'blanco', 60.00, 15.50, 1, 0, 1, 1, 1, '2023-10-11 01:12:09', '2023-10-11 01:12:09'),
+(3, 'Faris', 1, 2, 1, '2020-09-13', 2, 'blanco', 15.00, 2.50, 1, 1, 1, 1, 1, '2023-10-17 05:49:44', '2023-10-17 05:49:44'),
+(4, 'Faris', 1, 2, 1, '2020-09-13', 2, 'blanco', 15.00, 2.50, 1, 1, 1, 1, 1, '2023-10-17 06:15:33', '2023-10-17 06:15:33');
 
 -- --------------------------------------------------------
 
@@ -161,14 +164,38 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (42, '2014_10_12_100000_create_password_resets_table', 1),
 (43, '2019_08_19_000000_create_failed_jobs_table', 1),
 (44, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(45, '2023_10_05_042415_create_permission_tables', 1),
 (46, '2023_10_05_220851_create_horarios_table', 1),
 (47, '2023_10_05_220910_create_veterinarios_table', 1),
+(48, '2023_10_08_015914_add_descripcion_to_roles_table', 1),
 (49, '2023_10_09_221052_create_clientes_table', 1),
 (50, '2023_10_09_230557_create_animales_table', 1),
 (51, '2023_10_09_230608_create_razas_table', 1),
-(52, '2023_10_09_230630_create_mascotas_table', 1),
-(53, '2023_10_10_193739_create_roles_table', 2),
-(54, '2023_10_11_152106_add_campos_to_users_table', 3);
+(52, '2023_10_09_230630_create_mascotas_table', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `model_has_permissions`
+--
+
+CREATE TABLE `model_has_permissions` (
+  `permission_id` bigint(20) UNSIGNED NOT NULL,
+  `model_type` varchar(255) NOT NULL,
+  `model_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `model_has_roles`
+--
+
+CREATE TABLE `model_has_roles` (
+  `role_id` bigint(20) UNSIGNED NOT NULL,
+  `model_type` varchar(255) NOT NULL,
+  `model_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -192,6 +219,20 @@ CREATE TABLE `password_reset_tokens` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `permissions`
+--
+
+CREATE TABLE `permissions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `guard_name` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -242,24 +283,24 @@ INSERT INTO `razas` (`id`, `nombre`, `animal_id`, `created_at`, `updated_at`) VA
 --
 
 CREATE TABLE `roles` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `nombre` varchar(250) NOT NULL,
-  `modulos` text NOT NULL,
-  `estado` int(11) NOT NULL DEFAULT 0,
-  `usu_registro` int(11) DEFAULT NULL,
-  `usu_ult_mod` int(11) DEFAULT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `guard_name` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `roles`
+-- Estructura de tabla para la tabla `role_has_permissions`
 --
 
-INSERT INTO `roles` (`id`, `nombre`, `modulos`, `estado`, `usu_registro`, `usu_ult_mod`, `created_at`, `updated_at`) VALUES
-(1, 'administrador', 'todos', 1, NULL, NULL, '2023-10-11 21:18:18', '2023-10-11 21:18:18'),
-(2, 'veterinario', 'modulos_veterinario', 1, NULL, NULL, '2023-10-11 21:18:18', '2023-10-11 21:18:18'),
-(3, 'recepcionista', 'modulos_recepcionista', 1, NULL, NULL, '2023-10-11 21:18:18', '2023-10-11 21:18:18');
+CREATE TABLE `role_has_permissions` (
+  `permission_id` bigint(20) UNSIGNED NOT NULL,
+  `role_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -270,11 +311,6 @@ INSERT INTO `roles` (`id`, `nombre`, `modulos`, `estado`, `usu_registro`, `usu_u
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `apellido` varchar(250) NOT NULL,
-  `estado` int(11) NOT NULL DEFAULT 0,
-  `rol_id` int(10) UNSIGNED NOT NULL,
-  `usu_registro` int(11) DEFAULT NULL,
-  `usu_ult_mod` int(11) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) NOT NULL,
@@ -287,12 +323,8 @@ CREATE TABLE `users` (
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `apellido`, `estado`, `rol_id`, `usu_registro`, `usu_ult_mod`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(2, 'docVet', 'Ruiz Caro', 0, 2, NULL, NULL, 'vetRuizCaro@gmail.com', NULL, '$2y$10$PanJ0SHeANnFrNbEcikK.OU4ouXYxznzQBY/lO8wZyM4bADTSYhc.', NULL, '2023-10-11 21:57:47', '2023-10-12 22:11:18'),
-(3, 'admin', 'admin', 0, 1, NULL, NULL, 'admin@gmail.com', NULL, '$2y$10$QfwQBfD47UJphRlsEf9Oxe1mnP9bW5X0fzdYkuXGnB02AsaeTG3Ni', NULL, '2023-10-11 21:59:41', '2023-10-11 21:59:41'),
-(4, 'usuario01', 'prueba', 0, 3, NULL, NULL, 'upuebra01@gmail.com', NULL, '$2y$10$zlbcs1JPhWUWvWNT9Q5rg.ldYeJgV.RfHpq7E8KwSK6v9.JC8zceC', NULL, '2023-10-11 23:27:27', '2023-10-12 03:15:29'),
-(5, 'usuario02', 'prueba', 0, 3, NULL, NULL, 'uPrueba02@gmail.com', NULL, '$2y$10$jvE./gKXuWPVpvPXcetsouTD1oUdiwhdJPqH5W3HDIe32BeScU2t6', NULL, '2023-10-12 03:33:43', '2023-10-12 21:48:43'),
-(6, 'usuario03', 'prueba', 0, 3, NULL, NULL, 'uPrueba03@gmail.com', NULL, '$2y$10$HYZyjgsqTQkitJbpgRF2SOidKvcCbOhcvBMMA4VIbtV6bluJGA7.i', NULL, '2023-10-12 21:37:44', '2023-10-12 22:11:00');
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Ruiz Caro', 'adminVet@gmail.com', NULL, '$2y$10$KDjhqdWnsZ4cA.pAAhokw.Phaw1zywcKuW.HS5Ez6JxVIUUqA5OUC', NULL, '2023-10-11 04:07:31', '2023-10-11 04:07:31');
 
 -- --------------------------------------------------------
 
@@ -362,6 +394,20 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `model_has_permissions`
+--
+ALTER TABLE `model_has_permissions`
+  ADD PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
+  ADD KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`);
+
+--
+-- Indices de la tabla `model_has_roles`
+--
+ALTER TABLE `model_has_roles`
+  ADD PRIMARY KEY (`role_id`,`model_id`,`model_type`),
+  ADD KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`);
+
+--
 -- Indices de la tabla `password_resets`
 --
 ALTER TABLE `password_resets`
@@ -372,6 +418,13 @@ ALTER TABLE `password_resets`
 --
 ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
+
+--
+-- Indices de la tabla `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `permissions_name_guard_name_unique` (`name`,`guard_name`);
 
 --
 -- Indices de la tabla `personal_access_tokens`
@@ -392,15 +445,22 @@ ALTER TABLE `razas`
 -- Indices de la tabla `roles`
 --
 ALTER TABLE `roles`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `roles_name_guard_name_unique` (`name`,`guard_name`);
+
+--
+-- Indices de la tabla `role_has_permissions`
+--
+ALTER TABLE `role_has_permissions`
+  ADD PRIMARY KEY (`permission_id`,`role_id`),
+  ADD KEY `role_has_permissions_role_id_foreign` (`role_id`);
 
 --
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`),
-  ADD KEY `users_rol_id_foreign` (`rol_id`);
+  ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
 -- Indices de la tabla `veterinarios`
@@ -423,7 +483,7 @@ ALTER TABLE `animales`
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `failed_jobs`
@@ -441,13 +501,19 @@ ALTER TABLE `horarios`
 -- AUTO_INCREMENT de la tabla `mascotas`
 --
 ALTER TABLE `mascotas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+
+--
+-- AUTO_INCREMENT de la tabla `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `personal_access_tokens`
@@ -465,13 +531,13 @@ ALTER TABLE `razas`
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `veterinarios`
@@ -492,16 +558,29 @@ ALTER TABLE `mascotas`
   ADD CONSTRAINT `mascotas_raza_id_foreign` FOREIGN KEY (`raza_id`) REFERENCES `razas` (`id`);
 
 --
+-- Filtros para la tabla `model_has_permissions`
+--
+ALTER TABLE `model_has_permissions`
+  ADD CONSTRAINT `model_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `model_has_roles`
+--
+ALTER TABLE `model_has_roles`
+  ADD CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
+
+--
 -- Filtros para la tabla `razas`
 --
 ALTER TABLE `razas`
   ADD CONSTRAINT `razas_animal_id_foreign` FOREIGN KEY (`animal_id`) REFERENCES `animales` (`id`);
 
 --
--- Filtros para la tabla `users`
+-- Filtros para la tabla `role_has_permissions`
 --
-ALTER TABLE `users`
-  ADD CONSTRAINT `users_rol_id_foreign` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`);
+ALTER TABLE `role_has_permissions`
+  ADD CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `veterinarios`
