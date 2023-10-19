@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-//use App\Models\Permission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-//use Spatie\Permission\Models\Role;
+use App\Models\Role;
+
 class RoleSeeder extends Seeder
 {
     /**
@@ -22,5 +22,22 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'users'])->syncnRole([$administrador, $veterinario]);
         Permission::create(['name' => 'veterinario'])->syncnRole([$administrador, $veterinario, $recepcionista]);
         */
+        Role::create([
+            'nombre' => 'administrador',
+            'modulos' => 'todos',
+            'estado' => 1,
+        ]);
+
+        Role::create([
+            'nombre' => 'veterinario',
+            'modulos' => 'modulos_veterinario',
+            'estado' => 2,
+        ]);
+
+        Role::create([
+            'nombre' => 'recepcionista',
+            'modulos' => 'modulos_recepcionista',
+            'estado' => 3,
+        ]);
     }
 }

@@ -27,7 +27,7 @@ Route::get('/admin/users', function () {
 
 Route::get('/admin/veterinarios', function () {
     return view('admin/veterinarios/index');
-});
+})->middleware('can:administrador');
 
 Route::get('/admin/clientes', function () {
     return view('admin/clientes/index');

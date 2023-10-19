@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Veterinario;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Gate;
+use Carbon\Carbon;
 class VeterinarioController extends Controller
 {
     /**
@@ -12,8 +13,21 @@ class VeterinarioController extends Controller
      */
     public function index()
     {
-        $veterinario = Veterinario::whereIn('estado',[0,1])->get();
-        return response()->json($veterinario);
+        
+        if (Gate::allows('administrador')){
+
+            $veterinario = Veterinario::whereIn('estado',[0,1])->get();
+
+            $veterinario->transform(function ($veterinario) {
+                $veterinario->fec_nac = Carbon::parse($veterinario->fec_nac)->format('Y-m-d');
+                return $veterinario;
+            });
+
+            return response()->json($veterinario);
+
+        } else {
+            return response()->json(['error' => 'Acceso denegado'], 403);
+        }
     }
 
     /**
@@ -31,8 +45,7 @@ class VeterinarioController extends Controller
         $veterinario->especialidad = $request->especialidad;
         $veterinario->estado = $request->estado;
         $veterinario->horario_id = $request->horario_id;
-        $veterinario->usu_registro = $request->usu_registro;
-        $veterinario->usu_ult_mod = $request->usu_ult_mod;
+        $veterinario->usu_registro = auth()->user()->id;
 
         $veterinario->save();
 
@@ -64,6 +77,7 @@ class VeterinarioController extends Controller
         $veterinario->especialidad = $request->especialidad;
         $veterinario->estado = $request->estado;
         $veterinario->horario_id = $request->horario_id;
+        $veterinario->usu_ult_mod = auth()->user()->id;
 
         if( $veterinario->save()){
             $message = "El registro ha sido actualizado";

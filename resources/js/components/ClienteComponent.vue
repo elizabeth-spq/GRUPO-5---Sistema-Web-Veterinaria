@@ -15,9 +15,8 @@
                         <th scope="col">Telefono</th>
                         <th scope="col">Direccion</th>
                         <th scope="col">E-mail</th>
-                        <th scope="col">Fec Creacion</th>
                         <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>

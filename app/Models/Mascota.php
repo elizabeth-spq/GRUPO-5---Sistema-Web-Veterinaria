@@ -20,5 +20,4 @@ class Mascota extends Model
     {
         return $this->belongsTo(Animal::class);
     }
-
 }

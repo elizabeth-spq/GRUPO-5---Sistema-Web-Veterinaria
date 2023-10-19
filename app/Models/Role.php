@@ -16,6 +16,7 @@ class Role extends Model
     protected $table = 'roles';
     protected $fillable = ['nombre', 'modulos', 'estado'];
 
+    /*
     public static function crearRol($datos)
     {
         $validacion = validator($datos, [
@@ -33,6 +34,8 @@ class Role extends Model
         return $role;
 
     }
+
+    */
 
     public function user()
     {

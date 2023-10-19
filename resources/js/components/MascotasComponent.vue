@@ -20,7 +20,7 @@
                         <th scope="col">Esterilizado</th>
                         <th scope="col">Vacunas</th>
                         <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -24,10 +24,8 @@
                     <tr v-for="(veterinario, index) in veterinarios" class="text-center align-middle">
                         <th scope="row">{{ index + 1 }}</th>
                         <td class="text-start">{{ veterinario.nombre }}</td>
-                        <td class="text-start">{{ veterinario.apellido }}</td>
-                        <td>
-                            <input type="datetime-local" disabled v-model="veterinario.fec_nac">
-                        </td>
+                        <td class="text-start">{{ veterinario.apellido }}</td>         
+                        <td class="text-start">{{ veterinario.fec_nac }}</td>
                         <td>
                             <span v-if="veterinario.tip_doc == 1">DNI</span>
                             <span v-if="veterinario.tip_doc == 2">Pasaporte</span>

@@ -14,6 +14,7 @@ class RoleController extends Controller
         return response()->json($roles);
     }
 
+    /*
     public function Crear_Roles()
     {
         $roles = [
@@ -40,4 +41,5 @@ class RoleController extends Controller
 
         return response()->json(['message' => 'Roles creados exitosamente']);
     }
+    */
 }
