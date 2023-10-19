@@ -68,6 +68,8 @@ Route::get('/razas', [App\Http\Controllers\RazaController::class, 'index'])->nam
 
 Route::get('/animales', [App\Http\Controllers\AnimalController::class, 'index'])->name('index');
 
+Route::get('/reniec/{dni}', [App\Http\Controllers\ReniecController::class, 'show'])->name('show');
+
 Route::get('/roles', [App\Http\Controllers\RoleController::class, 'index'])->name('index');
 
 

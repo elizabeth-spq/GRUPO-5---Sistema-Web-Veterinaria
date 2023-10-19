@@ -5,16 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use App\Models\User;
 
 class ClienteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+
     public function index()
     {
-        $cliente = Cliente::whereIn('estado',[0,1])->get();
+        $cliente = Cliente::whereIn('estado', [0, 1])->get();
         return response()->json($cliente);
     }
 
@@ -24,8 +25,8 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $cliente = new Cliente();
-        $cliente->nombre=$request->nombre;
-        $cliente->apellido=$request->apellido;
+        $cliente->nombre = $request->nombre;
+        $cliente->apellido = $request->apellido;
         $cliente->tip_doc = $request->tip_doc;
         $cliente->documento = $request->documento;
         $cliente->telefono = $request->telefono;
@@ -47,7 +48,6 @@ class ClienteController extends Controller
     {
         $cliente = Cliente::find($id);
         return response()->json($cliente);
-
     }
 
     /**
@@ -56,8 +56,8 @@ class ClienteController extends Controller
     public function update(Request $request, string $id)
     {
         $cliente = Cliente::find($id);
-        $cliente->nombre=$request->nombre;
-        $cliente->apellido=$request->apellido;
+        $cliente->nombre = $request->nombre;
+        $cliente->apellido = $request->apellido;
         $cliente->tip_doc = $request->tip_doc;
         $cliente->documento = $request->documento;
         $cliente->telefono = $request->telefono;
@@ -66,9 +66,9 @@ class ClienteController extends Controller
         $cliente->estado = $request->estado;
         $cliente->usu_ult_mod = 1;
 
-        if( $cliente->save()){
+        if ($cliente->save()) {
             $message = "El registro ha sido actualizado";
-        }else {
+        } else {
             $message = "El registro no ha sido actualizado";
         }
 
