@@ -512,6 +512,7 @@ window.bootstrap = bootstrap;
                         error_message.value = error;
                         console.error("There was an error!", error);
                     });
+                    
             }
             return{
                 error_message,
