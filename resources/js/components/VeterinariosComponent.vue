@@ -26,7 +26,7 @@
                         <td class="text-start">{{ veterinario.nombre }}</td>
                         <td class="text-start">{{ veterinario.apellido }}</td>
                         <td>
-                            <input type="datetime-local" disabled v-model="veterinario.fec_nac">
+                            <input type="date" disabled v-model="veterinario.fec_nac">
                         </td>
                         <td>
                             <span v-if="veterinario.tip_doc == 1">DNI</span>
@@ -87,10 +87,11 @@
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col-12 d-flex">
+                            <div class="col-12 d-flex mb-3">
                                 <div class=" form-floating col-4">
                                     <select class="form-select" id="tipDoc" aria-label="Floating label select example"
-                                        aria-describedby="requiredDocumento" v-model="veterinario.tip_doc">
+                                        aria-describedby="requiredDocumento" v-model="veterinario.tip_doc"
+                                        :disabled="veterinario.id > 0 ? true : false" @click="cleanNombres">
                                         <option value="0" selected disabled>Seleccione ...</option>
                                         <option value="1">DNI</option>
                                         <option value="2">Pasaporte</option>
@@ -102,40 +103,45 @@
                                         Obligtorio
                                     </div>
                                 </div>
-                                <div class="form-floating col-8" v-show="veterinario.tip_doc == '1'">
-                                    <input type="text" class="form-control" id="documento-dni" placeholder="Nº DNI  *"
-                                        aria-describedby="requiredDni" v-model="veterinario.documento">
-                                    <label class="ms-2" for="floatingInput">Nº DNI *</label>
-                                    <div id="requiredDni" class="form-text text-danger" v-if="veterinario.documento == 0">
-                                        Obligtorio, ejemplo: 78455511 [[error_message]]
+                                <div class="col-8 d-flex text-end" v-if="veterinario.tip_doc == '1'">
+                                    <div class="form-floating col-8 ms-1">
+                                        <input type="number" class="form-control" id="documento-dni" placeholder="Nº DNI  *"
+                                            aria-describedby="requiredDni" v-model="veterinario.documento"
+                                            @input="filtroDocumento(veterinario.tip_doc)"
+                                            :disabled="veterinario.id > 0 ? true : false">
+                                        <label class="ms-2" for="floatingInput">Nº DNI *</label>
+                                        <div id="requiredDni" class="form-text text-danger text-start"
+                                            v-if="veterinario.documento < 10000000">
+                                            Mínimo 8 dígitos, ejemplo: 78455511
+                                        </div>
+                                        <div id="requiredDni" class="form-text text-danger text-start" v-if="error_message">
+                                            {{ error_message }}
+                                        </div>
                                     </div>
-                                    <div id="requiredDni" class="form-text text-danger" v-if="error_message">
-                                        [[error_message]]
+                                    <div class="align-items-center col-4 text-end h-100 pt-3" v-show="veterinario.id < 1">
+                                        <button type="button" class="btn btn-dark fw-1"
+                                            @click="consultarDni(veterinario.documento)"
+                                            :disabled="veterinario.documento < 10000000 ? true : false">Consultar</button>
                                     </div>
-                                    <button @click="consultarDni(veterinario.documento)">Consultar</button>
                                 </div>
-                                <div class="form-floating col-8 " v-show="veterinario.tip_doc == '3'">
+                                <div class="form-floating col-8 ms-1"
+                                    v-if="veterinario.tip_doc == '3' || veterinario.tip_doc == '2'">
                                     <input type="text" class="form-control" id="documento-carne"
-                                        placeholder="Carné de extrangeria *" aria-describedby="requiredCarne"
-                                        v-model="veterinario.documento">
-                                    <label class="ms-2" for="floatingInput">Carné de extrangeria *</label>
-                                    <div id="requiredCarne" class="form-text text-danger" v-if="veterinario.documento == 0">
-                                        Obligtorio, ejemplo: 78455511
+                                        placeholder="Carné / Pasaporte *" aria-describedby="requiredCarne"
+                                        v-model="veterinario.documento" @input="filtroDocumento(veterinario.tip_doc)">
+                                    <label class="ms-2" for="floatingInput">Carné / Pasaporte *</label>
+                                    <div id="requiredCarne" class="form-text text-danger text-start"
+                                        v-if="veterinario.documento.length < 8">
+                                        Mínimo 8 dígitos y máximo 15 dígitos
                                     </div>
                                 </div>
-                                <div class="form-floating col-8 " v-show="veterinario.tip_doc == '2'">
-                                    <input type="text" class="form-control" id="documento-pass" placeholder="Pasaporte *"
-                                        aria-describedby="requiredPass" v-model="veterinario.documento">
-                                    <label class="ms-2" for="floatingInput">Pasaporte *</label>
-                                    <div id="requiredPass" class="form-text text-danger" v-if="veterinario.documento == 0">
-                                        Obligtorio, ejemplo: 78455511
-                                    </div>
-                                </div>
+
                             </div>
 
                             <div class="col-12 form-floating mb-3">
                                 <input type="text" class="form-control" id="nombre" placeholder="Nombre *"
-                                    aria-describedby="requiredNombre" v-model="veterinario.nombre">
+                                    aria-describedby="requiredNombre" v-model="veterinario.nombre"
+                                    :readonly="veterinario.tip_doc == 1 ? true : false">
                                 <label class="ms-2" for="floatingInput">Nombre *</label>
                                 <div id="requiredNombre" class="form-text text-danger" v-if="veterinario.nombre == ''">
                                     Obligtorio, ejemplo: Ana Lucía
@@ -143,7 +149,8 @@
                             </div>
                             <div class="col-12 form-floating mb-3">
                                 <input type="text" class="form-control" id="apellido" placeholder="Apellido *"
-                                    aria-describedby="requiredApellido" v-model="veterinario.apellido">
+                                    aria-describedby="requiredApellido" v-model="veterinario.apellido"
+                                    :readonly="veterinario.tip_doc == 1 ? true : false">
                                 <label class="ms-2" for="floatingInput">Apellido *</label>
                                 <div id="requiredApellido" class="form-text text-danger" v-if="veterinario.apellido == ''">
                                     Obligtorio, ejemplo: López Rojas
@@ -151,12 +158,12 @@
                             </div>
                             <div class="col-12 mb-3">
                                 <label class="ms-2" for="fecNac">Fecha de Nacimiento *</label>
-                                <input id="fecNac" type="text" class="form-control" placeholder="02/02/2000" v-model="veterinario.fec_nac" aria-describedby="requiredFecNac" />
-                                <div id="requiredFecNac" class="form-text text-danger" v-if="veterinario.fec_nac == ''">
+                                <input id="fecNac" type="text" class="form-control" placeholder="02/02/2000"
+                                    v-model="veterinario.fec_nac" aria-describedby="requiredFecNac" />
+                                <div id="requiredFecNac" class="form-text text-danger" v-show="veterinario.fec_nac == ''">
                                     Obligtorio, ejemplo: 02/02/2000
                                 </div>
                             </div>
-
                             <div class="col-12 form-floating mb-3">
                                 <input type="text" class="form-control" id="telefono" placeholder="Telefono *"
                                     aria-describedby="requiredTelefono" v-model="veterinario.num_telefono">
@@ -223,7 +230,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" v-if="veterinario.id > 0"
                         @click="actualizarVeterinario(veterinario.id)">Actualizar registro</button>
-                    <button type="button" class="btn btn-primary" v-else @click="guardarVeterinario()">Guardar
+                    <button type="button" class="btn btn-primary" :disabled="is_disabled" v-else
+                        @click="guardarVeterinario()">Guardar
                         registro</button>
 
                 </div>
@@ -252,12 +260,13 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 export default {
     setup() {
         const error_message = ref("")
+        const is_disabled = ref(false)
         const modal_vet = reactive({
             mdl_vet: null,
         })
@@ -329,6 +338,7 @@ export default {
             veterinario.horario_id = 0
             veterinario.usu_registro = 0
             veterinario.usu_ult_mod = 0
+            error_message.value = ""
         }
         function closeModal() {
             modal_vet.mdl_vet.hide()
@@ -349,17 +359,41 @@ export default {
                         return Promise.reject(error);
                     }
                     console.log(data)
-
-                    veterinario.apellido = data.apellidoPaterno + ' ' + data.apellidoMaterno
-                    veterinario.nombre = data.nombres
-
-                    console.log(veterinario.apellido)
-
+                    if (data.error) {
+                        error_message.value = data.error
+                        //console.log(error_message.value)
+                    } else {
+                        veterinario.apellido = data.apellidoPaterno + ' ' + data.apellidoMaterno
+                        veterinario.nombre = data.nombres
+                        //console.log(veterinario.apellido)
+                    }
                 })
                 .catch((error) => {
                     error_message.value = error;
                     console.error("There was an error!", error);
                 });
+        }
+        function cleanNombres() {
+            if (veterinario.tip_doc == 1 || veterinario.tip_doc == 2 || veterinario.tip_doc == 3) {
+                veterinario.documento = "";
+                veterinario.nombre = "";
+                veterinario.apellido = "";
+            }
+        }
+        function desabilitar() {
+            is_disabled.value = veterinario.documento == "" ||
+                veterinario.documento.length < 8 ||
+                veterinario.documento < 10000000 ||
+                veterinario.nombre == "" ||
+                veterinario.apellido == "" ||
+                veterinario.fec_nac == "" ||
+                veterinario.tip_doc == 0 ||
+                veterinario.documento == "" ||
+                veterinario.num_telefono == "" ||
+                veterinario.especialidad == 0 ||
+                veterinario.estado == 0 ||
+                veterinario.horario_id == 0 ? true : false;
+            console.log(is_disabled.value)
         }
         function editarVeterinario(veterinario_tabla) {
             cleanForm()
@@ -401,6 +435,21 @@ export default {
                     error_message.value = error;
                     console.error("There was an error!", error);
                 });
+        }
+        function filtroDocumento(tipo) {
+            if (tipo == 1) {
+                if (veterinario.documento < 0 || veterinario.documento > 99999999) {
+                    veterinario.documento = '';
+                    error_message.value = ""
+                }
+            }
+            if (tipo == 2 || tipo == 3) {
+                if (veterinario.documento.length < 0 || veterinario.documento.length > 15) {
+                    veterinario.documento = '';
+                    error_message.value = "Mínimo 8 dígitos y máximo 15 dígitos"
+                }
+            }
+
         }
         function getVerinarios() {
             fetch("http://127.0.0.1:8000/veterinarios", {
@@ -452,7 +501,11 @@ export default {
                 showDropdowns: true,
                 minYear: 1940,
                 maxYear: 2005,
-            })
+            });
+            $("#fecNac").on("change", function () {
+                veterinario.fec_nac = $("#fecNac").val();
+
+            });
         }
         function nuevoVeterinario() {
             cleanForm()
@@ -464,10 +517,14 @@ export default {
         function openModalDetele() {
             modal_delete.mdl_delete.show()
         }
-
+        watch(veterinario, (newVet, oldVet) => {
+            error_message.value = ""
+            desabilitar()
+        })
 
         return {
             error_message,
+            is_disabled,
             modal_vet,
             modal_delete,
             veterinario,
@@ -475,23 +532,28 @@ export default {
             reniecs,
             reniec,
             actualizarVeterinario,
+            cleanForm,
+            cleanNombres,
             consultarDni,
-            nuevoVeterinario,
+            desabilitar,
             editarVeterinario,
             eliminarVeterinario,
             eliminarRegistro,
+            filtroDocumento,
             getVerinarios,
             guardarVeterinario,
             mostrarCalendarioNac,
+            nuevoVeterinario,
 
         }
     },
+
     mounted() {
-        console.log('Component mounted.')
         this.getVerinarios();
         this.modal_vet.mdl_vet = new bootstrap.Modal('#mdl-veterinario', {})
         this.modal_delete.mdl_delete = new bootstrap.Modal('#mdl-delete', {})
         this.mostrarCalendarioNac();
     }
+
 }
 </script>
