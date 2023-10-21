@@ -6,6 +6,9 @@ use App\Models\Veterinario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Carbon\Carbon;
+
+//use Illuminate\Database\QueryException;
+
 class VeterinarioController extends Controller
 {
     /**
@@ -13,10 +16,10 @@ class VeterinarioController extends Controller
      */
     public function index()
     {
-        
-        if (Gate::allows('administrador')){
 
-            $veterinario = Veterinario::whereIn('estado',[0,1])->get();
+        if (Gate::allows('administrador')) {
+
+            $veterinario = Veterinario::whereIn('estado', [0, 1])->get();
 
             $veterinario->transform(function ($veterinario) {
                 $veterinario->fec_nac = Carbon::parse($veterinario->fec_nac)->format('Y-m-d');
@@ -24,7 +27,6 @@ class VeterinarioController extends Controller
             });
 
             return response()->json($veterinario);
-
         } else {
             return response()->json(['error' => 'Acceso denegado'], 403);
         }
@@ -35,21 +37,31 @@ class VeterinarioController extends Controller
      */
     public function store(Request $request)
     {
-        $veterinario = new Veterinario();
-        $veterinario->nombre=$request->nombre;
-        $veterinario->apellido=$request->apellido;
-        $veterinario->fec_nac = $request->fec_nac;
-        $veterinario->tip_doc = $request->tip_doc;
-        $veterinario->documento = $request->documento;
-        $veterinario->num_telefono = $request->num_telefono;
-        $veterinario->especialidad = $request->especialidad;
-        $veterinario->estado = $request->estado;
-        $veterinario->horario_id = $request->horario_id;
-        $veterinario->usu_registro = auth()->user()->id;
+        $repetido = $request->documento;
+        $prev_veterinario = Veterinario::where('documento', $repetido)->first();
 
-        $veterinario->save();
+        if($prev_veterinario){
+            $message = "El registro ya existe";
+            $response = [
+                'message' => $message
+            ];
+            return response()->json($response);
+        }else{
+            $veterinario = new Veterinario();
+            $veterinario->nombre=$request->nombre;
+            $veterinario->apellido=$request->apellido;
+            $veterinario->fec_nac = $request->fec_nac;
+            $veterinario->tip_doc = $request->tip_doc;
+            $veterinario->documento = $request->documento;
+            $veterinario->num_telefono = $request->num_telefono;
+            $veterinario->especialidad = $request->especialidad;
+            $veterinario->estado = $request->estado;
+            $veterinario->horario_id = $request->horario_id;
+            $veterinario->usu_registro = auth()->user()->id;
 
-        return response()->json($veterinario);
+            $veterinario->save();
+            return response()->json($veterinario);
+        }
     }
 
     /**
@@ -68,8 +80,8 @@ class VeterinarioController extends Controller
     public function update(Request $request, string $id)
     {
         $veterinario = Veterinario::find($id);
-        $veterinario->nombre=$request->nombre;
-        $veterinario->apellido=$request->apellido;
+        $veterinario->nombre = $request->nombre;
+        $veterinario->apellido = $request->apellido;
         $veterinario->fec_nac = $request->fec_nac;
         $veterinario->tip_doc = $request->tip_doc;
         $veterinario->documento = $request->documento;
@@ -79,9 +91,9 @@ class VeterinarioController extends Controller
         $veterinario->horario_id = $request->horario_id;
         $veterinario->usu_ult_mod = auth()->user()->id;
 
-        if( $veterinario->save()){
+        if ($veterinario->save()) {
             $message = "El registro ha sido actualizado";
-        }else {
+        } else {
             $message = "El registro no ha sido actualizado";
         }
 
@@ -107,5 +119,4 @@ class VeterinarioController extends Controller
 
         return response()->json($response);
     }
-
 }

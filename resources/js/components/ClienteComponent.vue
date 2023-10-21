@@ -60,6 +60,57 @@
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
+                            <div class="col-12 d-flex mb-3">
+                                <div class=" form-floating col-3">
+                                    <select class="form-select" id="tipDoc" aria-label="Floating label select example"
+                                        aria-describedby="requiredDocumento" v-model="veterinario.tip_doc"
+                                        :disabled="veterinario.id > 0 ? true : false" @click="cleanNombres">
+                                        <option value="0" selected disabled>Seleccione ...</option>
+                                        <option value="1">DNI</option>
+                                        <option value="2">Pasaporte</option>
+                                        <option value="3">Carné</option>
+                                    </select>
+                                    <label for="tipDoc">Tipo Doc. *</label>
+                                    <div id="requiredDocumento" class="form-text text-danger"
+                                        v-if="veterinario.tip_doc == ''">
+                                        Obligtorio
+                                    </div>
+                                </div>
+                                <div class="col-9 ps-3" v-if="veterinario.tip_doc == '1'">
+                                    <div class="input-group">
+                                        <input type="number" id="documento-dni" class="form-control" placeholder="Nº DNI  *"
+                                            aria-label="Recipient's username" aria-describedby="requiredDni"
+                                            v-model="veterinario.documento" @input="filtroDocumento(veterinario.tip_doc)"
+                                            :disabled="veterinario.id > 0 ? true : false">
+                                        <button class="btn btn-outline-secondary" type="button" id="requiredDni"
+                                            @click="consultarDni(veterinario.documento)"
+                                            :disabled="veterinario.documento < 10000000 ? true : false">Consultar</button>
+                                    </div>
+                                    <div id="requiredDni" class="form-text text-danger text-start"
+                                        v-if="veterinario.documento < 10000000">
+                                        Mínimo 8 dígitos, ejemplo: 78455511
+                                    </div>
+                                    <div id="requiredDni" class="form-text text-danger text-start" v-if="error_message">
+                                        {{ error_message }}
+                                    </div>
+                                </div>
+                                <div class="form-floating col-9 ps-3"
+                                    v-if="veterinario.tip_doc == '3' || veterinario.tip_doc == '2'">
+                                    <input type="text" class="form-control" id="documento-carne"
+                                        placeholder="Carné / Pasaporte *" aria-describedby="requiredCarne"
+                                        v-model="veterinario.documento" @input="filtroDocumento(veterinario.tip_doc)">
+                                    <label class="ms-2" for="floatingInput">Carné / Pasaporte *</label>
+                                    <div id="requiredCarne" class="form-text text-danger text-start"
+                                        v-if="veterinario.documento.length < 8">
+                                        Mínimo 8 dígitos y máximo 15 dígitos
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
                             <div class="col-12 form-floating mb-3">
                                 <input type="text" class="form-control" id="nombre" placeholder="Nombre *"
                                     aria-describedby="requiredNombre" v-model="cliente.nombre">
@@ -78,31 +129,6 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 d-flex">
-                                <div class=" form-floating col-4">
-                                    <select class="form-select" id="tipDoc" aria-label="Floating label select example"
-                                        aria-describedby="requiredDocumento" v-model="cliente.tip_doc">
-                                        <option value="0" selected disabled>Seleccione ...</option>
-                                        <option value="1">DNI</option>
-                                        <option value="2">Pasaporte</option>
-                                        <option value="3">Carné</option>
-                                    </select>
-                                    <label for="tipDoc">Tipo Documento *</label>
-                                    <div id="requiredDocumento" class="form-text text-danger"
-                                        v-if="cliente.tip_doc == ''">
-                                        Obligtorio
-                                    </div>
-                                </div>
-                                <div class="form-floating col-8 ">
-                                    <input type="text" class="form-control" id="documento" placeholder="Documento *"
-                                        aria-describedby="requiredDocumento" v-model="cliente.documento">
-                                    <label class="ms-2" for="floatingInput">Documento *</label>
-                                    <div id="requiredDocumento" class="form-text text-danger"
-                                        v-if="cliente.documento == 0">
-                                        Obligtorio, ejemplo: 78455511
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="col-12 form-floating mb-3">
                                 <input type="text" class="form-control" id="telefono" placeholder="Telefono *"
@@ -223,7 +249,7 @@ window.bootstrap = bootstrap;
             cliente.email = ""
             cliente.estado = 0
         }
-        
+
         function closeModal(){
             modal_cliente.mdl_cli.hide()
             cleanForm()
@@ -340,7 +366,7 @@ window.bootstrap = bootstrap;
                 modal_delete,
                 cliente,
                 clientes,
-                
+
                 actualizarCliente,
                 nuevoCliente,
                 editarCliente,

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('nombre', 250);
             $table->string('apellido', 250);
-            $table->timestamp('fec_nac')->nullable();
+            $table->date('fec_nac')->nullable();
             $table->integer('tip_doc');
             $table->string('documento', 20)->unique();
             $table->string('num_telefono', 20);

@@ -16,7 +16,9 @@ class ClienteController extends Controller
     public function index()
     {
         $cliente = Cliente::whereIn('estado', [0, 1])->get();
+
         return response()->json($cliente);
+
     }
 
     /**
@@ -46,7 +48,9 @@ class ClienteController extends Controller
      */
     public function show(string $id)
     {
+
         $cliente = Cliente::find($id);
+
         return response()->json($cliente);
     }
 
