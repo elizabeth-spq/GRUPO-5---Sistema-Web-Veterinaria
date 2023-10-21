@@ -20,10 +20,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(cliente, index) in clientes">
+                    <tr v-for="(cliente, index) in clientes" class="text-center align-middle">
                         <th scope="row">{{ index + 1 }}</th>
-                        <td>{{ cliente.nombre }}</td>
-                        <td>{{ cliente.apellido }}</td>
+                        <td class="text-start">{{ cliente.nombre }}</td>
+                        <td class="text-start">{{ cliente.apellido }}</td>
                         <td>
                             <span v-if="cliente.tip_doc == 1">DNI</span>
                             <span v-if="cliente.tip_doc == 2">Pasaporte</span>
@@ -39,8 +39,9 @@
                         </td>
                         <td>
                             <div class="row g-1">
-                                <div class="col"> <button type="button" class="btn btn-warning w-100">Editar</button></div>
-                                <div class="col"> <button type="button" class="btn btn-danger w-100">Eliminar</button></div>
+                                <div class="col"> <button type="button" class="btn btn-warning w-100"
+                                        @click="editarCliente(cliente)">Editar</button></div>
+                                <div class="col"> <button type="button" class="btn btn-danger w-100" @click="eliminarCliente(cliente.id)">Eliminar</button></div>
                             </div>
                         </td>
                     </tr>
@@ -148,7 +149,7 @@
                                     @input="filtroEmail()">
                                 <label class="ms-2" for="floatingInput">Email *</label>
                                 <div id="requiredEmail" class="form-text text-danger text-start" v-if="error_message">
-                                        {{ error_message }}
+                                    {{ error_message }}
                                 </div>
                             </div>
                             <div class="col-12">
@@ -171,7 +172,7 @@
                     <button type="button" class="btn btn-primary" v-if="cliente.id > 0"
                         @click="actualizarCliente(cliente.id)">Actualizar registro</button>
                     <button type="button" class="btn btn-primary" v-else @click="guardarCliente()"
-                    :disabled="is_disabled">Guardar
+                        :disabled="is_disabled">Guardar
                         registro</button>
 
                 </div>
@@ -226,8 +227,8 @@ export default {
             estado: 0,
         })
         function actualizarCliente(Id) {
-            console.log(cliente)
-            fetch("http://127.0.0.1:8000/clientes" + Id, {
+            //console.log(cliente)
+            fetch("http://127.0.0.1:8000/clientes/" + Id, {
                 method: "PUT",
                 headers: {
                     Accept: "Application/json",
@@ -242,14 +243,15 @@ export default {
                             "error"
                         return Promise.reject(error);
                     }
+                    obtenerClientes();
+                    closeModal();
 
                 })
                 .catch((error) => {
                     error_message.value = error;
                     console.error("There was an error!", error);
                 });
-            obtenerClientes();
-            closeModal();
+
         }
         function cleanForm() {
             cliente.id = 0
@@ -309,16 +311,16 @@ export default {
                 cliente.apellido == "" ||
                 cliente.telefono == "" ||
                 cliente.tip_doc == 0 ||
-                cliente.direccion == ""  ? true : false;
+                cliente.direccion == "" ? true : false;
 
         }
         function editarCliente(cliente_tabla) {
             cleanForm()
+            cliente.tip_doc = cliente_tabla.tip_doc
+            cliente.documento = cliente_tabla.documento
             cliente.id = cliente_tabla.id
             cliente.nombre = cliente_tabla.nombre
             cliente.apellido = cliente_tabla.apellido
-            cliente.tip_doc = cliente_tabla.tip_doc
-            cliente.documento = cliente_tabla.documento
             cliente.telefono = cliente_tabla.telefono
             cliente.direccion = cliente_tabla.direccion
             cliente.email = cliente_tabla.email
@@ -331,8 +333,8 @@ export default {
             openModalDetele()
         }
 
-        function eliminarRegistroCli(Id) {
-            fetch("http://127.0.0.1:8000/clientes" + Id, {
+        function eliminarRegistro(Id) {
+            fetch("http://127.0.0.1:8000/clientes/" + Id, {
                 method: "DELETE",
                 headers: {
                     Accept: "Application/json",
@@ -429,7 +431,7 @@ export default {
 
         function nuevoCliente() {
             cleanForm()
-            cliente.estado=1
+            cliente.estado = 1
             openModal()
         }
 
@@ -459,7 +461,7 @@ export default {
             desabilitar,
             editarCliente,
             eliminarCliente,
-            eliminarRegistroCli,
+            eliminarRegistro,
             filtroDocumento,
             filtroEmail,
             obtenerClientes,

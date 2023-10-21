@@ -26,7 +26,7 @@
                         <td class="text-start">{{ veterinario.nombre }}</td>
                         <td class="text-start">{{ veterinario.apellido }}</td>
                         <td>
-                            <input type="date" disabled v-model="veterinario.fec_nac">
+                            {{ veterinario.fec_nac }}
                         </td>
                         <td>
                             <span v-if="veterinario.tip_doc == 1">DNI</span>
@@ -319,7 +319,7 @@ export default {
         })
 
         function actualizarVeterinario(Id) {
-            console.log(veterinario)
+            //console.log(veterinario)
             fetch("http://127.0.0.1:8000/veterinarios/" + Id, {
                 method: "PUT",
                 headers: {
@@ -335,14 +335,14 @@ export default {
                             "error"
                         return Promise.reject(error);
                     }
-
+                    getVerinarios();
+                    closeModal();
                 })
                 .catch((error) => {
                     error_message.value = error;
                     console.error("There was an error!", error);
                 });
-            getVerinarios();
-            closeModal();
+
         }
         function cleanForm() {
             veterinario.id = 0
