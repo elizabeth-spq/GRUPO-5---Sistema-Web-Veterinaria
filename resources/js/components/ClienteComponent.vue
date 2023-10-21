@@ -170,7 +170,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" v-if="cliente.id > 0"
-                        @click="actualizarCliente(cliente.id)">Actualizar registro</button>
+                        @click="actualizarCliente(cliente.id)" :disabled="is_disabled">Actualizar registro</button>
                     <button type="button" class="btn btn-primary" v-else @click="guardarCliente()"
                         :disabled="is_disabled">Guardar
                         registro</button>

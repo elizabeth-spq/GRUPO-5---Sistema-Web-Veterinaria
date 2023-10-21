@@ -530,7 +530,6 @@ export default {
                 }
             });
             $("#fecNac").on("change", function () {
-                console.log($("#fecNac").val())
                 veterinario.fec_nac = $("#fecNac").val();
             });
         }

@@ -10,9 +10,9 @@ class RazaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(int $id)
     {
-        $razas = Raza::get();
+        $razas = Raza::whereIn('animal_id',[$id])->get();
         return response()->json($razas);
     }
 

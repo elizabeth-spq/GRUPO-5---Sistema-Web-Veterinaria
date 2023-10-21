@@ -23,6 +23,7 @@ class VerifyCsrfToken extends Middleware
         "/mascotas/",
         "/mascotas/*",
         "/razas/",
+        "/razas/*",
         "/animales/",
     ];
 }

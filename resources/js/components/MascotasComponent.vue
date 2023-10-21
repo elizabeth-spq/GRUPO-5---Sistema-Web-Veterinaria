@@ -24,45 +24,45 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(mascota,index) in mascotas">
+                    <tr v-for="(mascota, index) in mascotas">
                         <th scope="row">{{ index + 1 }}</th>
                         <td>{{ mascota.nombre }}</td>
                         <td>{{ mascota.cliente_id }}</td>
                         <td>
-                            <span v-if="mascota.animal_id==1">Gato</span>
-                            <span v-if="mascota.animal_id==2">Perro</span>
+                            <span v-if="mascota.animal_id == 1">Gato</span>
+                            <span v-if="mascota.animal_id == 2">Perro</span>
                         </td>
                         <td>
-                            <span v-if="mascota.raza_id==1">Mestizo</span>
-                            <span v-if="mascota.raza_id==2">Viringo</span>
-                            <span v-if="mascota.raza_id==3">Labrador retriever</span>
-                            <span v-if="mascota.raza_id==4">Pastor alemán</span>
-                            <span v-if="mascota.raza_id==5">Yorkshire terrier</span>
-                            <span v-if="mascota.raza_id==6">Beagle</span>
-                            <span v-if="mascota.raza_id==7">Golder retriever</span>
-                            <span v-if="mascota.raza_id==8">Bulldog</span>
-                            <span v-if="mascota.raza_id==9">Boxer</span>
-                            <span v-if="mascota.raza_id==10">Poodle</span>
-                            <span v-if="mascota.raza_id==11">Shih tzu</span>
-                            <span v-if="mascota.raza_id==12">Chow chow</span>
-                            <span v-if="mascota.raza_id==13">Pekines</span>
-                            <span v-if="mascota.raza_id==14">Mestizo</span>
+                            <span v-if="mascota.raza_id == 1">Mestizo</span>
+                            <span v-if="mascota.raza_id == 2">Viringo</span>
+                            <span v-if="mascota.raza_id == 3">Labrador retriever</span>
+                            <span v-if="mascota.raza_id == 4">Pastor alemán</span>
+                            <span v-if="mascota.raza_id == 5">Yorkshire terrier</span>
+                            <span v-if="mascota.raza_id == 6">Beagle</span>
+                            <span v-if="mascota.raza_id == 7">Golder retriever</span>
+                            <span v-if="mascota.raza_id == 8">Bulldog</span>
+                            <span v-if="mascota.raza_id == 9">Boxer</span>
+                            <span v-if="mascota.raza_id == 10">Poodle</span>
+                            <span v-if="mascota.raza_id == 11">Shih tzu</span>
+                            <span v-if="mascota.raza_id == 12">Chow chow</span>
+                            <span v-if="mascota.raza_id == 13">Pekines</span>
+                            <span v-if="mascota.raza_id == 14">Mestizo</span>
                         </td>
                         <td>{{ mascota.fec_nac }}</td>
                         <td>
-                            <span v-if="mascota.sexo==1">macho</span>
-                            <span v-if="mascota.sexo==2">hembra</span>
+                            <span v-if="mascota.sexo == 1">macho</span>
+                            <span v-if="mascota.sexo == 2">hembra</span>
                         </td>
                         <td>{{ mascota.color }}</td>
                         <td>{{ mascota.altura }}</td>
                         <td>{{ mascota.peso }}</td>
                         <td>
-                            <span v-if="mascota.estirilizado==1">Si</span>
-                            <span v-if="mascota.estirilizado==2">No</span>
+                            <span v-if="mascota.estirilizado == 1">Si</span>
+                            <span v-if="mascota.estirilizado == 2">No</span>
                         </td>
                         <td>
-                            <span v-if="mascota.vacunas==1">Si</span>
-                            <span v-if="mascota.vacunas==2">No</span>
+                            <span v-if="mascota.vacunas == 1">Si</span>
+                            <span v-if="mascota.vacunas == 2">No</span>
                         </td>
                         <td>
                             <i :class="mascota.estado == 1 ? 'bi bi-check2-circle' : 'bi bi-exclamation-circle'">
@@ -73,9 +73,9 @@
                         <td>
                             <div class="row g-1">
                                 <div class="col"> <button type="button" class="btn btn-warning w-100"
-                                    @click="editarMascota(mascota)">Editar</button></div>
+                                        @click="editarMascota(mascota)">Editar</button></div>
                                 <div class="col"> <button type="button" class="btn btn-danger w-100"
-                                    @click="eliminarMascota(mascota.id)">Eliminar</button></div>
+                                        @click="eliminarMascota(mascota.id)">Eliminar</button></div>
                             </div>
                         </td>
                     </tr>
@@ -108,51 +108,53 @@
 
                             <div class="col-12 form-floating mb-3">
                                 <select class="form-select" id="Dueño" aria-label="Floating label select example"
-                                        aria-describedby="requiredDueño" v-model="clienteSeleccionado">
-                                    <option value="">Seleccione...</option>
-                                    <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.nombre }}</option>
+                                    aria-describedby="requiredDueño" v-model="mascota.cliente_id">
+                                    <option value="0" disabled>Seleccione...</option>
+                                    <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.nombre }} {{
+                                        cliente.apellido }}</option>
                                 </select>
                                 <label for="dueño" class="ms-2">Dueño *</label>
-                                <div id="requiredDueño" class="form-text text-danger" v-if="!clienteSeleccionado">
+                                <div id="requiredDueño" class="form-text text-danger" v-if="mascota.cliente_id == 0">
                                     Obligtorio
                                 </div>
                             </div>
-                            
+
                             <!--Seccion de raza y especie-->
                             <div class="col-12 d-flex">
                                 <div class=" form-floating col-6 mb-3">
                                     <select class="form-select" id="Animal" aria-label="Floating label select example"
-                                            aria-describedby="requiredAnimal" v-model="animalSeleccionado">
-                                        <option value="">Seleccion...</option>
+                                        aria-describedby="requiredAnimal" v-model="mascota.animal_id"
+                                        @click="obtenerNomRazas(mascota.animal_id)">
+                                        <option value="" disabled>Seleccione...</option>
                                         <option v-for="animal in animales" :value="animal.id">{{ animal.nombre }}</option>
                                     </select>
                                     <label for="animal" class="ms-2">Animal *</label>
-                                    <div id="requiredAnimal" class="form-text text-danger" v-if="!animalSeleccionado">
+                                    <div id="requiredAnimal" class="form-text text-danger" v-if="mascota.animal_id == 0">
                                         Obligtorio
                                     </div>
                                 </div>
                                 <div class=" form-floating col-6 mb-3">
                                     <select class="form-select" id="Raza" aria-label="Floating label select example"
-                                            aria-describedby="requiredRaza" v-model="razaSeleccionado">
-                                        <option value="">Seleccione...</option>
+                                        aria-describedby="requiredRaza" v-model="mascota.raza_id">
+                                        <option value="0" disabled>Seleccione...</option>
                                         <option v-for="raza in razas" :value="raza.id">{{ raza.nombre }}</option>
                                     </select>
                                     <label for="raza" class="ms-2">Raza *</label>
-                                    <div id="requiredRaza" class="form-text text-danger" v-if="!razaSeleccionado">
+                                    <div id="requiredRaza" class="form-text text-danger" v-if="mascota.raza_id == 0">
                                         Obligtorio
                                     </div>
                                 </div>
                             </div>
                             <!--Seccion de raza y especie-->
-
                             <div class="col-12 mb-3">
                                 <label class="ms-2" for="fecNac">Fecha de Nacimiento *</label>
-                                <input type="date" class="form-control" id="fecNac" aria-describedby="requiredFecNac"
-                                    v-model="mascota.fec_nac">
-                                <div id="requiredFecNac" class="form-text text-danger" v-if="mascota.fec_nac == ''">
+                                <input id="fecNac" type="text" class="form-control" placeholder="02/02/2000"
+                                    v-model="mascota.fec_nac" aria-describedby="requiredFecNac" />
+                                <div id="requiredFecNac" class="form-text text-danger" v-show="mascota.fec_nac == ''">
                                     Obligtorio, ejemplo: 02/02/2000
                                 </div>
                             </div>
+
                             <div class=" form-floating col-12 mb-3">
                                 <select class="form-select" id="sexo" aria-label="Floating label select example"
                                     aria-describedby="requiredsexo" v-model="mascota.sexo">
@@ -203,9 +205,10 @@
                                         <option value="2">No</option>
                                     </select>
                                     <label for="Est" class="ms-2">Estirilizado *</label>
-                                        <div id="requiredEstirilizado" class="form-text text-danger" v-if="mascota.estirilizado == 0">
-                                            Obligtorio
-                                        </div>
+                                    <div id="requiredEstirilizado" class="form-text text-danger"
+                                        v-if="mascota.estirilizado == 0">
+                                        Obligtorio
+                                    </div>
                                 </div>
                                 <div class=" form-floating col-6 mb-3">
                                     <select class="form-select" id="Vacunas" aria-label="Floating label select example"
@@ -215,9 +218,9 @@
                                         <option value="2">No</option>
                                     </select>
                                     <label for="Vac" class="ms-2">Vacunas completas *</label>
-                                        <div id="requiredVacuna" class="form-text text-danger" v-if="mascota.vacunas == 0">
-                                            Obligtorio
-                                        </div>
+                                    <div id="requiredVacuna" class="form-text text-danger" v-if="mascota.vacunas == 0">
+                                        Obligtorio
+                                    </div>
                                 </div>
                             </div>
 
@@ -238,11 +241,11 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" v-if="mascota.id > 0"
-                        @click="actualizarMascota(mascota.id)">Actualizar registro</button>
-                    <button type="button" class="btn btn-primary" v-else @click="guardarMascota()">Guardar
+                        @click="actualizarMascota(mascota.id)" :disabled="is_disabled">Actualizar registro</button>
+                    <button type="button" class="btn btn-primary" :disabled="is_disabled" v-else @click="guardarMascota()">Guardar
                         registro</button>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -270,68 +273,75 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
-    export default {
-        setup() {
-            const error_message = ref("")
-            const animales = ref([])
-            const animalSeleccionado = ref('')
-            const razas = ref([])
-            const razaSeleccionado = ref('')
-            const clientes = ref([])
-            const clienteSeleccionado = ref('')
-            const mascotas = ref([])
-            const mascota = reactive({
-                id: 0,
-                nombre: "",
-                cliente_id: 0,
-                animal_id: 0,
-                raza_id: 0,
-                fec_nac: "",
-                sexo: 0,
-                color: "",
-                altura: 0,
-                peso: 0,
-                estirilizado: 0,
-                vacunas: 0,
-                estado: 0
-            })
-            const modal_mascota = reactive({
+export default {
+    setup() {
+        const error_message = ref("")
+        const animal = reactive({
+            id: 0,
+            nombre: ""
+        })
+        const animales = ref([])
+        const raza = reactive({
+            id: 0,
+            nombre: "",
+            animal_id: 0
+        })
+        const is_disabled = ref(false)
+        const razas = ref([])
+        const clientes = ref([])
+        const mascotas = ref([])
+        const mascota = reactive({
+            id: 0,
+            nombre: "",
+            cliente_id: 0,
+            animal_id: 0,
+            raza_id: 0,
+            fec_nac: "",
+            sexo: 0,
+            color: "",
+            altura: 0,
+            peso: 0,
+            estirilizado: 0,
+            vacunas: 0,
+            estado: 0
+        })
+        const modal_mascota = reactive({
             mdl_mas: null,
-            })
-            const modal_delete = reactive({
+        })
+        const modal_delete = reactive({
             mdl_delete: null,
+        })
+        function actualizarMascota(Id) {
+            console.log(mascota)
+            fetch("http://127.0.0.1:8000/mascotas/" + Id, {
+                method: "PUT",
+                headers: {
+                    Accept: "Application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(mascota),
             })
-            function actualizarMascota(Id) {
-                console.log(mascota)
-                fetch("http://127.0.0.1:8000/mascotas/" + Id, {
-                    method: "PUT",
-                    headers: {
-                        Accept: "Application/json",
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(mascota),
-                })
-                    .then(async (response) => {
-                        //const data = await response.json();
-                        if (!response.ok) {
-                            const error =
-                                "error"
-                            return Promise.reject(error);
-                        }
+                .then(async (response) => {
+                    //const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            "error"
+                        return Promise.reject(error);
+                    }
 
-                    })
-                    .catch((error) => {
-                        error_message.value = error;
-                        console.error("There was an error!", error);
-                    });
-                obtenerMascotas();
-                closeModal();
-            }
-            function cleanForm() {
-                mascota.id = 0,
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+            obtenerMascotas();
+            closeModal();
+        }
+        function cleanForm() {
+            mascota.id = 0,
                 mascota.nombre = "",
                 mascota.cliente_id = 0,
                 mascota.animal_id = 0,
@@ -344,93 +354,121 @@ window.bootstrap = bootstrap;
                 mascota.estirilizado = 0,
                 mascota.vacunas = 0,
                 mascota.estado = 0
-            }
-            function closeModal(){
-                modal_mascota.mdl_mas.hide()
-                cleanForm()
-            }
-            function closeModalDelete() {
+        }
+        function closeModal() {
+            modal_mascota.mdl_mas.hide()
+            cleanForm()
+        }
+        function closeModalDelete() {
             modal_delete.mdl_delete.hide()
         }
-            function editarMascota(mascota_tabla) {
-                cleanForm()
-                mascota.id = mascota_tabla.id
-                mascota.nombre = mascota_tabla.nombre
-                mascota.cliente_id = mascota_tabla.cliente_id
-                mascota.animal_id = mascota_tabla.animal_id
-                mascota.raza_id = mascota_tabla.raza_id
-                mascota.fec_nac = mascota_tabla.fec_nac
-                mascota.sexo = mascota_tabla.sexo
-                mascota.color = mascota_tabla.color
-                mascota.altura = mascota_tabla.altura
-                mascota.peso = mascota_tabla.peso
-                mascota.estirilizado = mascota_tabla.estirilizado
-                mascota.vacunas = mascota_tabla.vacunas
-                mascota.estado = mascota_tabla.estado
-                openModal()
-            }
-            function eliminarMascota(Id) {
-                mascota.id = Id
-                openModalDetele()
-            }
-            function eliminarRegistro(Id) {
-                fetch("http://127.0.0.1:8000/mascotas/" + Id, {
-                    method: "DELETE",
-                    headers: {
-                        Accept: "Application/json",
-                        "Content-Type": "application/json",
-                    },
+        function desabilitar() {
+            is_disabled.value = mascota.nombre == "" ||
+                mascota.cliente_id == 0 ||
+                mascota.animal_id == 0 ||
+                mascota.raza_id == 0 ||
+                mascota.fec_nac == "" ||
+                mascota.sexo == 0 ||
+                mascota.color == "" ||
+                mascota.altura == 0 ||
+                mascota.peso == 0 ||
+                mascota.estirilizado == 0 ||
+                mascota.vacunas == 0
+                 ? true : false;
+        }
+        function editarMascota(mascota_tabla) {
+            cleanForm()
+            mascota.id = mascota_tabla.id
+            mascota.nombre = mascota_tabla.nombre
+            mascota.cliente_id = mascota_tabla.cliente_id
+            mascota.animal_id = mascota_tabla.animal_id
+            mascota.raza_id = mascota_tabla.raza_id
+            mascota.fec_nac = mascota_tabla.fec_nac
+            mascota.sexo = mascota_tabla.sexo
+            mascota.color = mascota_tabla.color
+            mascota.altura = mascota_tabla.altura
+            mascota.peso = mascota_tabla.peso
+            mascota.estirilizado = mascota_tabla.estirilizado
+            mascota.vacunas = mascota_tabla.vacunas
+            mascota.estado = mascota_tabla.estado
+            openModal()
+        }
+        function eliminarMascota(Id) {
+            mascota.id = Id
+            openModalDetele()
+        }
+        function eliminarRegistro(Id) {
+            fetch("http://127.0.0.1:8000/mascotas/" + Id, {
+                method: "DELETE",
+                headers: {
+                    Accept: "Application/json",
+                    "Content-Type": "application/json",
+                },
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    obtenerMascotas();
+                    closeModalDelete()
                 })
-                    .then(async (response) => {
-                        const data = await response.json();
-                        if (!response.ok) {
-                            const error =
-                                data && data.detail ? data.detail : response.statusText;
-                            return Promise.reject(error);
-                        }
-                        obtenerMascotas();
-                        closeModalDelete()
-                    })
-                    .catch((error) => {
-                        error_message.value = error;
-                        console.error("There was an error!", error);
-                    });
-            }
-            function nuevaMascota() {
-                cleanForm()
-                openModal()
-            }
-            function openModal(){
-                modal_mascota.mdl_mas.show()
-            }
-            function openModalDetele() {
-                modal_delete.mdl_delete.show()
-            }
-            function obtenerMascotas() {
-                fetch("http://127.0.0.1:8000/mascotas", {
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        }
+        function mostrarCalendarioNac() {
+            $('#fecNac').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 1980,
+                maxYear: parseInt(moment().format('YYYY'), 10),
+                maxDate: moment(),
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+            });
+            $("#fecNac").on("change", function () {
+                mascota.fec_nac = $("#fecNac").val();
+            });
+        }
+        function nuevaMascota() {
+            cleanForm()
+            mascota.estado = 1;
+            mascota.animal_id = 2;
+            openModal()
+        }
+        function openModal() {
+            modal_mascota.mdl_mas.show()
+        }
+        function openModalDetele() {
+            modal_delete.mdl_delete.show()
+        }
+        function obtenerMascotas() {
+            fetch("http://127.0.0.1:8000/mascotas", {
                 method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    console.log(data)
+                    mascotas.value = data;
                 })
-                    .then(async (response) => {
-                        const data = await response.json();
-                        if (!response.ok) {
-                            const error =
-                                data && data.detail ? data.detail : response.statusText;
-                            return Promise.reject(error);
-                        }
-                        console.log(data)
-                        mascotas.value = data;
-                    })
-                    .catch((error) => {
-                        error_message.value = error;
-                        console.error("There was an error!", error);
-                    });
-            }
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        }
 
-            function guardarMascota(){
-                mascota.cliente_id = clienteSeleccionado.value;
-                mascota.animal_id = animalSeleccionado.value;
-                mascota.raza_id = razaSeleccionado.value;
-                fetch("http://127.0.0.1:8000/mascotas", {
+        function guardarMascota() {
+            fetch("http://127.0.0.1:8000/mascotas", {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -451,103 +489,105 @@ window.bootstrap = bootstrap;
                     console.error("There was an error!", error);
                 });
 
-                obtenerMascotas();
-                closeModal();
-            }
-            function obtenerNomClientes() {
-                fetch("http://127.0.0.1:8000/clientes", {
-                method: "GET",
-                })
-                    .then(async (response) => {
-                        const data = await response.json();
-                        if (!response.ok) {
-                            const error =
-                                data && data.detail ? data.detail : response.statusText;
-                            return Promise.reject(error);
-                        }
-                        //console.log(data)
-                        clientes.value = data;
-                        console.log(clientes.value);
-                    })
-                    .catch((error) => {
-                        error_message.value = error;
-                        console.error("There was an error!", error);
-                    });
-            }
-            function obtenerNomAnimales() {
-                fetch("http://127.0.0.1:8000/animales", {
-                method: "GET",
-                })
-                    .then(async (response) => {
-                        const data = await response.json();
-                        if (!response.ok) {
-                            const error =
-                                data && data.detail ? data.detail : response.statusText;
-                            return Promise.reject(error);
-                        }
-                        //console.log(data)
-                        animales.value = data;
-                        console.log(animales.value);
-                    })
-                    .catch((error) => {
-                        error_message.value = error;
-                        console.error("There was an error!", error);
-                    });
-            }function obtenerNomRazas() {
-                fetch("http://127.0.0.1:8000/razas", {
-                method: "GET",
-                })
-                    .then(async (response) => {
-                        const data = await response.json();
-                        if (!response.ok) {
-                            const error =
-                                data && data.detail ? data.detail : response.statusText;
-                            return Promise.reject(error);
-                        }
-                        //console.log(data)
-                        razas.value = data;
-                        console.log(razas.value);
-                    })
-                    .catch((error) => {
-                        error_message.value = error;
-                        console.error("There was an error!", error);
-                    });
-                    
-            }
-            return{
-                error_message,
-                modal_mascota,
-                modal_delete,
-                mascota,
-                mascotas,
-                modal_mascota,
-                animales,
-                animalSeleccionado,
-                clientes,
-                clienteSeleccionado,
-                razas,
-                razaSeleccionado,
-
-                actualizarMascota,
-                guardarMascota,
-                nuevaMascota,
-                editarMascota,
-                eliminarMascota,
-                eliminarRegistro,
-                obtenerNomAnimales,
-                obtenerNomClientes,
-                obtenerNomRazas,
-                obtenerMascotas,
-            }
-        },
-        mounted() {
-            console.log('Component mounted.')
-            this.obtenerMascotas()
-            this.obtenerNomAnimales()
-            this.obtenerNomClientes()
-            this.obtenerNomRazas()
-            this.modal_mascota.mdl_mas = new bootstrap.Modal('#mdl-mascota', {})
-            this.modal_delete.mdl_delete = new bootstrap.Modal('#mdl-delete', {})
+            obtenerMascotas();
+            closeModal();
         }
+        function obtenerNomClientes() {
+            fetch("http://127.0.0.1:8000/clientes", {
+                method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    //console.log(data)
+                    clientes.value = data;
+                    console.log(clientes.value);
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        }
+        function obtenerNomAnimales() {
+            fetch("http://127.0.0.1:8000/animales", {
+                method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    animales.value = data;
+
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        } function obtenerNomRazas(Id) {
+            fetch("http://127.0.0.1:8000/razas/" + Id, {
+                method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    razas.value = data;
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+
+        }
+        watch(mascota, (newVet, oldVet) => {
+            error_message.value = ""
+            desabilitar()
+        })
+
+        return {
+            error_message,
+            is_disabled,
+            modal_mascota,
+            modal_delete,
+            mascota,
+            mascotas,
+            modal_mascota,
+            animales,
+            animal,
+            clientes,
+            raza,
+            razas,
+            actualizarMascota,
+            guardarMascota,
+            nuevaMascota,
+            desabilitar,
+            editarMascota,
+            eliminarMascota,
+            eliminarRegistro,
+            mostrarCalendarioNac,
+            obtenerNomAnimales,
+            obtenerNomClientes,
+            obtenerNomRazas,
+            obtenerMascotas,
+        }
+    },
+    mounted() {
+        this.obtenerMascotas()
+        this.obtenerNomAnimales()
+        this.obtenerNomClientes()
+        this.modal_mascota.mdl_mas = new bootstrap.Modal('#mdl-mascota', {})
+        this.modal_delete.mdl_delete = new bootstrap.Modal('#mdl-delete', {})
+        this.mostrarCalendarioNac()
     }
+}
 </script>
