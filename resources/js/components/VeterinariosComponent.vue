@@ -406,10 +406,8 @@ export default {
                 veterinario.apellido == "" ||
                 veterinario.fec_nac == "" ||
                 veterinario.tip_doc == 0 ||
-                veterinario.documento == "" ||
                 veterinario.num_telefono == "" ||
                 veterinario.especialidad == 0 ||
-                veterinario.estado == 0 ||
                 veterinario.horario_id == 0 ? true : false;
             console.log(is_disabled.value)
         }

@@ -20,21 +20,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(cliente,index) in clientes">
-                        <th scope="row">{{index + 1}}</th>
+                    <tr v-for="(cliente, index) in clientes">
+                        <th scope="row">{{ index + 1 }}</th>
                         <td>{{ cliente.nombre }}</td>
                         <td>{{ cliente.apellido }}</td>
                         <td>
-                            <span v-if="cliente.tip_doc==1">DNI</span>
-                            <span v-if="cliente.tip_doc==2">Pasaporte</span>
-                            <span v-if="cliente.tip_doc==3">Carné</span>
+                            <span v-if="cliente.tip_doc == 1">DNI</span>
+                            <span v-if="cliente.tip_doc == 2">Pasaporte</span>
+                            <span v-if="cliente.tip_doc == 3">Carné</span>
                         </td>
                         <td>{{ cliente.documento }}</td>
                         <td>{{ cliente.telefono }}</td>
                         <td>{{ cliente.direccion }}</td>
                         <td>{{ cliente.email }}</td>
                         <td>
-                            <span v-if="cliente.estado==0">Inactivo</span>
+                            <span v-if="cliente.estado == 0">Inactivo</span>
                             <span v-else="cliente.estado==1">Activo</span>
                         </td>
                         <td>
@@ -63,31 +63,30 @@
                             <div class="col-12 d-flex mb-3">
                                 <div class=" form-floating col-3">
                                     <select class="form-select" id="tipDoc" aria-label="Floating label select example"
-                                        aria-describedby="requiredDocumento" v-model="veterinario.tip_doc"
-                                        :disabled="veterinario.id > 0 ? true : false" @click="cleanNombres">
+                                        aria-describedby="requiredDocumento" v-model="cliente.tip_doc"
+                                        :disabled="cliente.id > 0 ? true : false" @click="cleanNombres()">
                                         <option value="0" selected disabled>Seleccione ...</option>
                                         <option value="1">DNI</option>
                                         <option value="2">Pasaporte</option>
                                         <option value="3">Carné</option>
                                     </select>
                                     <label for="tipDoc">Tipo Doc. *</label>
-                                    <div id="requiredDocumento" class="form-text text-danger"
-                                        v-if="veterinario.tip_doc == ''">
+                                    <div id="requiredDocumento" class="form-text text-danger" v-if="cliente.tip_doc == ''">
                                         Obligtorio
                                     </div>
                                 </div>
-                                <div class="col-9 ps-3" v-if="veterinario.tip_doc == '1'">
+                                <div class="col-9 ps-3" v-if="cliente.tip_doc == '1'">
                                     <div class="input-group">
                                         <input type="number" id="documento-dni" class="form-control" placeholder="Nº DNI  *"
                                             aria-label="Recipient's username" aria-describedby="requiredDni"
-                                            v-model="veterinario.documento" @input="filtroDocumento(veterinario.tip_doc)"
-                                            :disabled="veterinario.id > 0 ? true : false">
+                                            v-model="cliente.documento" @input="filtroDocumento(cliente.tip_doc)"
+                                            :disabled="cliente.id > 0 ? true : false">
                                         <button class="btn btn-outline-secondary" type="button" id="requiredDni"
-                                            @click="consultarDni(veterinario.documento)"
-                                            :disabled="veterinario.documento < 10000000 ? true : false">Consultar</button>
+                                            @click="consultarDni(cliente.documento)"
+                                            :disabled="cliente.documento < 10000000 ? true : false">Consultar</button>
                                     </div>
                                     <div id="requiredDni" class="form-text text-danger text-start"
-                                        v-if="veterinario.documento < 10000000">
+                                        v-if="cliente.documento < 10000000">
                                         Mínimo 8 dígitos, ejemplo: 78455511
                                     </div>
                                     <div id="requiredDni" class="form-text text-danger text-start" v-if="error_message">
@@ -95,25 +94,21 @@
                                     </div>
                                 </div>
                                 <div class="form-floating col-9 ps-3"
-                                    v-if="veterinario.tip_doc == '3' || veterinario.tip_doc == '2'">
+                                    v-if="cliente.tip_doc == '3' || cliente.tip_doc == '2'">
                                     <input type="text" class="form-control" id="documento-carne"
                                         placeholder="Carné / Pasaporte *" aria-describedby="requiredCarne"
-                                        v-model="veterinario.documento" @input="filtroDocumento(veterinario.tip_doc)">
+                                        v-model="cliente.documento" @input="filtroDocumento(cliente.tip_doc)">
                                     <label class="ms-2" for="floatingInput">Carné / Pasaporte *</label>
                                     <div id="requiredCarne" class="form-text text-danger text-start"
-                                        v-if="veterinario.documento.length < 8">
+                                        v-if="cliente.documento.length < 8">
                                         Mínimo 8 dígitos y máximo 15 dígitos
                                     </div>
                                 </div>
-
                             </div>
-
-
-
-
                             <div class="col-12 form-floating mb-3">
                                 <input type="text" class="form-control" id="nombre" placeholder="Nombre *"
-                                    aria-describedby="requiredNombre" v-model="cliente.nombre">
+                                    aria-describedby="requiredNombre" v-model="cliente.nombre"
+                                    :readonly="cliente.tip_doc == 1 ? true : false">
                                 <label class="ms-2" for="floatingInput">Nombre *</label>
                                 <div id="requiredNombre" class="form-text text-danger" v-if="cliente.nombre == ''">
                                     Obligtorio, ejemplo: Ana Lucía
@@ -122,20 +117,19 @@
 
                             <div class="col-12 form-floating mb-3">
                                 <input type="text" class="form-control" id="apellido" placeholder="Apellido *"
-                                    aria-describedby="requiredApellido" v-model="cliente.apellido">
+                                    aria-describedby="requiredApellido" v-model="cliente.apellido"
+                                    :readonly="cliente.tip_doc == 1 ? true : false">
                                 <label class="ms-2" for="floatingInput">Apellido *</label>
                                 <div id="requiredApellido" class="form-text text-danger" v-if="cliente.apellido == ''">
                                     Obligtorio, ejemplo: López Rojas
                                 </div>
                             </div>
 
-
                             <div class="col-12 form-floating mb-3">
                                 <input type="text" class="form-control" id="telefono" placeholder="Telefono *"
                                     aria-describedby="requiredTelefono" v-model="cliente.telefono">
                                 <label class="ms-2" for="floatingInput">Telefono *</label>
-                                <div id="requiredTelefono" class="form-text text-danger"
-                                    v-if="cliente.telefono == ''">
+                                <div id="requiredTelefono" class="form-text text-danger" v-if="cliente.telefono == ''">
                                     Obligtorio, ejemplo: 054-145287 ó 95741244
                                 </div>
                             </div>
@@ -148,16 +142,15 @@
                                     Obligtorio, ejemplo: Av.Marical Castilla
                                 </div>
                             </div>
-
                             <div class="col-12 form-floating mb-3">
-                                <input type="email" class="form-control" id="email" placeholder="Email *"
-                                    aria-describedby="requiredEmail" v-model="cliente.email">
+                                <input type="email" size="30" class="form-control" id="email" placeholder="Email *"
+                                    aria-describedby="requiredEmail" v-model="cliente.email" required
+                                    @input="filtroEmail()">
                                 <label class="ms-2" for="floatingInput">Email *</label>
-                                <div id="requiredEmail" class="form-text text-danger" v-if="cliente.email == ''">
-                                    Obligtorio, ejemplo: fabricio@gmial.com
+                                <div id="requiredEmail" class="form-text text-danger text-start" v-if="error_message">
+                                        {{ error_message }}
                                 </div>
                             </div>
-
                             <div class="col-12">
                                 <h6>Estado</h6>
                                 <div class="form-check form-switch">
@@ -169,7 +162,6 @@
                                     </label>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -178,9 +170,29 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" v-if="cliente.id > 0"
                         @click="actualizarCliente(cliente.id)">Actualizar registro</button>
-                    <button type="button" class="btn btn-primary" v-else @click="guardarCliente()">Guardar
+                    <button type="button" class="btn btn-primary" v-else @click="guardarCliente()"
+                    :disabled="is_disabled">Guardar
                         registro</button>
 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" id="mdl-delete">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Eliminar cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body align-self-center">
+                    <span class="text-center text-danger">Esta acción NO se puede REVERTIR</span> <br>
+                    <span class="text-center">¿Esta seguro de eliminar este registro?</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="eliminarRegistro(cliente.id)">Eliminar
+                        registro</button>
                 </div>
             </div>
         </div>
@@ -188,31 +200,32 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
-    export default{
-        setup(){
-            const error_message = ref("")
-            const modal_cliente = reactive({
+export default {
+    setup() {
+        const error_message = ref("")
+        const modal_cliente = reactive({
             mdl_cli: null,
-            })
-            const modal_delete = reactive({
+        })
+        const modal_delete = reactive({
             mdl_delete: null,
         })
-            const clientes = ref([])
-            const cliente = reactive({
-                id: 0,
-                nombre: "",
-                apellido: "",
-                tip_doc: 0,
-                documento: "",
-                telefono: "",
-                direccion: "",
-                email: "",
-                estado: 0,
-            })
-            function actualizarCliente(Id) {
+        const is_disabled = ref(false)
+        const clientes = ref([])
+        const cliente = reactive({
+            id: 0,
+            nombre: "",
+            apellido: "",
+            tip_doc: 0,
+            documento: "",
+            telefono: "",
+            direccion: "",
+            email: "",
+            estado: 0,
+        })
+        function actualizarCliente(Id) {
             console.log(cliente)
             fetch("http://127.0.0.1:8000/clientes" + Id, {
                 method: "PUT",
@@ -250,14 +263,55 @@ window.bootstrap = bootstrap;
             cliente.estado = 0
         }
 
-        function closeModal(){
+        function closeModal() {
             modal_cliente.mdl_cli.hide()
             cleanForm()
         }
         function closeModalDelete() {
             modal_delete.mdl_delete.hide()
         }
+        function cleanNombres() {
+            if (cliente.tip_doc == 1 || cliente.tip_doc == 2 || cliente.tip_doc == 3) {
+                cliente.documento = "";
+                cliente.nombre = "";
+                cliente.apellido = "";
+            }
+        }
+        function consultarDni(dni) {
+            fetch("http://127.0.0.1:8000/reniec/" + dni, {
+                method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    console.log(data)
+                    if (data.error) {
+                        error_message.value = data.error
+                    } else {
+                        cliente.apellido = data.apellidoPaterno + ' ' + data.apellidoMaterno
+                        cliente.nombre = data.nombres
+                    }
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        }
+        function desabilitar() {
+            is_disabled.value = cliente.documento == "" ||
+                cliente.documento.length < 8 ||
+                cliente.documento < 10000000 ||
+                cliente.nombre == "" ||
+                cliente.apellido == "" ||
+                cliente.telefono == "" ||
+                cliente.tip_doc == 0 ||
+                cliente.direccion == ""  ? true : false;
 
+        }
         function editarCliente(cliente_tabla) {
             cleanForm()
             cliente.id = cliente_tabla.id
@@ -301,11 +355,36 @@ window.bootstrap = bootstrap;
                 });
         }
 
+        function filtroDocumento(tipo) {
+            if (tipo == 1) {
+                if (cliente.documento < 0 || cliente.documento > 99999999) {
+                    cliente.documento = '';
+                    error_message.value = ""
+                }
+            }
+            if (tipo == 2 || tipo == 3) {
+                if (cliente.documento.length < 0 || cliente.documento.length > 15) {
+                    cliente.documento = '';
+                    error_message.value = "Mínimo 8 dígitos y máximo 15 dígitos"
+                }
+            }
+
+        }
+        function filtroEmail() {
+            if (cliente.email.includes("@") == true) {
+                error_message.value = '';
+            } else {
+
+                error_message.value = 'E-mail inválido';
+                console.log(error_message.value)
+            }
+        }
+
         //
-            function obtenerClientes() {
+        function obtenerClientes() {
             fetch("http://127.0.0.1:8000/clientes", {
                 method: "GET",
-                })
+            })
                 .then(async (response) => {
                     const data = await response.json();
                     if (!response.ok) {
@@ -320,10 +399,10 @@ window.bootstrap = bootstrap;
                     error_message.value = error;
                     console.error("There was an error!", error);
                 });
-            }
+        }
 
-            function guardarCliente(){
-                fetch("http://127.0.0.1:8000/clientes", {
+        function guardarCliente() {
+            fetch("http://127.0.0.1:8000/clientes", {
                 method: "POST",
                 headers: {
                     Accept: "Application/json",
@@ -344,43 +423,54 @@ window.bootstrap = bootstrap;
                     console.error("There was an error!", error);
                 });
 
-                obtenerClientes();
-                closeModal();
-            }
+            obtenerClientes();
+            closeModal();
+        }
 
-            function nuevoCliente(){
-                cleanForm()
-                openModal()
-            }
+        function nuevoCliente() {
+            cleanForm()
+            cliente.estado=1
+            openModal()
+        }
 
-            function openModal(){
-                modal_cliente.mdl_cli.show()
-            }
-            function openModalDetele() {
+        function openModal() {
+            modal_cliente.mdl_cli.show()
+        }
+        function openModalDetele() {
             modal_delete.mdl_delete.show()
         }
+        watch(cliente, (newCli, oldCli) => {
+            error_message.value = ""
+            desabilitar()
+        })
 
-            return{
-                error_message,
-                modal_cliente,
-                modal_delete,
-                cliente,
-                clientes,
+        return {
+            error_message,
+            modal_cliente,
+            modal_delete,
+            cliente,
+            clientes,
+            is_disabled,
 
-                actualizarCliente,
-                nuevoCliente,
-                editarCliente,
-                eliminarCliente,
-                eliminarRegistroCli,
-                obtenerClientes,
-                guardarCliente,
-            }
-        },
-        mounted(){
-            console.log('Component mounted.')
-            this.obtenerClientes();
-            this.modal_cliente.mdl_cli = new bootstrap.Modal('#mdl-cliente', {})
-            this.modal_delete.mdl_delete = new bootstrap.Modal('#mdl-delete', {})
+            actualizarCliente,
+            cleanNombres,
+            consultarDni,
+            nuevoCliente,
+            desabilitar,
+            editarCliente,
+            eliminarCliente,
+            eliminarRegistroCli,
+            filtroDocumento,
+            filtroEmail,
+            obtenerClientes,
+            guardarCliente,
         }
+    },
+    mounted() {
+        console.log('Component mounted.')
+        this.obtenerClientes();
+        this.modal_cliente.mdl_cli = new bootstrap.Modal('#mdl-cliente', {})
+        this.modal_delete.mdl_delete = new bootstrap.Modal('#mdl-delete', {})
     }
+}
 </script>
