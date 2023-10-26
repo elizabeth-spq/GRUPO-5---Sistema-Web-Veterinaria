@@ -6,7 +6,7 @@
       <div class="mt-5">
         <table class="table table-hover">
           <thead>
-            <tr class="table-dark">
+            <tr class="table-dark align-middle text-center">
               <th scope="col">#</th>
               <th scope="col">Nombre</th>
               <th scope="col">Apellidos</th>

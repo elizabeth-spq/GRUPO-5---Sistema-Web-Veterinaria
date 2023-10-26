@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Route::get('/admin/roles', function () {
     return view('admin/roles/index');
-});
+})->middleware('can:administrador');
 
 Route::get('/admin/users', function () {
     return view('admin/users/index');
@@ -71,6 +71,8 @@ Route::get('/animales', [App\Http\Controllers\AnimalController::class, 'index'])
 Route::get('/reniec/{dni}', [App\Http\Controllers\ReniecController::class, 'show'])->name('show');
 
 Route::get('/roles', [App\Http\Controllers\RoleController::class, 'index'])->name('index');
+Route::get('/permisos', [App\Http\Controllers\PermissionController::class, 'index'])->name('index');
+Route::get('/roles-permisos', [App\Http\Controllers\RolePermissionController::class, 'index'])->name('index');
 
 
 /*Route::resource('veterinarios', App\Http\Controllers\VeterinarioController::class)->only([

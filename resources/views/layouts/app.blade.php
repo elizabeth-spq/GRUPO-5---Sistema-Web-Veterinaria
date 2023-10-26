@@ -58,6 +58,7 @@
                         @else
 
                             @can('administrador')
+                            <li class="nav-item"><a href="{{ url('/admin/roles') }}" class="nav-link">Roles</a></li>
                             <li class="nav-item"><a href="{{ url('/admin/users') }}" class="nav-link">Usuarios</a></li>
                             <li class="nav-item"><a href="{{ url('/admin/veterinarios') }}" class="nav-link">Veterinarios</a></li>
                             @endcan

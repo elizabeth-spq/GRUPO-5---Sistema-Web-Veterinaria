@@ -1,12 +1,12 @@
 <template>
     <div class="container">
         <div class="mt-5">
-            <button type="button" class="btn btn-primary px-4" @click="nuevoCliente()">Nuevo Cliente </button>
+            <button type="button" class="btn btn-primary px-4" @click="nuevoCliente()" v-if="canCreate">Nuevo Cliente </button>
         </div>
         <div class="mt-5">
             <table class="table table-hover">
                 <thead>
-                    <tr class="table-dark">
+                    <tr class="table-dark align-middle text-center">
                         <th scope="col">#</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Apellido</th>
@@ -40,8 +40,8 @@
                         <td>
                             <div class="row g-1">
                                 <div class="col"> <button type="button" class="btn btn-warning w-100"
-                                        @click="editarCliente(cliente)">Editar</button></div>
-                                <div class="col"> <button type="button" class="btn btn-danger w-100" @click="eliminarCliente(cliente.id)">Eliminar</button></div>
+                                        @click="editarCliente(cliente)" v-if="canEdit">Editar</button></div>
+                                <div class="col"> <button type="button" class="btn btn-danger w-100" @click="eliminarCliente(cliente.id)" v-if="canDelete">Eliminar</button></div>
                             </div>
                         </td>
                     </tr>
@@ -206,6 +206,9 @@ import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 export default {
     setup() {
+        const canCreate = ref(window.canCreate);
+        const canEdit = ref(window.canEdit);
+        const canDelete = ref(window.canDelete);
         const error_message = ref("")
         const modal_cliente = reactive({
             mdl_cli: null,
@@ -453,6 +456,9 @@ export default {
             cliente,
             clientes,
             is_disabled,
+            canCreate,
+            canEdit,
+            canDelete,
 
             actualizarCliente,
             cleanNombres,

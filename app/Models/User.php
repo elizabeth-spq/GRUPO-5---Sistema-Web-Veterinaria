@@ -51,4 +51,55 @@ class User extends Authenticatable
     {
         return $this->rol->nombre === $role;
     }
+
+    public function hasAnyRole($role)
+    {
+        if (is_array($role)) {
+            return in_array($this->rol->nombre, $role);
+        }
+
+        return $this->rol->nombre === $role;
+    }
+
+
+    public function canEditRecord($model)
+    {
+        $permissionSlug = 'editar-' . $model->getTable();
+
+        if ($this->hasRole('administrador')) {
+            return true;
+        }
+
+        if ($this->hasRole('veterinario') && $this->hasPermission($permissionSlug)) {
+            return true;
+        }
+
+        if ($this->hasRole('recepcionista') && $this->hasPermission($permissionSlug)) {
+            return true;
+        }
+
+
+        return false;
+    }
+
+    public function canDeleteRecord($model)
+    {
+        $permissionSlug = 'eliminar-' . $model->getTable();
+
+        if ($this->hasRole('administrador')) {
+            return true;
+        }
+
+        if ($this->hasRole('veterinario') && $this->hasPermission($permissionSlug)) {
+            return true;
+        }
+
+        if ($this->hasRole('recepcionista') && $this->hasPermission($permissionSlug)) {
+            return true;
+        }
+
+        return false;
+    }
+
+
 }

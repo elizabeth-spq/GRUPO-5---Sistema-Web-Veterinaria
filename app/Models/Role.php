@@ -16,30 +16,20 @@ class Role extends Model
     protected $table = 'roles';
     protected $fillable = ['nombre', 'modulos', 'estado'];
 
-    /*
-    public static function crearRol($datos)
-    {
-        $validacion = validator($datos, [
-            'nombre' => 'required|string|max:250',
-            'modulos' => 'required|string',
-            'estado' => 'integer',
-        ]);
-
-        if ($validacion->fails()) {
-            return ['error' => $validacion->errors()->all()];
-        }
-
-        $role = self::create($datos);
-
-        return $role;
-
-    }
-
-    */
 
     public function user()
     {
         return $this->belongsTo(User::class, 'rol_id');
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
+    }
+
+    public function hasPermission($permissionSlug)
+    {
+        return $this->permissions->contains('slug', $permissionSlug);
     }
 
 }
