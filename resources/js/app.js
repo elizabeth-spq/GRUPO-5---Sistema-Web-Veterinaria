@@ -21,6 +21,7 @@ import UsersComponent from './components/UsersComponent.vue';
 import VeterinariosComponent from './components/VeterinariosComponent.vue';
 import ClienteComponent from './components/ClienteComponent.vue';
 import MascotasComponent from './components/MascotasComponent.vue';
+import CitasComponent from './components/CitasComponent.vue';
 
 app.component('example-component', ExampleComponent);
 app.component('roles-component', RolesComponent);
@@ -28,6 +29,7 @@ app.component('users-component', UsersComponent);
 app.component('veterinarios-component', VeterinariosComponent);
 app.component('cliente-component', ClienteComponent);
 app.component('mascotas-component', MascotasComponent);
+app.component('citas-component', CitasComponent);
 
 /**
  * The following block of code may be used to automatically register your

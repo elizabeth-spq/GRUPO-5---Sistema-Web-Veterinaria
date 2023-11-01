@@ -14,10 +14,15 @@ class Mascota extends Model
 
     protected $table = 'mascotas';
     protected $primaryKey = 'id';
-    protected $foreingKey = 'animal_id';
+    protected $foreingKeyAnimal = 'animal_id';
+    protected $foreingKeyCliente = 'cliente_id';
 
     public function animal(): BelongsTo
     {
         return $this->belongsTo(Animal::class);
+    }
+    public function cliente(): BelongsTo
+    {
+        return $this->belongsTo(Cliente::class);
     }
 }

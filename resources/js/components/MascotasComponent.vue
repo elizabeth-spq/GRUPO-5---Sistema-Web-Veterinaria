@@ -1,12 +1,12 @@
 <template>
     <div class="container">
         <div class="mt-5">
-            <button type="button" class="btn btn-primary px-4" @click="nuevaMascota()" v-if="canCreate">Nueva Mascota </button>
+            <button type="button" class="btn btn-primary px-4" @click="nuevaMascota()">Nueva Mascota </button>
         </div>
         <div class="mt-5">
             <table class="table table-hover">
                 <thead>
-                    <tr class="table-dark align-middle text-center">
+                    <tr class="table-dark">
                         <th scope="col">#</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Dueño</th>
@@ -27,7 +27,7 @@
                     <tr v-for="(mascota, index) in mascotas">
                         <th scope="row">{{ index + 1 }}</th>
                         <td>{{ mascota.nombre }}</td>
-                        <td>{{ mascota.cliente_id }}</td>
+                        <td>{{ mascota.cliente.nombre }} {{ mascota.cliente.apellido }}</td>
                         <td>
                             <span v-if="mascota.animal_id == 1">Gato</span>
                             <span v-if="mascota.animal_id == 2">Perro</span>
@@ -73,9 +73,9 @@
                         <td>
                             <div class="row g-1">
                                 <div class="col"> <button type="button" class="btn btn-warning w-100"
-                                        @click="editarMascota(mascota)" v-if="canEdit">Editar</button></div>
+                                        @click="editarMascota(mascota)">Editar</button></div>
                                 <div class="col"> <button type="button" class="btn btn-danger w-100"
-                                        @click="eliminarMascota(mascota.id)" v-if="canDelete">Eliminar</button></div>
+                                        @click="eliminarMascota(mascota.id)">Eliminar</button></div>
                             </div>
                         </td>
                     </tr>
@@ -278,9 +278,6 @@ import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 export default {
     setup() {
-        const canCreate = ref(window.canCreate);
-        const canEdit = ref(window.canEdit);
-        const canDelete = ref(window.canDelete);
         const error_message = ref("")
         const animal = reactive({
             id: 0,
@@ -570,10 +567,6 @@ export default {
             clientes,
             raza,
             razas,
-            canCreate,
-            canEdit,
-            canDelete,
-
             actualizarMascota,
             guardarMascota,
             nuevaMascota,
