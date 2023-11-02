@@ -16,5 +16,9 @@ class Cliente extends Model
     {
         return $this->hasMany(Mascota::class);
     }
+    public function cita(): HasMany
+    {
+        return $this->hasMany(Cita::class);
+    }
 
 }
