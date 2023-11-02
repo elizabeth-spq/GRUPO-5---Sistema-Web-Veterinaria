@@ -21,7 +21,9 @@ import UsersComponent from './components/UsersComponent.vue';
 import VeterinariosComponent from './components/VeterinariosComponent.vue';
 import ClienteComponent from './components/ClienteComponent.vue';
 import MascotasComponent from './components/MascotasComponent.vue';
-import CitasComponent from './components/CitasComponent.vue';
+import CitasComponent from './components/citas/CitasComponent.vue';
+import TableCitasComponent from './components/citas/TableCitasComponent.vue';
+import CalendarCitasComponent from './components/citas/CalendarCitasComponent.vue';
 
 app.component('example-component', ExampleComponent);
 app.component('roles-component', RolesComponent);
@@ -30,6 +32,8 @@ app.component('veterinarios-component', VeterinariosComponent);
 app.component('cliente-component', ClienteComponent);
 app.component('mascotas-component', MascotasComponent);
 app.component('citas-component', CitasComponent);
+app.component('table-citas-component', TableCitasComponent);
+app.component('calendar-citas-component', CalendarCitasComponent);
 
 /**
  * The following block of code may be used to automatically register your

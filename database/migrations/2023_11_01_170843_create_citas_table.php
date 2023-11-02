@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('citas', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('tipo_id');
+            $table->unsignedInteger('cliente_id');
+            $table->unsignedInteger('mascota_id');
+            $table->unsignedInteger('espec_id');
+            $table->date('fec_ini');
+            $table->date('fec_fin');
+            $table->unsignedInteger('vet_id');
+            $table->text('observaciones')->nullable();
+            $table->text('cargos_adicionales')->nullable();
+            $table->double('subtotal', 8, 2)->default(0.0);
+            $table->double('monto_adicional', 8, 2)->default(0.0);
+            $table->double('total', 8, 2)->default(0.0);
+            $table->double('pago_previo', 8, 2)->default(0.0);
+            $table->double('pago_pendiente', 8, 2)->default(0.0);
+            $table->integer('estado_cita')->default(1);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('citas');
+    }
+};

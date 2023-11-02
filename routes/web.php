@@ -37,6 +37,10 @@ Route::get('/admin/mascotas', function () {
     return view('admin/mascotas/index');
 });
 
+Route::get('/admin/citas', function () {
+    return view('admin/citas/index');
+});
+
 Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('index');
 Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('show');
 Route::post('/users', [App\Http\Controllers\UserController::class, 'store'])->name('store');
