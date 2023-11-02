@@ -15,22 +15,22 @@ class TipocitaSeeder extends Seeder
     {
         Tipocita::create([
             'nombre' => 'Cita de control',
-            'tiempo' => 1,
+            'tiempo' => 0.5,
             'precio' => 30.00,
         ]);
         Tipocita::create([
             'nombre' => 'Cita preoperatoria',
-            'tiempo' => 1,
+            'tiempo' => 0.34,
             'precio' => 25.00,
         ]);
         Tipocita::create([
             'nombre' => 'Cita de seguimiento',
-            'tiempo' => 1,
+            'tiempo' => 0.25,
             'precio' => 10.00,
         ]);
         Tipocita::create([
             'nombre' => 'Cita por dolencia',
-            'tiempo' => 1,
+            'tiempo' => 0.5,
             'precio' => 40.00,
         ]);
         Tipocita::create([

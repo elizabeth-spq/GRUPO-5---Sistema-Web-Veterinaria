@@ -31,7 +31,7 @@ export default {
                 error_message.value = $("#fecNac").val() ;
                 var startDateTime = error_message.value
                 console.log(startDateTime)
-                var newDateTime = moment(startDateTime).startOf('hours').add(0.5, 'hours').format('YYYY-MM-DD HH:mm');
+                var newDateTime = moment(startDateTime).startOf('hours').add(0.34, 'hours').format('YYYY-MM-DD HH:mm');
                 console.log(newDateTime);
             });
         }
