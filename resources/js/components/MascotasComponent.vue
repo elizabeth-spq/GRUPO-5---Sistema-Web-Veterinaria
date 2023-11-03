@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="mt-5">
-            <button type="button" class="btn btn-primary px-4" @click="nuevaMascota()">Nueva Mascota </button>
+            <button type="button" class="btn btn-primary px-4" @click="nuevaMascota()"  v-if="canCreate">Nueva Mascota </button>
         </div>
         <div class="mt-5">
             <table class="table table-hover">
@@ -73,9 +73,9 @@
                         <td>
                             <div class="row g-1">
                                 <div class="col"> <button type="button" class="btn btn-warning w-100"
-                                        @click="editarMascota(mascota)">Editar</button></div>
+                                        @click="editarMascota(mascota)"  v-if="canEdit">Editar</button></div>
                                 <div class="col"> <button type="button" class="btn btn-danger w-100"
-                                        @click="eliminarMascota(mascota.id)">Eliminar</button></div>
+                                        @click="eliminarMascota(mascota.id)"  v-if="canDelete">Eliminar</button></div>
                             </div>
                         </td>
                     </tr>
@@ -278,6 +278,9 @@ import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 export default {
     setup() {
+        const canCreate = ref(window.canCreate);
+        const canEdit = ref(window.canEdit);
+        const canDelete = ref(window.canDelete);
         const error_message = ref("")
         const animal = reactive({
             id: 0,
@@ -567,6 +570,9 @@ export default {
             clientes,
             raza,
             razas,
+            canCreate,
+            canEdit,
+            canDelete,
             actualizarMascota,
             guardarMascota,
             nuevaMascota,
