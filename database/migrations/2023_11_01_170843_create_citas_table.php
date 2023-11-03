@@ -17,8 +17,8 @@ return new class extends Migration
             $table->unsignedInteger('cliente_id');
             $table->unsignedInteger('mascota_id');
             $table->unsignedInteger('espec_id');
-            $table->date('fec_ini');
-            $table->date('fec_fin');
+            $table->dateTime('fec_ini');
+            $table->dateTime('fec_fin');
             $table->unsignedInteger('vet_id');
             $table->text('observaciones')->nullable();
             $table->text('cargos_adicionales')->nullable();
@@ -28,6 +28,8 @@ return new class extends Migration
             $table->double('pago_previo', 8, 2)->default(0.0);
             $table->double('pago_pendiente', 8, 2)->default(0.0);
             $table->integer('estado_cita')->default(1);
+            $table->integer('usu_registro')->nullable();
+            $table->integer('usu_ult_mod')->nullable();
             $table->timestamps();
         });
     }

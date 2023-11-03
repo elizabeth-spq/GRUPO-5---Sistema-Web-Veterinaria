@@ -68,6 +68,13 @@ Route::post('/mascotas', [App\Http\Controllers\MascotaController::class, 'store'
 Route::put('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'update'])->name('update');
 Route::delete('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'destroy'])->name('destroy');
 
+Route::get('/citas', [App\Http\Controllers\CitaController::class, 'index'])->name('index');
+Route::get('/citas/{id}', [App\Http\Controllers\CitaController::class, 'show'])->name('show');
+Route::post('/citas', [App\Http\Controllers\CitaController::class, 'store'])->name('store');
+Route::put('/citas/{id}', [App\Http\Controllers\CitaController::class, 'update'])->name('update');
+Route::delete('/citas/{id}', [App\Http\Controllers\CitaController::class, 'destroy'])->name('destroy');
+
+
 Route::get('/razas/{id}', [App\Http\Controllers\RazaController::class, 'index'])->name('index');
 
 Route::get('/animales', [App\Http\Controllers\AnimalController::class, 'index'])->name('index');
