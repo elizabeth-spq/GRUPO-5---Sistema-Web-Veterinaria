@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AnimalSeeder::class);
         $this->call(RazaSeeder::class);
         $this->call(MascotaSeeder::class);
-        //$this->call(PermissionSeeder::class);
-        //$this->call(RolePermissionSeeder::class);
+        $this->call(PermissionSeeder::class);
+        $this->call(RolePermissionSeeder::class);
     }
 }
