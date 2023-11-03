@@ -47,5 +47,32 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('eliminar', function ($user) {
             return $user->hasRole('administrador');
         });
+        /*
+        Gate::before(function ($user, $ability) {
+            if ($user->hasPermission('administrador')) {
+                return true;
+            }
+        });
+        Gate::define('crear-cliente', function ($user) {
+            return $user->hasPermission('editar-cliente');
+        });
+
+        Gate::define('editar-cliente', function ($user) {
+            return $user->hasPermission('editar-cliente');
+        });
+
+        Gate::define('eliminar-cliente', function ($user) {
+            return $user->hasPermission('eliminar-cliente');
+        });
+
+        Gate::define('editar-mascota', function ($user) {
+            return $user->hasPermission('editar-mascota');
+        });
+
+        Gate::define('eliminar-mascota', function ($user) {
+            return $user->hasPermission('eliminar-mascota');
+        });
+
+        */
     }
 }

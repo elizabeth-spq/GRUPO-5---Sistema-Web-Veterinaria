@@ -3,9 +3,9 @@
 @section('content')
     <div class="container-fluid">
         <script>
-            window.canCreate = @can('crear', App\Models\Cliente::class) true @else false @endcan;
-            window.canEdit = @can('editar', App\Models\Cliente::class) true @else false @endcan;
-            window.canDelete = @can('eliminar', App\Models\Cliente::class) true @else false @endcan;
+            window.canCreate = @can('crear', App\Models\Mascota::class) true @else false @endcan;
+            window.canEdit = @can('editar', App\Models\Mascota::class) true @else false @endcan;
+            window.canDelete = @can('eliminar', App\Models\Mascota::class) true @else false @endcan;
         </script>
         <cliente-component/>
     </div>

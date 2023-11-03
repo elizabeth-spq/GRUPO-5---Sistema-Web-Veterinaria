@@ -229,6 +229,7 @@ export default {
             email: "",
             estado: 0,
         })
+
         function actualizarCliente(Id) {
             //console.log(cliente)
             fetch("http://127.0.0.1:8000/clientes/" + Id, {
@@ -475,6 +476,7 @@ export default {
         }
     },
     mounted() {
+
         console.log('Component mounted.')
         this.obtenerClientes();
         this.modal_cliente.mdl_cli = new bootstrap.Modal('#mdl-cliente', {})

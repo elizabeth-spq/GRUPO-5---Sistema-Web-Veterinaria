@@ -60,7 +60,11 @@ class User extends Authenticatable
 
         return $this->rol->nombre === $role;
     }
-
+    /*
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
+    }
 
     public function canEditRecord($model)
     {
@@ -100,6 +104,23 @@ class User extends Authenticatable
 
         return false;
     }
+
+    public function hasPermission($permission)
+    {
+        return $this->permissions->contains('slug', $permission);
+    }
+
+    public function hasPermission($permission)
+    {
+        return $this->permissions ? $this->permissions->contains('slug', $permission) : false;
+    }
+
+    public function hasPermission($permissionSlug)
+    {
+        return $this->permissions()->where('slug', $permissionSlug)->count() > 0;
+    }*/
+
+
 
 
 }
