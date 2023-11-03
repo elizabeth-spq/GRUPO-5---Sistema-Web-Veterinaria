@@ -2,6 +2,7 @@
     <div class="container">
         <div class="mt-5">
             <button type="button" class="btn btn-primary px-4" @click="nuevaMascota()"  v-if="canCreate">Nueva Mascota </button>
+
         </div>
         <div class="mt-5">
             <table class="table table-hover">
