@@ -65,7 +65,7 @@
                             <li class="nav-item"><a href="{{ url('/admin/clientes') }}" class="nav-link">Clientes</a></li>
                             <li class="nav-item"><a href="{{ url('/admin/mascotas') }}" class="nav-link">Mascotas</a></li>
                             <li class="nav-item"><a href="{{ url('/admin/citas') }}" class="nav-link">Citas</a></li>
-                            <li class="nav-item"><a href="{{ url('/admin/hsMedico') }}" class="nav-link">Historial Medico</a></li>
+                            <li class="nav-item"><a href="{{ url('/admin/historias') }}" class="nav-link">Historial Medico</a></li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
