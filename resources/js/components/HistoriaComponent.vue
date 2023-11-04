@@ -1,20 +1,25 @@
 <template>
     <div class="container">
         <div class="mt-5">
+            <button type="button" class="btn btn-primary px-4" >Nueva Mascota </button>
+
+        </div>
+        <div class="mt-5">
             <table class="table table-hover">
                 <thead>
-                    <tr class="table-dark">
+                    <tr class="table-dark align-middle text-center">
                         <th scope="col">#</th>
-                        <th scope="col">Codigo de Mascota</th>
+                        <th scope="col">Id</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Dueño</th>
                         <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(mascota, index) in mascotas">
                         <th scope="row">{{ index + 1 }}</th>
-                        <td>{{ mascota.mascota_id }}</td>
+                        <td>{{ mascota.id }}</td>
                         <td>{{ mascota.nombre }}</td>
                         <td>{{ mascota.cliente.nombre }} {{ mascota.cliente.apellido }}</td>
                         <td>
@@ -25,8 +30,9 @@
                         </td>
                         <td>
                             <div class="row g-1">
-                                <div class="col"> <button type="button" class="btn btn-danger w-100"
-                                        @click="detalleHistoria(historia.id)">Detalle de Historia</button></div>
+                                <div class="col"> <button type="button" class="btn btn-success w-100">Detalle de Historia</button></div>
+                                        <div class="col"> <button type="button" class="btn btn-warning w-100">Editar</button></div>
+                                        <div class="col"> <button type="button" class="btn btn-danger w-100">Eliminar</button></div>
                             </div>
                         </td>
                     </tr>
@@ -176,7 +182,7 @@ export default {
     mounted() {
 
         console.log('Component mounted.')
-        this.obtenerHistorias();
+        //this.obtenerHistorias();
         this.obtenerMascotas();
         this.obtenerClientes();
     }
