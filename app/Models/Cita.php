@@ -12,10 +12,15 @@ class Cita extends Model
     use HasFactory;
     protected $table = 'citas';
     protected $primaryKey = 'id';
+    protected $foreingKeyTipo = 'tipo_id';
+    protected $foreingKeyCliente = 'cliente_id';
+    protected $foreingKeyMascota = 'mascota_id';
+    protected $foreingKeyEspec = 'espec_id';
+    protected $foreingKeyVet = 'vet_id';
 
     public function especialidad(): BelongsTo
     {
-        return $this->belongsTo(Especialidad::class);
+        return $this->belongsTo(Especialidad::class,'espec_id');
     }
     public function tipo(): BelongsTo
     {
@@ -31,7 +36,7 @@ class Cita extends Model
     }
     public function veterinario(): BelongsTo
     {
-        return $this->belongsTo(Veterinario::class);
+        return $this->belongsTo(Veterinario::class,'vet_id');
     }
 
 }

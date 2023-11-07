@@ -76,6 +76,7 @@ Route::get('/citas', [App\Http\Controllers\CitaController::class, 'index'])->nam
 Route::get('/citas/{id}', [App\Http\Controllers\CitaController::class, 'show'])->name('show');
 Route::post('/citas', [App\Http\Controllers\CitaController::class, 'store'])->name('store');
 Route::put('/citas/{id}', [App\Http\Controllers\CitaController::class, 'update'])->name('update');
+Route::put('/citas/status/{id}', [App\Http\Controllers\CitaController::class, 'status'])->name('status');
 Route::delete('/citas/{id}', [App\Http\Controllers\CitaController::class, 'destroy'])->name('destroy');
 
 Route::get('/historias', [App\Http\Controllers\HistoriaController::class, 'index'])->name('index');
@@ -87,6 +88,8 @@ Route::delete('/historias/{id}', [App\Http\Controllers\HistoriaController::class
 Route::get('/razas/{id}', [App\Http\Controllers\RazaController::class, 'index'])->name('index');
 
 Route::get('/animales', [App\Http\Controllers\AnimalController::class, 'index'])->name('index');
+
+Route::get('/tipocitas', [App\Http\Controllers\TipocitaController::class, 'index'])->name('index');
 
 Route::get('/reniec/{dni}', [App\Http\Controllers\ReniecController::class, 'show'])->name('show');
 
