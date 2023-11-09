@@ -59,6 +59,7 @@ Route::get('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::cl
 Route::post('/veterinarios', [App\Http\Controllers\VeterinarioController::class, 'store'])->name('store');
 Route::put('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::class, 'update'])->name('update');
 Route::delete('/veterinarios/{id}', [App\Http\Controllers\VeterinarioController::class, 'destroy'])->name('destroy');
+Route::get('/veterinarios/filtro/', [App\Http\Controllers\VeterinarioController::class, 'veterinariosByEspecAndFec'])->name('veterinariosByEspecAndFec');
 
 Route::get('/clientes', [App\Http\Controllers\ClienteController::class, 'index'])->name('index');
 Route::get('/clientes/{id}', [App\Http\Controllers\ClienteController::class, 'show'])->name('show');
@@ -68,6 +69,7 @@ Route::delete('/clientes/{id}', [App\Http\Controllers\ClienteController::class, 
 
 Route::get('/mascotas', [App\Http\Controllers\MascotaController::class, 'index'])->name('index');
 Route::get('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'show'])->name('show');
+Route::get('/mascotas/cliente/{id}', [App\Http\Controllers\MascotaController::class, 'mascotasByCliente'])->name('mascotasByCliente');
 Route::post('/mascotas', [App\Http\Controllers\MascotaController::class, 'store'])->name('store');
 Route::put('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'update'])->name('update');
 Route::delete('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'destroy'])->name('destroy');
@@ -89,7 +91,10 @@ Route::get('/razas/{id}', [App\Http\Controllers\RazaController::class, 'index'])
 
 Route::get('/animales', [App\Http\Controllers\AnimalController::class, 'index'])->name('index');
 
+Route::get('/especialidades', [App\Http\Controllers\EspecialidadController::class, 'index'])->name('index');
+
 Route::get('/tipocitas', [App\Http\Controllers\TipocitaController::class, 'index'])->name('index');
+Route::get('/tipocitas/{id}', [App\Http\Controllers\TipocitaController::class, 'show'])->name('show');
 
 Route::get('/reniec/{dni}', [App\Http\Controllers\ReniecController::class, 'show'])->name('show');
 

@@ -119,4 +119,10 @@ class VeterinarioController extends Controller
 
         return response()->json($response);
     }
+    public function veterinariosByEspecAndFec(string $id,string $date)
+    {
+        $veterinario = Veterinario::find($id);
+
+        return response()->json($veterinario);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Animal;
+use App\Models\Cliente;
 use App\Models\Mascota;
 use Illuminate\Http\Request;
 
@@ -104,5 +105,10 @@ class MascotaController extends Controller
         ];
 
         return response()->json($response);
+    }
+    public function mascotasByCliente(int $id)
+    {
+        $mascotas = Mascota::whereIn('cliente_id',[$id])->get();
+        return response()->json($mascotas);
     }
 }

@@ -22,7 +22,7 @@ class TipocitaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -30,7 +30,8 @@ class TipocitaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $tipo = Tipocita::find($id);
+        return response()->json($tipo);
     }
 
     /**

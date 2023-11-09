@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tipocitas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre', 250);
-            $table->integer('tiempo');
+            $table->double('tiempo', 8, 2);
             $table->double('precio', 8, 2);
             $table->timestamps();
         });

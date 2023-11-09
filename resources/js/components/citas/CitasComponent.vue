@@ -64,11 +64,10 @@
         </div>
     </div>
 
-    <input id="fecNac" type="text" class="form-control" placeholder="02/02/2000" v-model="error_message"
-        aria-describedby="requiredFecNac" />
 
 
-    <div class="modal" tabindex="-1" id="mdl-cita">
+
+    <div class="modal" id="mdl-cita">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -79,19 +78,53 @@
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
-                            <div class=" form-floating col-12">
-                                    <select class="form-select" id="tipoCita" aria-label="Floating label select example"
-                                        aria-describedby="requiredTipoCita" v-model="cita.tipo_id"
-                                        :disabled="cita.tipo_id > 0 ? true : false">
-                                        <option value="0" selected disabled>Seleccione ...</option>
-                                        <option v-for="(tipo, index) in tipos" :value="tipo.tiempo">{{ tipo.nombre }}</option>
-                                    </select>
-                                    <label for="tipoCita">Tipo Doc. *</label>
-                                    <div id="requiredTipoCita" class="form-text text-danger"
-                                        v-if="cita.tip_doc == ''">
-                                        Obligtorio
-                                    </div>
-                                </div>
+                            <div class="col-12 mb-3">
+                                <h6>Cliente</h6>
+                                <select class="form-select" id="single-select-cliente"
+                                    data-placeholder="Seleccione un cliente">
+                                    <option></option>
+                                    <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.nombre }} {{
+                                        cliente.apellido }}</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <h6>Mascota</h6>
+                                <select class="form-select" id="single-select-mascota"
+                                    data-placeholder="Seleccione una mascota" :disabled="cita.cliente_id==0 ? true:false">
+                                    <option></option>
+                                    <option v-for="mascota in mascotas" :value="mascota.id">{{ mascota.nombre }}</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <h6>Tipo de cita</h6>
+                                <select class="form-select" id="single-select-tipo-cita"
+                                    data-placeholder="Seleccione un tipo de cita">
+                                    <option></option>
+                                    <option v-for="(tipo, index) in tipos" :value="tipo.id">{{ tipo.nombre }}</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <h6>Fecha y hora</h6>
+                                <input id="fecNac" type="text" class="form-control" placeholder="02/02/2000"
+                                    v-model="error_message" aria-describedby="requiredFecNac" :disabled="cita.tipo_id==0 ? true:false" />
+                            </div>
+                            <div class="col-12 mb-3">
+                                <h6>Especialidad</h6>
+                                <select class="form-select" id="single-select-especialidad"
+                                    data-placeholder="Seleccione una especialidad">
+                                    <option></option>
+                                    <option v-for="(especialidad, index) in especialidades" :value="especialidad.id">{{ especialidad.nombre }}</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <h6>Veterinario</h6>
+                                <select class="form-select" id="single-select-veterinario"
+                                    data-placeholder="Seleccione una especialidad" :disabled="cita.espec_id==0 ? true:false">
+                                    <option></option>
+                                    <option v-for="(veterinario, index) in veterinarios" :value="veterinario.id">{{ veterinario.nombre }} {{ veterinario.apellido }}</option>
+                                </select>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -99,8 +132,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" v-if="cita.id > 0"
                         @click="actualizarCita(cita.id)">Actualizar registro</button>
-                    <button type="button" class="btn btn-primary"  v-else
-                        @click="guardarCita()">
+                    <button type="button" class="btn btn-primary" v-else @click="guardarCita()">
                         Guardar registro
                     </button>
                 </div>
@@ -115,6 +147,7 @@ window.bootstrap = bootstrap;
 export default {
     setup() {
         const error_message = ref("")
+        const tiempo_cita = ref("")
         const error_message_two = ref("")
         const cita = reactive({
             id: 0,
@@ -135,15 +168,55 @@ export default {
             estado_cita: 0,
         })
         const citas = ref([])
+        const clientes = ref([])
+        const cliente = reactive({
+            id: 0,
+            nombre: "",
+            apellido: "",
+            tip_doc: 0,
+            documento: "",
+            telefono: "",
+            direccion: "",
+            email: "",
+            estado: 0,
+        })
+        const especialidades = ref([])
+        const especialidad = reactive({
+            id: 0,
+            nombre: "",
+        })
+        const mascotas = ref([])
+        const mascota = reactive({
+            id: 0,
+            nombre: "",
+            cliente_id: 0,
+            animal_id: 0,
+            raza_id: 0,
+            fec_nac: "",
+            sexo: 0,
+            color: "",
+            altura: 0,
+            peso: 0,
+            estirilizado: 0,
+            vacunas: 0,
+            estado: 0
+        })
         const modal_cita = reactive({
             mdl_cita: null,
         })
         const tipos = ref([])
         const tipo = reactive({
-            id:0,
-            nombre:"",
-            tiempo:0,
-            precio:0.0,
+            id: 0,
+            nombre: "",
+            tiempo: 0,
+            precio: 0.0,
+        })
+        const veterinarios = ref([])
+        const veterinario = reactive({
+            id: 0,
+            nombre: "",
+            apellido: "",
+            especialidad: 0,
         })
         function cleanForm() {
             cita.id = 0,
@@ -163,6 +236,22 @@ export default {
                 cita.pago_pendiente = 0.0,
                 cita.estado_cita = 0
         }
+        function cleanMascota() {
+            mascotas.value=[]
+            mascota.id = 0
+            mascota.nombre = ""
+            mascota.cliente_id = 0
+            mascota.animal_id = 0
+            mascota.raza_id = 0
+            mascota.fec_nac = ""
+            mascota.sexo = 0
+            mascota.color = ""
+            mascota.altura = 0
+            mascota.peso = 0
+            mascota.estirilizado = 0
+            mascota.vacunas = 0
+            mascota.estado = 0
+        }
         function mostrarCalendarioNac() {
             $('#fecNac').daterangepicker({
                 singleDatePicker: true,
@@ -174,12 +263,56 @@ export default {
                 }
             });
             $("#fecNac").on("change", function () {
-                //console.log($('#fecNac').val);
-                error_message.value = $("#fecNac").val();
-                var startDateTime = error_message.value
-                console.log(startDateTime)
-                var newDateTime = moment(startDateTime).startOf('hours').add(0.34, 'hours').format('YYYY-MM-DD HH:mm');
-                console.log(newDateTime);
+                cita.fec_ini = $("#fecNac").val();
+                cita.fec_fin = moment(cita.fec_ini).startOf('hours').add(tiempo_cita.value, 'hours').format('YYYY-MM-DD HH:mm');
+            });
+        }
+        function mostrarSelectSingleTipo() {
+            $('#single-select-tipo-cita').select2({
+                theme: "bootstrap-5",
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                dropdownParent: $('#mdl-cita .modal-content')
+            });
+            $("#single-select-tipo-cita").on("change", function () {
+                cita.tipo_id = $("#single-select-tipo-cita").val();
+                obtenerTipoId(cita.tipo_id);
+            });
+        }
+        function mostrarSelectSingleCLiente() {
+            $('#single-select-cliente').select2({
+                theme: "bootstrap-5",
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                dropdownParent: $('#mdl-cita .modal-content')
+            });
+            $("#single-select-cliente").on("change", function () {
+                cleanMascota()
+                cita.cliente_id = $("#single-select-cliente").val();
+                obenerMascotasByCliente(cita.cliente_id);
+            });
+        }
+        function mostrarSelectSingleMascota() {
+            $('#single-select-mascota').select2({
+                theme: "bootstrap-5",
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                dropdownParent: $('#mdl-cita .modal-content')
+            });
+            $("#single-select-mascota").on("change", function () {
+                cita.cliente_id = $("#single-select-mascota").val();
+            });
+        }
+
+        function mostrarSelectSingleEspecialidad() {
+            $('#single-select-especialidad').select2({
+                theme: "bootstrap-5",
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                dropdownParent: $('#mdl-cita .modal-content')
+            });
+            $("#single-select-especialidad").on("change", function () {
+                cita.espec_id = $("#single-select-especialidad").val();
             });
         }
         function obtenerCitas() {
@@ -201,7 +334,81 @@ export default {
                     console.error("There was an error!", error);
                 });
         }
-        function obtenerTipoCita(){
+        function obtenerCliente() {
+            fetch("http://127.0.0.1:8000/clientes", {
+                method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    //console.log(data)
+                    clientes.value = data;
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        }
+        function obtenerEspecialidad() {
+            fetch("http://127.0.0.1:8000/especialidades", {
+                method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    especialidades.value = data;
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        }
+        function obenerMascotasByCliente(Id) {
+            fetch("http://127.0.0.1:8000/mascotas/cliente/" + Id, {
+                method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+
+                    mascotas.value = data
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        }
+        function obtenerTipoId(Id) {
+            fetch("http://127.0.0.1:8000/tipocitas/" + Id, {
+                method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    tiempo_cita.value = data.tiempo
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        }
+        function obtenerTipoCita() {
             fetch("http://127.0.0.1:8000/tipocitas", {
                 method: "GET",
             })
@@ -220,7 +427,25 @@ export default {
                     console.error("There was an error!", error);
                 });
         }
-        function openModalReservarCita(){
+        function obtenerVeterinarios(){
+            fetch("http://127.0.0.1:8000/veterinarios/filtro/?especialidad="+1+"&fec_ini="+2023, {
+                method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    veterinarios.value = data;
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        }
+        function openModalReservarCita() {
             modal_cita.mdl_cita.show()
         }
         function reservarCita() {
@@ -230,14 +455,31 @@ export default {
         return {
             cita,
             citas,
+            cliente,
+            clientes,
             error_message,
             error_message_two,
+            especialidades,
+            especialidad,
             modal_cita,
+            mascotas,
+            mascota,
             tipos,
             tipo,
+            tiempo_cita,
+            veterinarios,
+            veterinario,
             mostrarCalendarioNac,
+            mostrarSelectSingleTipo,
+            mostrarSelectSingleCLiente,
+            mostrarSelectSingleMascota,
+            mostrarSelectSingleEspecialidad,
             obtenerCitas,
+            obtenerCliente,
+            obtenerTipoId,
             obtenerTipoCita,
+            obtenerEspecialidad,
+            obtenerVeterinarios,
             reservarCita,
         }
     },
@@ -245,8 +487,16 @@ export default {
         console.log("Component mounted")
         this.mostrarCalendarioNac()
         this.obtenerCitas()
+        this.obtenerCliente()
+        this.obtenerEspecialidad()
         this.obtenerTipoCita()
+        this.obtenerVeterinarios()
+        this.mostrarSelectSingleTipo()
+        this.mostrarSelectSingleCLiente()
+        this.mostrarSelectSingleMascota()
+        this.mostrarSelectSingleEspecialidad()
         this.modal_cita.mdl_cita = new bootstrap.Modal('#mdl-cita', {})
+
     }
 }
 </script>
