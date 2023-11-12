@@ -12,7 +12,13 @@ class CitaController extends Controller
      */
     public function index()
     {
-        $cita = Cita::whereIn('estado_cita', [1, 2, 3, 4])->get();
+        $cita = Cita::whereIn('estado_cita', [1, 2, 3, 4])
+        ->with('cliente')
+        ->with('mascota')
+        ->with('especialidad')
+        ->with('tipo')
+        ->with('veterinario')
+        ->get();
 
         return response()->json($cita);
     }
@@ -24,14 +30,18 @@ class CitaController extends Controller
     {
         $from = $request->fec_ini;
         $to = $request->fec_fin;
-        $vet = $request->vet_id;
+        $vet_id = $request->vet_id;
 
-        $cita_prev = Cita::whereBetween('fec_ini', [$from, $to])
-            ->orWhereBetween('fec_fin', [$from, $to])
-            ->get();
-        if ($cita_prev) {
-            $cita_prev_vet = $cita_prev->where('vet_id', $vet)->first();
-            if ($cita_prev_vet) {
+        if ($from != null && $to != null && $vet_id != null) {
+            $prev_cita = Cita::whereIn('estado_cita', [1, 2])->where('vet_id', $vet_id)
+                ->whereRaw("(
+                            (fec_ini BETWEEN '$from' AND '$to')
+                            OR
+                            (fec_fin BETWEEN '$from' AND '$to')
+                        ) ")
+                ->first();
+
+            if ($prev_cita) {
                 $message = "Ya existe una cita asiganada en ese horario y con el profesional indicado, escoja otro horario y/o profesional";
                 $response = [
                     'message' => $message
@@ -54,11 +64,17 @@ class CitaController extends Controller
                 $cita->pago_previo = $request->pago_previo;
                 $cita->pago_pendiente = $request->pago_pendiente;
                 $cita->estado_cita = $request->estado_cita;
-                $cita->usu_registro = auth()->user()->id;
-                $cita->usu_ult_mod = auth()->user()->id;
+                //$cita->usu_registro = auth()->user()->id;
+                //$cita->usu_ult_mod = auth()->user()->id;
                 $cita->save();
                 return response()->json($cita);
             }
+        } else {
+            $message = "Debe ingresar la fecha de inicio, fecha de fin y en veterinario";
+            $response = [
+                'message' => $message
+            ];
+            return response()->json($response, 400);
         }
     }
 
@@ -67,7 +83,7 @@ class CitaController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -75,9 +91,55 @@ class CitaController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $cita = Cita::find($id);
+        $cita->cargos_adicionales =$request->cargos_adicionales;
+        $cita->subtotal =$request->subtotal;
+        $cita->monto_adicional =$request->monto_adicional;
+        $cita->total =$request->total;
+        $cita->pago_previo =$request->pago_previo;
+        $cita->pago_pendiente =$request->pago_pendiente;
 
+        if ($cita->save()) {
+            $message = "El registro ha sido actualizado";
+        } else {
+            $message = "El registro no ha sido actualizado";
+        }
+
+        $response = [
+            'message' => $message
+        ];
+
+        return response()->json($response);
     }
+    public function status(Request $request, string $id)
+    {
+        $estado_cita = $request->estado_cita;
 
+        $cita = Cita::find($id);
+        $cita->estado_cita = $estado_cita;
+        $cita->observaciones = $request->observaciones;
+        $cita->save();
+        if($estado_cita == 1){
+            $response = [
+                'message' => "El registro cambió su estado a Confirmada"
+            ];
+        }else if($estado_cita == 2){
+            $response = [
+                'message' => "El registro cambió su estado a En Atención"
+            ];
+        }else if($estado_cita == 3){
+            $response = [
+                'message' => "El registro cambió su estado a Atendida"
+            ];
+        }else{
+            $response = [
+                'message' => "El registro cambió su estado a Cancelada"
+            ];
+        }
+
+
+        return response()->json($response);
+    }
     /**
      * Remove the specified resource from storage.
      */

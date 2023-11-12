@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tipocita;
 use Illuminate\Http\Request;
 
 class TipocitaController extends Controller
@@ -11,15 +12,17 @@ class TipocitaController extends Controller
      */
     public function index()
     {
-        //
+        $tipo = Tipocita::get();
+        return response()->json($tipo);
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -27,7 +30,8 @@ class TipocitaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $tipo = Tipocita::find($id);
+        return response()->json($tipo);
     }
 
     /**

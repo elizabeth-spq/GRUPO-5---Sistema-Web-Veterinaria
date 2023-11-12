@@ -27,5 +27,10 @@ class VerifyCsrfToken extends Middleware
         "/animales/",
         "/citas/",
         "/citas/*",
+        "/tipocitas/",
+        "/tipocitas/*",
+        "/especialidades/",
+
+
     ];
 }

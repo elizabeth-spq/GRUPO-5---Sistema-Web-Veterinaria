@@ -12,10 +12,12 @@ class Veterinario extends Model
     use HasFactory;
     protected $table = 'veterinarios';
     protected $primaryKey = 'id';
+    protected $foreingKeyHorario = 'horario_id';
 
     public function cita(): HasMany
     {
         return $this->hasMany(Cita::class);
     }
+
 
 }

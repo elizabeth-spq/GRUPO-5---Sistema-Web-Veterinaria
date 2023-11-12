@@ -14,11 +14,20 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <!-- Styles -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" />-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <!-- Or for RTL support -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
 </head>
 
 <body>
@@ -56,16 +65,17 @@
                                 </li>
                             @endif
                         @else
-
                             @can('administrador')
-                            <li class="nav-item"><a href="{{ url('/admin/roles') }}" class="nav-link">Roles</a></li>
-                            <li class="nav-item"><a href="{{ url('/admin/users') }}" class="nav-link">Usuarios</a></li>
-                            <li class="nav-item"><a href="{{ url('/admin/veterinarios') }}" class="nav-link">Veterinarios</a></li>
+                                <li class="nav-item"><a href="{{ url('/admin/roles') }}" class="nav-link">Roles</a></li>
+                                <li class="nav-item"><a href="{{ url('/admin/users') }}" class="nav-link">Usuarios</a></li>
+                                <li class="nav-item"><a href="{{ url('/admin/veterinarios') }}"
+                                        class="nav-link">Veterinarios</a></li>
                             @endcan
                             <li class="nav-item"><a href="{{ url('/admin/clientes') }}" class="nav-link">Clientes</a></li>
                             <li class="nav-item"><a href="{{ url('/admin/mascotas') }}" class="nav-link">Mascotas</a></li>
                             <li class="nav-item"><a href="{{ url('/admin/citas') }}" class="nav-link">Citas</a></li>
-                            <li class="nav-item"><a href="{{ url('/admin/historias') }}" class="nav-link">Historial Medico</a></li>
+                            <li class="nav-item"><a href="{{ url('/admin/historias') }}" class="nav-link">Historial
+                                    Medico</a></li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
