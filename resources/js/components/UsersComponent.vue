@@ -29,7 +29,7 @@
               <td>
                 <div class="row g-1">
                   <div class="col">
-                    <button type="button" class="btn btn-warning w-100" @click="editarUsuario(user)">Editar</button>
+                    <button type="button" class="btn btn-warning w-100" v-if="!user.isDeactivated" @click="editarUsuario(user)">Editar</button>
                   </div>
                   <div class="col">
                     <button type="button" class="btn btn-danger w-100" @click="eliminarUsuario(user.id)">Eliminar</button>
@@ -41,7 +41,6 @@
         </table>
       </div>
     </div>
-
 
     <div class="modal" tabindex="-1" id="mdl-create">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -169,7 +168,7 @@
                             <div class="form-text text-danger" v-if="user.password !== '' && user.confirmPassword !== user.password">
                                 Las contraseñas no coinciden
                             </div>
-                            <div class=" form-floating col-12">
+                            <div class="form-floating col-12 mb-3">
                                 <select class="form-select" id="id" aria-label="Floating label select example"
                                     aria-describedby="requiredRol" v-model="user.rol_id">
                                     <option value="0" selected disabled>Seleccione ...</option>
@@ -179,6 +178,12 @@
                                 <label for="rol" class="ms-2">Rol *</label>
                                 <div id="requiredRol" class="form-text text-danger"
                                     v-if="user.name == 0">
+                                </div>
+                            </div>
+                            <div class="form-floating col-12 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="switchDeactivar" v-model="user.isDeactivated" @change="confirmarDesactivacion">
+                                    <label class="form-check-label" for="switchDeactivar">Desactivar Usuario</label>
                                 </div>
                             </div>
                         </div>
@@ -211,6 +216,46 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" tabindex="-1" id="mdl-desactivar">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Desactivar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body align-self-center">
+                    <span class="text-center text-danger">ESTA ACCIÓN NO SE PUEDE REVERTIR</span> <br>
+                    <span class="text-center">¿Está seguro de desactivar al usuario?</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" @click="mostrarCampoMotivoDesactivacion">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" id="mdl-motivo">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Motivo de Desactivación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <div class="mb-3">
+                    <label for="motivoDesactivacion">Ingrese el motivo de desactivación:</label>
+                    <textarea class="form-control" id="motivoDesactivacion" v-model="user.motivoDesactivacion"></textarea>
+                </div>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" @click="guardarMotivoDesactivacion">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -229,6 +274,12 @@ export default {
           const modal_delete = reactive({
               mdl_delete: null,
           })
+          const modal_desactivar = reactive({
+            mdl_desactivar: null,
+          })
+          const modal_motivo = reactive({
+            mdl_motivo: null,
+          })
             const users = ref([])
             const user = reactive({
                 id: 0,
@@ -237,13 +288,42 @@ export default {
                 email: "",
                 password: '',
                 confirmPassword: '',
-                rol_id: 0
+                rol_id: 0,
+                isDeactivated: false,
+                motivoDesactivacion: ''
             })
+
+            function confirmarDesactivacion() {
+                openModalDesactivar()
+            };
+
+
+            function mostrarCampoMotivoDesactivacion() {
+                closeModalDesactivar()
+                openModalMotivo()
+            };
+
+            function guardarMotivoDesactivacion() {
+                if (user.motivoDesactivacion.trim() === '') {
+                    alert('Por favor, ingresa un motivo para desactivar al usuario.');
+                return;
+            }
+                closeModalMotivo()
+            };
 
             function actualizarUsuario(Id) {
                 if (user.password !== '' && user.password !== user.confirmPassword) {
                     error_message.value = "Las contraseñas no coinciden";
                     return;
+                }
+                if (user.isDeactivated) {
+                    if (!user.motivoDesactivacion) {
+                        error_message.value = "Se requiere un motivo para desactivar al usuario";
+                        return;
+                    }
+                    user.estado = 1;
+                    user.motivoDeDesactivacion = user.motivoDesactivacion;
+                    alert('La cuenta ha sido desactivada. Ya no podrá realizar ninguna acción.');
                 }
                 fetch("http://127.0.0.1:8000/users/" + Id, {
                     method: "PUT",
@@ -277,6 +357,8 @@ export default {
                     user.password = '',
                     user.confirmPassword = '',
                     user.rol_id = 0
+                    user.isDeactivated = false,
+                    user.motivoDesactivacion = ''
             }
             function closeModalCreate() {
                 modal_create.mdl_create.hide()
@@ -289,6 +371,12 @@ export default {
             function closeModalDelete() {
                 modal_delete.mdl_delete.hide()
             }
+            function closeModalDesactivar() {
+                modal_desactivar.mdl_desactivar.hide()
+            }
+            function closeModalMotivo() {
+                modal_motivo.mdl_motivo.hide()
+            }
             function editarUsuario(user_tabla) {
                 cleanForm()
                 user.id = user_tabla.id
@@ -298,6 +386,8 @@ export default {
                 user.password = ''
                 user.confirmPassword = ''
                 user.rol_id = user_tabla.rol_id
+                user.isDeactivated = false;
+                user.motivoDesactivacion = user_tabla.motivoDeDesactivacion || '';
                 openModalEdit()
             }
             function eliminarUsuario(Id) {
@@ -390,15 +480,26 @@ export default {
             function openModalDetele() {
                 modal_delete.mdl_delete.show()
             }
+            function openModalDesactivar() {
+                modal_desactivar.mdl_desactivar.show()
+            }
+            function openModalMotivo() {
+                modal_motivo.mdl_motivo.show()
+            }
 
             return{
                 error_message,
                 modal_create,
                 modal_edit,
                 modal_delete,
+                modal_desactivar,
+                modal_motivo,
                 user,
                 users,
 
+                confirmarDesactivacion,
+                mostrarCampoMotivoDesactivacion,
+                guardarMotivoDesactivacion,
                 actualizarUsuario,
                 nuevoUsuario,
                 editarUsuario,
@@ -413,6 +514,8 @@ export default {
         this.modal_create.mdl_create = new bootstrap.Modal('#mdl-create', {})
         this.modal_edit.mdl_edit = new bootstrap.Modal('#mdl-edit', {})
         this.modal_delete.mdl_delete = new bootstrap.Modal('#mdl-delete', {})
+        this.modal_desactivar.mdl_desactivar = new bootstrap.Modal('#mdl-desactivar', {})
+        this.modal_motivo.mdl_motivo = new bootstrap.Modal('#mdl-motivo', {})
     }
 }
 </script>

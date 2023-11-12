@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('apellido');
             $table->integer('estado')->default(0);
+            $table->boolean('isDeactivated')->default(false);
+            $table->string('motivoDesactivacion')->nullable();
             $table->unsignedInteger('rol_id');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

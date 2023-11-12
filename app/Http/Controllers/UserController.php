@@ -74,6 +74,7 @@ class UserController extends Controller
             'rol_id' => 'required|integer',
             'usu_registro' => 'integer',
             'usu_ult_mod' => 'integer',
+            'motivoDesactivacion' => 'nullable|string|max:255',
         ]);
 
         $user->name = $request->name;
@@ -81,6 +82,8 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->rol_id = $request->rol_id;
         $user->usu_ult_mod = auth()->user()->id;
+        $user->isDeactivated = $request->isDeactivated;
+        $user->motivoDesactivacion = $request->motivoDesactivacion;
 
         if ($request->password) {
             $user->password = Hash::make($request->password);
@@ -103,7 +106,7 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         $user = User::find($id);
-        $user->estado =  3;
+        $user->estado =  2;
         $user->save();
 
         $response = [

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -36,5 +38,25 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            if ($user->isDeactivated) {
+                Auth::logout();
+                return redirect('/login')->withErrors(['isDeactivated' => 'Esta cuenta ha sido desactivada.']);
+            }
+
+            return redirect()->intended($this->redirectPath());
+        }
+
+        return redirect('/login')->withErrors([
+            'invalidCredentials' => 'Las credenciales proporcionadas son inválidas.',
+        ]);
     }
 }

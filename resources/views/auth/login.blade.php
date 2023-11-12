@@ -14,7 +14,7 @@
 </head>
 
 <body>
-  
+
 <section class="vh-100" style="background-color: #76e2e5;">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -51,11 +51,23 @@
                   <div class="pt-1 mb-4">
                     <button class="btn btn-dark btn-lg btn-block" type="submit">Ingresar</button>
                   </div>
-                
+
+                    @if ($errors->has('isDeactivated'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ $errors->first('isDeactivated') }}
+                        </div>
+                    @endif
+
+                    @if ($errors->has('invalidCredentials'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ $errors->first('invalidCredentials') }}
+                        </div>
+                    @endif
+
                   <a class="small text-muted" href="{{ route('password.request') }}">Olvidate tu contraseña?</a>
                   <p class="mb-5 pb-lg-2" style="color: #393f81;">Desea crear una cuenta? <a href="{{ route('register') }}"
                       style="color: #393f81;">Registrarse</a></p>
-                      
+
                   <a  href="http://127.0.0.1:8000" class="btn btn-dark btn-lg btn-block" type="button">Ventana inicio -></a>
                   <!--<a href="#!" class="small text-muted">Privacy policy</a>-->
                 </form>
