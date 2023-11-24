@@ -110,6 +110,8 @@ Route::get('/roles-permisos', [App\Http\Controllers\RolePermissionController::cl
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/changePassword', [App\Http\Controllers\ChangePasswordController::class, 'showChangePasswordForm'])->name('changePassword');
+Route::post('/changePassword',[App\Http\Controllers\ChangePasswordController::class, 'changePassword'])->name('changePassword');
 
 
 

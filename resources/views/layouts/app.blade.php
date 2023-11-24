@@ -64,6 +64,12 @@
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
+
+                            @if (Route::has('changePassword'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('changePassword') }}">{{ __('ChangePassword') }}</a>
+                                </li>
+                            @endif
                         @else
                             @can('administrador')
                                 <li class="nav-item"><a href="{{ url('/admin/roles') }}" class="nav-link">Roles</a></li>
@@ -83,12 +89,14 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('changePassword') }}">
+                                        {{ __('Cambiar Contraseña') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Cerrar Sesión') }}
                                     </a>
-
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>

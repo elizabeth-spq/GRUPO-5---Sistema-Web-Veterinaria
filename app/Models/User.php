@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'password', 'apellido', 'estado', 'rol_id', 'usu_registro', 'usu_ult_mod',
+        'name', 'email', 'password', 'password_changed', 'apellido', 'estado', 'rol_id', 'usu_registro', 'usu_ult_mod',
     ];
 
     /**
@@ -40,6 +40,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'password_changed' => 'datetime',
     ];
 
     public function rol()

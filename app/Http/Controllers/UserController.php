@@ -43,6 +43,7 @@ class UserController extends Controller
         $user->rol_id = $request->rol_id;
         $user->usu_registro = auth()->user()->id;
 
+
         $user->save();
 
         return response()->json($user);
@@ -74,7 +75,7 @@ class UserController extends Controller
             'rol_id' => 'required|integer',
             'usu_registro' => 'integer',
             'usu_ult_mod' => 'integer',
-            'motivoDesactivacion' => 'nullable|string|max:255',
+            'motivoDesactivacion' => 'nullable  |string|max:255',
         ]);
 
         $user->name = $request->name;

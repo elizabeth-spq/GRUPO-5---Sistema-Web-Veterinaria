@@ -64,6 +64,7 @@
                         </div>
                     @endif
 
+
                   <a class="small text-muted" href="{{ route('password.request') }}">Olvidate tu contraseña?</a>
                   <p class="mb-5 pb-lg-2" style="color: #393f81;">Desea crear una cuenta? <a href="{{ route('register') }}"
                       style="color: #393f81;">Registrarse</a></p>
@@ -79,11 +80,6 @@
     </div>
   </div>
 </section>
-
-
-
-
-
 
     <!-- place footer here -->
   </footer>

@@ -52,6 +52,12 @@ class LoginController extends Controller
                 return redirect('/login')->withErrors(['isDeactivated' => 'Esta cuenta ha sido desactivada.']);
             }
 
+            // Verificar si el usuario debe cambiar la contraseña
+            if ($user->password_changed) {
+                // Establecer una bandera para indicar que se debe cambiar la contraseña
+                session(['password_changed' => true]);
+            }
+
             return redirect()->intended($this->redirectPath());
         }
 
@@ -59,4 +65,13 @@ class LoginController extends Controller
             'invalidCredentials' => 'Las credenciales proporcionadas son inválidas.',
         ]);
     }
+
+    /*protected function authenticated(Request $request, $user)
+    {
+        if (!$user->password_changed) {
+            return redirect()->route('cambiar-contrasena');
+        }
+
+        return redirect()->intended($this->redirectPath());
+    }*/
 }

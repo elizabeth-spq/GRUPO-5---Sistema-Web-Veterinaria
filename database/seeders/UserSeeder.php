@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
+            'password_changed' => now(),
         ]);
 
         User::create([
@@ -33,6 +34,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
+            'password_changed' => now(),
         ]);
 
         User::create([
@@ -43,6 +45,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
+            'password_changed' => now(),
         ]);
     }
 }
