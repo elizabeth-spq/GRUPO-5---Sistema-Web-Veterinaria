@@ -26,36 +26,41 @@
                             <div class="col-2 border-end">{{ hora.hora_ini }} - {{ hora.hora_fin }}</div>
                             <div class="col-2">
                                 <div class="d-flex" v-for="veterinario in veterinarios">
-                                    <button class="btn"  @click="reservarCita(veterinario)">
-                                        <span class="bg-secondary-subtle rounded-circle p-1">{{veterinario.especialidad.codigo}}</span>
+                                    <button class="btn" @click="reservarCita(veterinario,hora)">
+                                        <span
+                                            class="bg-secondary-subtle rounded-circle p-1">{{ veterinario.especialidad.codigo }}</span>
                                     </button>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="d-flex" v-for="veterinario in veterinarios">
-                                    <button class="btn">
-                                        <span class="bg-secondary-subtle rounded-circle p-1">{{veterinario.especialidad.codigo}}</span>
+                                    <button class="btn" @click="reservarCita(veterinario)">
+                                        <span
+                                            class="bg-secondary-subtle rounded-circle p-1">{{ veterinario.especialidad.codigo }}</span>
                                     </button>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="d-flex" v-for="veterinario in veterinarios">
-                                    <button class="btn" >
-                                        <span class="bg-secondary-subtle rounded-circle p-1">{{veterinario.especialidad.codigo}}</span>
+                                    <button class="btn" @click="reservarCita(veterinario)">
+                                        <span
+                                            class="bg-secondary-subtle rounded-circle p-1">{{ veterinario.especialidad.codigo }}</span>
                                     </button>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="d-flex" v-for="veterinario in veterinarios">
-                                    <button class="btn">
-                                        <span class="bg-secondary-subtle rounded-circle p-1">{{veterinario.especialidad.codigo}}</span>
+                                    <button class="btn" @click="reservarCita(veterinario)">
+                                        <span
+                                            class="bg-secondary-subtle rounded-circle p-1">{{ veterinario.especialidad.codigo }}</span>
                                     </button>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="d-flex" v-for="veterinario in veterinarios">
-                                    <button class="btn">
-                                        <span class="bg-secondary-subtle rounded-circle p-1">{{veterinario.especialidad.codigo}}</span>
+                                    <button class="btn" @click="reservarCita(veterinario)">
+                                        <span
+                                            class="bg-secondary-subtle rounded-circle p-1">{{ veterinario.especialidad.codigo }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -123,29 +128,25 @@
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <h6>Veterinario</h6>
-                                <select class="form-select"
-                                    v-model="cita.vet_id"
-                                    disabled>
+                                <select class="form-select" v-model="cita.vet_id" disabled>
                                     <option></option>
                                     <option v-for="(veterinario, index) in veterinarios" :value="veterinario.id">{{
                                         veterinario.nombre }} {{ veterinario.apellido }}</option>
                                 </select>
                             </div>
                             <div class="col-12 mb-3">
-                                <h6>Fecha y hora</h6>
-                                <input id="fecNac" type="text" class="form-control"
-                                    disabled />
-                            </div>
-                            <div class="col-12 mb-3">
                                 <h6>Especialidad</h6>
-                                <select class="form-select"
-                                    v-model="cita.espec_id"
-                                    disabled>
+                                <select class="form-select" v-model="cita.espec_id" disabled>
                                     <option></option>
                                     <option v-for="(especialidad, index) in especialidades" :value="especialidad.id">{{
                                         especialidad.nombre }}</option>
                                 </select>
                             </div>
+                            <div class="col-12 mb-3">
+                                <h6>Fecha y hora</h6>
+                                <input id="fecNac" type="text" class="form-control" disabled />
+                            </div>
+
 
                             <div class="col-12 mb-3">
                                 <h6>Cliente</h6>
@@ -179,11 +180,14 @@
                                     style="height: 100px" v-model="cita.observaciones"></textarea>
                                 <label class="ms-3" for="floatingTextarea2">Observaciones</label>
                             </div>
-                            <select class="col-12 form-select" id="multiple-cargos-adicionales"
-                                data-placeholder="Seleccione Cargos Adicionales" multiple>
-                                <option value="50.00">Baño de la mascota</option>
-                                <option value="35.00">Corte de pelo</option>
-                            </select>
+                            <div class="col-12 mb-3">
+                                <h6>Cargos Adicionales</h6>
+                                <select class="col-12 form-select" id="multiple-cargos-adicionales"
+                                    data-placeholder="Seleccione Cargos Adicionales" multiple>
+                                    <option value="50.00">Baño de la mascota</option>
+                                    <option value="35.00">Corte de pelo</option>
+                                </select>
+                            </div>
                             <div class="col-12  mt-3">
                                 <select class="form-select" v-show="cita.id > 0" v-model="cita.estado_cita">
                                     <option value="1" selected>Programada</option>
@@ -352,7 +356,7 @@
     </div>
 </template>
 <script>
-import { ref, reactive,watch } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 export default {
@@ -437,7 +441,7 @@ export default {
             id: 0,
             nombre: "",
             apellido: "",
-            especialidad: 0,
+            espec_id: 0,
         })
         function cleanForm() {
             cita.id = 0
@@ -621,21 +625,7 @@ export default {
             });
         }
 
-        function mostrarSelectSingleEspecialidad() {
-            $('#single-select-especialidad').select2({
-                theme: "bootstrap-5",
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                dropdownParent: $('#mdl-cita .modal-content')
-            });
-            $("#single-select-especialidad").on("change", function () {
-                cita.espec_id = $("#single-select-especialidad").val();
-                if (cita.espec_id == undefined || cita.fec_ini == undefined) {
-                    obtenerVeterinarios(cita.espec_id, cita.fec_ini)
-                }
 
-            });
-        }
         function mostrarSelectMultipleCargos() {
             $('#multiple-cargos-adicionales').select2({
                 theme: "bootstrap-5",
@@ -837,15 +827,17 @@ export default {
         function openModalReservarCita() {
             modal_cita.mdl_cita.show()
         }
-        function reservarCita(veterinario_calendar) {
-            console.log(veterinario_calendar)
+        function reservarCita(veterinario_calendar,hora_cal) {
+            console.log(hora_cal)
             cleanForm()
-            cita.vet_id=veterinario_calendar.id
-            cita.espec_id=veterinario_calendar.espec_id
+            cita.vet_id = veterinario_calendar.id
+            cita.espec_id = veterinario_calendar.espec_id
+            //cita.fec_ini = cita_table.fec_ini
+            //cita.fec_fin = cita_table.fec_fin
             openModalReservarCita()
         }
-        function colors(){
-            console.log( "espec")
+        function colors() {
+            console.log("espec")
         }
         watch(veterinario, (newVet, oldVet) => {
             error_message.value = ""
@@ -879,7 +871,6 @@ export default {
             mostrarSelectSingleTipo,
             mostrarSelectSingleCLiente,
             mostrarSelectSingleMascota,
-            mostrarSelectSingleEspecialidad,
             mostrarSelectMultipleCargos,
             obtenerCitas,
             obtenerCliente,
@@ -899,6 +890,7 @@ export default {
         this.obtenerCliente()
         this.obtenerHora()
         this.obtenerVerinarios()
+        this.obtenerEspecialidad()
         this.obtenerTipoCita()
         this.mostrarSelectSingleTipo()
         this.mostrarSelectSingleCLiente()

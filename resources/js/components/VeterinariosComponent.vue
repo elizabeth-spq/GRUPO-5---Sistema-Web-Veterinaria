@@ -36,19 +36,7 @@
                         <td>{{ veterinario.documento }}</td>
                         <td>{{ veterinario.num_telefono }}</td>
                         <td>
-                            <span v-if="veterinario.especialidad == 1">Medicina Interna</span>
-                            <span v-if="veterinario.especialidad == 2">Cirugía</span>
-                            <span v-if="veterinario.especialidad == 3">Fisioterapia </span>
-                            <span v-if="veterinario.especialidad == 4">Anestesiología</span>
-                            <span v-if="veterinario.especialidad == 5">Cardiología </span>
-                            <span v-if="veterinario.especialidad == 6">Dermatología </span>
-                            <span v-if="veterinario.especialidad == 7">Neurología </span>
-                            <span v-if="veterinario.especialidad == 8">Oftalmología </span>
-                            <span v-if="veterinario.especialidad == 9">Oncología </span>
-                            <span v-if="veterinario.especialidad == 10">Medicina de Fauna silvestre </span>
-                            <span v-if="veterinario.especialidad == 11">Radiología </span>
-                            <span v-if="veterinario.especialidad == 12">Ultrasonografía </span>
-                            <span v-if="veterinario.especialidad == 13">Radiología </span>
+                            {{ veterinario.especialidad.nombre }}
                         </td>
                         <td>
                             <span v-if="veterinario.horario_id == 1">Completo</span>
@@ -171,7 +159,7 @@
                             </div>
                             <div class=" form-floating col-12">
                                 <select class="form-select" id="tipDoc" aria-label="Floating label select example"
-                                    aria-describedby="requiredDocumento" v-model="veterinario.especialidad">
+                                    aria-describedby="requiredDocumento" v-model="veterinario.espec_id">
                                     <option value="0" selected disabled>Seleccione ...</option>
                                     <option value="1">Medicina Interna</option>
                                     <option value="2">Cirugía</option>
@@ -301,7 +289,7 @@ export default {
             tip_doc: 0,
             documento: "",
             num_telefono: "",
-            especialidad: 0,
+            espec_id: 0,
             estado: 0,
             horario_id: 0,
             usu_registro: 0,
