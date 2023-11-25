@@ -13,8 +13,7 @@ class HistoriaController extends Controller
      */
     public function index()
     {
-        $historias = Historia::with('mascota')->whereIn('estado', [0, 1])->get();
-
+        $historias = Historia::with('mascota')->whereIn('estado_historia', [0, 1])->get();
         return response()->json($historias);
     }
 
@@ -27,7 +26,7 @@ class HistoriaController extends Controller
         $historia->mascota_id = $request->mascota_id;
         $historia->foto = $request->foto;
         $historia->documentos = $request->documentos;
-        $historia->estado = $request->estado;
+        $historia->estado_historia = $request->estado;
 
         $historia->save();
 
@@ -53,7 +52,7 @@ class HistoriaController extends Controller
         $historia = Historia::find($id);
         $historia->foto = $request->foto;
         $historia->documentos = $request->documentos;
-        $historia->estado = $request->estado;
+        $historia->estado_historia = $request->estado;
 
         if ($historia->save()) {
             $message = "El registro ha sido actualizado";
@@ -74,7 +73,7 @@ class HistoriaController extends Controller
     public function destroy(string $id)
     {
         $historia = Historia::find($id);
-        $historia->estado =  3;
+        $historia->estado_historia =  3;
         $historia->save();
 
         $response = [
@@ -82,5 +81,16 @@ class HistoriaController extends Controller
         ];
 
         return response()->json($response);
+    }
+    public function subirFoto(Request $request)
+    {
+        $request->validate([
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $file = $request->file('foto');
+        $path = $file->store('fotoHistorias'); // Guarda la imagen en la carpeta "fotoHistorias"
+
+        return response()->json(['path' => $path]);
     }
 }

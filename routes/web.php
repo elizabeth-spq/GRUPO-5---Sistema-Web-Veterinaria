@@ -86,8 +86,10 @@ Route::get('/historias/{id}', [App\Http\Controllers\HistoriaController::class, '
 Route::post('/historias', [App\Http\Controllers\HistoriaController::class, 'store'])->name('store');
 Route::put('/historias/{id}', [App\Http\Controllers\HistoriaController::class, 'update'])->name('update');
 Route::delete('/historias/{id}', [App\Http\Controllers\HistoriaController::class, 'destroy'])->name('destroy');
+Route::post('/subir-foto', 'HistoriaController@subirFoto');
 
 Route::get('/razas/{id}', [App\Http\Controllers\RazaController::class, 'index'])->name('index');
+Route::get('/razas/details/{id}', [App\Http\Controllers\RazaController::class, 'getDetails'])->name('getDetails');
 
 Route::get('/animales', [App\Http\Controllers\AnimalController::class, 'index'])->name('index');
 
@@ -97,8 +99,6 @@ Route::get('/tipocitas', [App\Http\Controllers\TipocitaController::class, 'index
 Route::get('/tipocitas/{id}', [App\Http\Controllers\TipocitaController::class, 'show'])->name('show');
 
 Route::get('/reniec/{dni}', [App\Http\Controllers\ReniecController::class, 'show'])->name('show');
-
-Route::get('/horas', [App\Http\Controllers\HoraController::class, 'index'])->name('index');
 
 Route::get('/roles', [App\Http\Controllers\RoleController::class, 'index'])->name('index');
 Route::get('/permisos', [App\Http\Controllers\PermissionController::class, 'index'])->name('index');
@@ -112,8 +112,6 @@ Route::get('/roles-permisos', [App\Http\Controllers\RolePermissionController::cl
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/changePassword', [App\Http\Controllers\ChangePasswordController::class, 'showChangePasswordForm'])->name('changePassword');
-Route::post('/changePassword',[App\Http\Controllers\ChangePasswordController::class, 'changePassword'])->name('changePassword');
 
 
 

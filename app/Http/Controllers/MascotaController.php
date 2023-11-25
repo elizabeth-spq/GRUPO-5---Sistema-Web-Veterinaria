@@ -15,7 +15,7 @@ class MascotaController extends Controller
     public function index()
     {
         //$mascota = Mascota::whereIn('estado',[0,1])->get()->animal();
-        $mascotas = Mascota::with('cliente')->whereIn('estado',[0,1])->get();
+        $mascotas = Mascota::with('cliente', 'animal')->whereIn('estado',[0,1])->get();
         //$mascota = Mascota::find(3)->animal()->first();;
 
         return response()->json($mascotas);

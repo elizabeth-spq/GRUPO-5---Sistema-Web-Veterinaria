@@ -47,4 +47,9 @@ class RazaController extends Controller
     {
         //
     }
+    public function getDetails(int $id)
+    {
+        $raza = Raza::findOrFail($id);
+        return response()->json($raza);
+    }
 }
