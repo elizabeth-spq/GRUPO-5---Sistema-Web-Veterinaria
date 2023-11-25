@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('tip_doc');
             $table->string('documento', 20)->unique();
             $table->string('num_telefono', 20);
-            $table->integer('especialidad');
+            $table->unsignedInteger('espec_id');
             $table->integer('estado')->default(0);
             $table->unsignedInteger('horario_id');
             $table->integer('usu_registro')->nullable();
@@ -28,6 +28,8 @@ return new class extends Migration
 
             $table->foreign('horario_id')->references('id')
                 ->on('horarios');
+            $table->foreign('espec_id')->references('id')
+                ->on('especialidades');
         });
     }
 

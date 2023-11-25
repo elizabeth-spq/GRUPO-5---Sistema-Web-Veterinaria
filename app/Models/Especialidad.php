@@ -17,4 +17,8 @@ class Especialidad extends Model
     {
         return $this->hasMany(Cita::class);
     }
+    public function veterinario(): HasMany
+    {
+        return $this->hasMany(Veterinario::class);
+    }
 }

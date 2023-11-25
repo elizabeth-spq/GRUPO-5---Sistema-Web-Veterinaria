@@ -20,7 +20,7 @@ class VeterinarioSeeder extends Seeder
             'tip_doc' => 1,
             'documento' => 74785412,
             'num_telefono' => 902548536,
-            'especialidad' => 5,
+            'espec_id' => 1,
             'horario_id' => 1,
         ]);
 
@@ -31,8 +31,8 @@ class VeterinarioSeeder extends Seeder
             'tip_doc' => 1,
             'documento' => 74145201,
             'num_telefono' => 999547525,
-            'especialidad' => 1,
-            'horario_id' => 2,
+            'espec_id' => 1,
+            'horario_id' => 1,
         ]);
     }
 }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('especialidades', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('codigo', 4);
             $table->string('nombre', 300);
             $table->timestamps();
         });

@@ -98,6 +98,8 @@ Route::get('/tipocitas/{id}', [App\Http\Controllers\TipocitaController::class, '
 
 Route::get('/reniec/{dni}', [App\Http\Controllers\ReniecController::class, 'show'])->name('show');
 
+Route::get('/horas', [App\Http\Controllers\HoraController::class, 'index'])->name('index');
+
 Route::get('/roles', [App\Http\Controllers\RoleController::class, 'index'])->name('index');
 Route::get('/permisos', [App\Http\Controllers\PermissionController::class, 'index'])->name('index');
 Route::get('/roles-permisos', [App\Http\Controllers\RolePermissionController::class, 'index'])->name('index');

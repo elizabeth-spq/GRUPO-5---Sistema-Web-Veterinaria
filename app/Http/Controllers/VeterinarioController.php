@@ -19,7 +19,9 @@ class VeterinarioController extends Controller
 
         if (Gate::allows('administrador')) {
 
-            $veterinario = Veterinario::whereIn('estado', [0, 1])->get();
+            $veterinario = Veterinario::whereIn('estado', [0, 1])
+            ->with('especialidad')
+            ->get();
 
             $veterinario->transform(function ($veterinario) {
                 $veterinario->fec_nac = Carbon::parse($veterinario->fec_nac)->format('Y-m-d');
@@ -40,16 +42,16 @@ class VeterinarioController extends Controller
         $repetido = $request->documento;
         $prev_veterinario = Veterinario::where('documento', $repetido)->first();
 
-        if($prev_veterinario){
+        if ($prev_veterinario) {
             $message = "El registro ya existe";
             $response = [
                 'message' => $message
             ];
             return response()->json($response);
-        }else{
+        } else {
             $veterinario = new Veterinario();
-            $veterinario->nombre=$request->nombre;
-            $veterinario->apellido=$request->apellido;
+            $veterinario->nombre = $request->nombre;
+            $veterinario->apellido = $request->apellido;
             $veterinario->fec_nac = $request->fec_nac;
             $veterinario->tip_doc = $request->tip_doc;
             $veterinario->documento = $request->documento;
@@ -119,10 +121,30 @@ class VeterinarioController extends Controller
 
         return response()->json($response);
     }
-    public function veterinariosByEspecAndFec(string $id,string $date)
+    public function veterinariosByEspecAndFec(int $id, string $date)
     {
-        $veterinario = Veterinario::find($id);
 
-        return response()->json($veterinario);
+        $fec_ini = $date;
+
+        $time = strtotime($fec_ini);
+        $newformat = date('H', $time);
+        $hour = (int)$newformat;
+
+        if ($hour > 8 && $hour < 13) {
+            $veterinario = Veterinario::whereIn('horario_id', [0, 1])
+            ->whereRaw("especialidad = '$id'")->get();
+            return response()->json($veterinario);
+        }else if($hour > 12 && $hour < 18){
+            $veterinario = Veterinario::whereIn('horario_id', [0, 2])
+                ->whereRaw(" especialidad = '$id'")->get();
+            return response()->json($veterinario);
+        }
+        else {
+            $response = [
+                'message' => "No hay veterinarios disponibles"
+            ];
+
+            return response()->json($response);
+        }
     }
 }
