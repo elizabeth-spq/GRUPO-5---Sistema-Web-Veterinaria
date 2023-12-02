@@ -30,6 +30,8 @@ class VerifyCsrfToken extends Middleware
         "/tipocitas/",
         "/tipocitas/*",
         "/especialidades/",
+        "/horas/",
+        "/horas/*",
 
 
     ];

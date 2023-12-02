@@ -14,68 +14,68 @@ class HoraSeeder extends Seeder
     public function run(): void
     {
         Hora::create([
-            'hora_ini' => '8:00',
-            'hora_fin' => '8:30',
+            'hora_ini' => '08:00:00',
+            'hora_fin' => '08:30:00',
         ]);
         Hora::create([
-            'hora_ini' => '8:30',
-            'hora_fin' => '9:00',
+            'hora_ini' => '08:30:00',
+            'hora_fin' => '09:00:00',
         ]);
         Hora::create([
-            'hora_ini' => '9:00',
-            'hora_fin' => '9:30',
+            'hora_ini' => '09:00:00',
+            'hora_fin' => '09:30:00',
         ]);
         Hora::create([
-            'hora_ini' => '9:30',
-            'hora_fin' => '10:00',
+            'hora_ini' => '09:30:00',
+            'hora_fin' => '10:00:00',
         ]);
         Hora::create([
-            'hora_ini' => '10:00',
-            'hora_fin' => '10:30',
+            'hora_ini' => '10:00:00',
+            'hora_fin' => '10:30:00',
         ]);
         Hora::create([
-            'hora_ini' => '10:30',
-            'hora_fin' => '11:00',
+            'hora_ini' => '10:30:00',
+            'hora_fin' => '11:00:00',
         ]);
         Hora::create([
-            'hora_ini' => '11:00',
-            'hora_fin' => '11:30',
+            'hora_ini' => '11:00:00',
+            'hora_fin' => '11:30:00',
         ]);
         Hora::create([
-            'hora_ini' => '11:30',
-            'hora_fin' => '12:00',
+            'hora_ini' => '11:30:00',
+            'hora_fin' => '12:00:00',
         ]);
         Hora::create([
-            'hora_ini' => '12:00',
-            'hora_fin' => '12:30',
+            'hora_ini' => '12:00:00',
+            'hora_fin' => '12:30:00',
         ]);
         Hora::create([
-            'hora_ini' => '12:30',
-            'hora_fin' => '13:00',
+            'hora_ini' => '12:30:00',
+            'hora_fin' => '13:00:00',
         ]);
         Hora::create([
-            'hora_ini' => '14:00',
-            'hora_fin' => '14:30',
+            'hora_ini' => '14:00:00',
+            'hora_fin' => '14:30:00',
         ]);
         Hora::create([
-            'hora_ini' => '14:30',
-            'hora_fin' => '15:00',
+            'hora_ini' => '14:30:00',
+            'hora_fin' => '15:00:00',
         ]);
         Hora::create([
-            'hora_ini' => '15:00',
-            'hora_fin' => '15:30',
+            'hora_ini' => '15:00:00',
+            'hora_fin' => '15:30:00',
         ]);
         Hora::create([
-            'hora_ini' => '15:30',
-            'hora_fin' => '16:00',
+            'hora_ini' => '15:30:00',
+            'hora_fin' => '16:00:00',
         ]);
         Hora::create([
-            'hora_ini' => '16:00',
-            'hora_fin' => '16:30',
+            'hora_ini' => '16:00:00',
+            'hora_fin' => '16:30:00',
         ]);
         Hora::create([
-            'hora_ini' => '16:30',
-            'hora_fin' => '17:00',
+            'hora_ini' => '16:30:00',
+            'hora_fin' => '17:00:00',
         ]);
     }
 }

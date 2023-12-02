@@ -95,6 +95,9 @@ Route::get('/animales', [App\Http\Controllers\AnimalController::class, 'index'])
 
 Route::get('/especialidades', [App\Http\Controllers\EspecialidadController::class, 'index'])->name('index');
 
+Route::get('/horas', [App\Http\Controllers\HoraController::class, 'index'])->name('index');
+Route::post('/horas/date', [App\Http\Controllers\HoraController::class, 'getdate'])->name('getdate');
+
 Route::get('/tipocitas', [App\Http\Controllers\TipocitaController::class, 'index'])->name('index');
 Route::get('/tipocitas/{id}', [App\Http\Controllers\TipocitaController::class, 'show'])->name('show');
 
@@ -104,6 +107,8 @@ Route::get('/roles', [App\Http\Controllers\RoleController::class, 'index'])->nam
 Route::get('/permisos', [App\Http\Controllers\PermissionController::class, 'index'])->name('index');
 Route::get('/roles-permisos', [App\Http\Controllers\RolePermissionController::class, 'index'])->name('index');
 
+Route::get('/changePassword', [App\Http\Controllers\ChangePasswordController::class, 'showChangePasswordForm'])->name('changePassword');
+Route::post('/changePassword',[App\Http\Controllers\ChangePasswordController::class, 'changePassword'])->name('changePassword');
 
 /*Route::resource('veterinarios', App\Http\Controllers\VeterinarioController::class)->only([
     'index', 'show', 'store','update','destroy'

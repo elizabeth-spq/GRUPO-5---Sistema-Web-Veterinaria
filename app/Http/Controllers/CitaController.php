@@ -42,7 +42,7 @@ class CitaController extends Controller
                 ->first();
 
             if ($prev_cita) {
-                $message = "Ya existe una cita asiganada en ese horario y con el profesional indicado, escoja otro horario y/o profesional";
+                $message = "Ya existe una cita asignada en ese horario y con el profesional indicado, escoja otro horario y/o profesional";
                 $response = [
                     'message' => $message
                 ];

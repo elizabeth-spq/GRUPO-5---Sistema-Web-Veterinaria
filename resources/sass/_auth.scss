@@ -1,0 +1,60 @@
+#auth {
+    align-items: center;
+    background: url(/public/images/fondo.jpg) no-repeat center center fixed;
+    background-size: cover;
+    color: black;
+    display: flex;
+    height: auto;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    width: 100%;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    -webkit-background-size: cover;
+
+    .overlay {
+        background: rgba(38, 38, 38, .6);
+        bottom: 0px;
+        left: 0px;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        .container{
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            main{
+                .card{
+                    background-color: #ffffff;
+                    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+                    .card-body{
+                        #buttons-ini{
+                            .btn-primary{
+                                background-image: linear-gradient(to right, $ship-cove-800 0%, $ship-cove-500 70%);
+                                border: none;
+                                border-color: none;
+                                width: -webkit-fill-available;
+                                margin: 20px;
+                                transition: $tran-04;
+                                border-radius: 15px;
+                                &:hover{
+                                    background-image: linear-gradient(to right, #FF512F 0%, #ef7c1e  70%);
+                                    border-color: none;
+                                    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+                                }
+                                a{
+                                    font-size: 16px;
+                                    font-weight: bolder;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+}

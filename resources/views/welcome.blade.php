@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Veterinaria</title>
-
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -831,34 +831,52 @@
 </head>
 
 <body class="antialiased">
-    <div
-        class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-        @if (Route::has('login'))
-            <div class="sm:fixed sm:top-50 sm:right-50 p-6 text-right z-10">
-                <div class="text-center">
-                    <i class="bi bi-hospital-fill" style="font-size: 60px"></i>
+    <div class="container-fluid p-0">
+        <div id="auth">
+            <div class="overlay">
+                <div class="container">
+                    <main>
+                        <div class="d-flex justify-content-center">
+                            <div class="card">
+                                <div class="card-body">
+                                    <img src="{{ URL('images/logo.png') }}" height="300" width="300">
+                                    <div>
+                                        @if (Route::has('login'))
+                                            <div id="buttons-ini">
+                                                @auth
+                                                    <div class="text-center">
+                                                        <button type="button" class="btn btn-primary">
+                                                            <a href="{{ url('/home') }}">Home</a>
+                                                        </button>
+
+                                                    </div>
+                                                @else
+                                                    <div class="text-center">
+                                                        <button type="button" class="btn btn-primary">
+                                                            <a href="{{ route('login') }}">Log in</a>
+                                                        </button>
+                                                    </div>
+                                                    @if (Route::has('register'))
+                                                        <button type="button" class="btn btn-primary">
+                                                            <a href="{{ route('register') }}">Register</a>
+                                                        </button>
+                                                    @endif
+                                                @endauth
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+
                 </div>
-                @auth
-                    <div class="text-center">
-                        <a href="{{ url('/home') }}"
-                            class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Home</a>
-                    </div>
-                @else
-                    <div class="text-center">
-                        <a href="{{ route('login') }}"
-                            class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log
-                            in</a>
-                    </div>
 
-                                @if (Route::has('register'))
-    <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
-    @endif
-                @endauth
             </div>
-        @endif
-
-
+        </div>
     </div>
+
+
 </body>
 
 </html>

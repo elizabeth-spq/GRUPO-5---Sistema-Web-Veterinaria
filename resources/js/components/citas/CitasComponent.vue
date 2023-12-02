@@ -11,56 +11,61 @@
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
+
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
                     tabindex="0">
+                    <div id="leyenda">
+                        <h5>Leyenda</h5>
+                        <h6>Especialidades</h6>
+                        <div class="d-flex flex-wrap">
+
+                            <div v-for="especialidad in especialidades" class="m-1">
+                                <span v-html="especialidad.codigo + ': '"></span>
+                                <span v-html="especialidad.nombre + ' / '"></span>
+                            </div>
+                        </div>
+                        <h6>Estados de cita</h6>
+                        <div class="d-flex flex-wrap">
+                            <div class="mt-1 me-2">
+                                <i class="bi bi-circle-fill text-black-50 text-opacity-25"></i>
+                                <span> Disponible </span>
+                            </div>
+                            <div class="mt-1 me-2">
+                                <i class="bi bi-circle-fill text-success"></i>
+                                <span> Programada </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 text-center">
+                        <button @click="obtenerDate(next_last_dates.last_start_week,next_last_dates.last_end_week)"><i class="bi bi-chevron-left fs-5"></i></button>
+                        <button @click="obtenerDate(next_last_dates.next_start_week,next_last_dates.next_end_week)"><i class="bi bi-chevron-right fs-5"></i></button>
+                    </div>
                     <div class="container text-center mt-2">
                         <div class="row row-cols-6">
-                            <div class="col-2 border border-end-0 py-1">Horas</div>
-                            <div class="col-2 border border-end-0 py-1">Lunes 27</div>
-                            <div class="col-2 border border-end-0 py-1">Martes 28</div>
-                            <div class="col-2 border border-end-0 py-1">Miercoles 29</div>
-                            <div class="col-2 border border-end-0 py-1">Jueves 30</div>
-                            <div class="col-2 border border-end-0 py-1">Viernes 01</div>
+                            <div class="col-2 border border-bottom-0"></div>
+                            <div class="col-2 border border-bottom-0" v-for="(dia, index) in dias">
+                                <div  v-html="dia"></div>
+                            </div>
                         </div>
+                        <div class="row row-cols-6">
+                            <div class="col-2 border-start">Horas</div>
+                            <div class="col-2 border-start border-end" v-for="(date, index) in fechas">
+                                <div  v-html="date"></div>
+                            </div>
+                        </div>
+
                         <div id="medicos" class="row row-cols-6 border-bottom" v-for="hora in horas">
-                            <div class="col-2 border-end">{{ hora.hora_ini }} - {{ hora.hora_fin }}</div>
-                            <div class="col-2">
-                                <div class="d-flex" v-for="veterinario in veterinarios">
-                                    <button class="btn" @click="reservarCita(veterinario,hora)">
-                                        <span
-                                            class="bg-secondary-subtle rounded-circle p-1">{{ veterinario.especialidad.codigo }}</span>
-                                    </button>
-                                </div>
+                            <div class="col-2 border border-end">{{ hora.hora_ini }} - {{ hora.hora_fin }}
+                                <input type="text" class="d-none" v-model="hora.hora_ini">
+                                <input type="text" class="d-none" v-model="hora.hora_fin">
                             </div>
-                            <div class="col-2">
+                            <div class="col-2 border border-start-0" v-for="(date, index) in fechas">
                                 <div class="d-flex" v-for="veterinario in veterinarios">
-                                    <button class="btn" @click="reservarCita(veterinario)">
-                                        <span
-                                            class="bg-secondary-subtle rounded-circle p-1">{{ veterinario.especialidad.codigo }}</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="d-flex" v-for="veterinario in veterinarios">
-                                    <button class="btn" @click="reservarCita(veterinario)">
-                                        <span
-                                            class="bg-secondary-subtle rounded-circle p-1">{{ veterinario.especialidad.codigo }}</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="d-flex" v-for="veterinario in veterinarios">
-                                    <button class="btn" @click="reservarCita(veterinario)">
-                                        <span
-                                            class="bg-secondary-subtle rounded-circle p-1">{{ veterinario.especialidad.codigo }}</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="d-flex" v-for="veterinario in veterinarios">
-                                    <button class="btn" @click="reservarCita(veterinario)">
-                                        <span
-                                            class="bg-secondary-subtle rounded-circle p-1">{{ veterinario.especialidad.codigo }}</span>
+                                    <button class="btn rounded-circle m-1"
+                                    :class="mostrarEstadoCita(veterinario, hora.hora_ini,hora.hora_fin, date)"
+                                    @click="reservarCita(veterinario, hora.hora_ini,hora.hora_fin, date)"
+                                    :disabled="desabilitaFechaAnterior(date)">
+                                        {{veterinario.especialidad.codigo }}
                                     </button>
                                 </div>
                             </div>
@@ -384,6 +389,15 @@ export default {
             estado_cita: 0,
         })
         const citas = ref([])
+        const fechas = ref([])
+        const next_last_dates=reactive({
+            next_start_week:"",
+            next_end_week:"",
+            last_start_week:"",
+            last_end_week:"",
+        })
+        const dias = ref([])
+
         const clientes = ref([])
         const cliente = reactive({
             id: 0,
@@ -443,6 +457,8 @@ export default {
             apellido: "",
             espec_id: 0,
         })
+
+
         function cleanForm() {
             cita.id = 0
             cita.tipo_id = 0
@@ -517,6 +533,16 @@ export default {
         function closeModal() {
             modal_cita.mdl_cita.hide()
         }
+        function desabilitaFechaAnterior(fec){
+            //const todayDate = new Date().toISOString().slice(0, 10);
+            //const todayDate = new Date().toLocaleDateString('az', {timeZone: 'America/Lima'})
+            const todayDate = moment().format('YYYY-MM-DD');
+            if(fec<todayDate){
+                return true
+            }else{
+                return false
+            }
+        }
         function guardarCita() {
             cita.estado_cita = 1
             fetch("http://127.0.0.1:8000/citas", {
@@ -562,7 +588,8 @@ export default {
             });
             $("#fecNac").on("change", function () {
                 cita.fec_ini = $("#fecNac").val();
-                cita.fec_fin = moment(cita.fec_ini).startOf('hours').add(tiempo_cita.value, 'hours').format('YYYY-MM-DD HH:mm');
+                cita.fec_fin = moment(cita.fec_ini).startOf('hours').add(0.5, 'hours').format('YYYY-MM-DD HH:mm');
+                console.log(cita.fec_ini+ '-'+ cita.fec_fin)
             });
         }
         function mostrarDetalle(cita_table) {
@@ -679,6 +706,38 @@ export default {
                     }
                     console.log(data)
                     clientes.value = data;
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        }
+        function obtenerDate(start,end) {
+            fetch("http://127.0.0.1:8000/horas/date", {
+                method: "POST",
+                headers: {
+                    Accept: "Application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ start_date: start,
+                                    end_date:end})
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    console.log(data)
+                    fechas.value = data.fechas;
+                    dias.value = data.dias;
+                    next_last_dates.next_start_week=data.nextStartDate
+                    next_last_dates.next_end_week=data.nextEndDate
+                    next_last_dates.last_start_week=data.lastStartDate
+                    next_last_dates.last_end_week=data.lastEndDate
+                    console.log(next_last_dates)
+
                 })
                 .catch((error) => {
                     error_message.value = error;
@@ -827,28 +886,48 @@ export default {
         function openModalReservarCita() {
             modal_cita.mdl_cita.show()
         }
-        function reservarCita(veterinario_calendar,hora_cal) {
-            console.log(hora_cal)
+        function reservarCita(veterinario_calendar, hora_ini,hora_fin, fecha) {
             cleanForm()
             cita.vet_id = veterinario_calendar.id
             cita.espec_id = veterinario_calendar.espec_id
-            //cita.fec_ini = cita_table.fec_ini
-            //cita.fec_fin = cita_table.fec_fin
+            $("#fecNac").val(fecha +' '+hora_ini).trigger("change");
             openModalReservarCita()
         }
-        function colors() {
-            console.log("espec")
+        function mostrarEstadoCita(vet,hora_ini,hora_fin,date) {
+
+
+            let reservas_list = citas.value
+            console.log(reservas_list)
+            let estado = 'bg-secondary-subtle'
+            let fec_initial = date+' '+hora_ini
+            reservas_list.map((item)=> {
+                if( item.fec_ini == fec_initial && item.vet_id == vet.id){
+                    if(item.estado_cita==1){
+                        estado = 'bg-success-subtle'
+                    }else if(item.estado_cita==2){
+                        estado = 'bg-warning-subtle'
+                    }else if(item.estado_cita==3){
+                        estado = 'bg-info-subtle'
+                    }else{
+                        estado = 'bg-danger-subtle'
+                    }
+                }
+            });
+            return estado;
         }
+        /*
         watch(veterinario, (newVet, oldVet) => {
             error_message.value = ""
             colors()
-        })
+        })*/
         return {
             bkg_espec,
             cita,
             citas,
             cliente,
             clientes,
+            dias,
+            fechas,
             error_message,
             error_message_two,
             especialidades,
@@ -859,13 +938,15 @@ export default {
             modal_detalle,
             mascotas,
             mascota,
+            next_last_dates,
             tipos,
             tipo,
             tiempo_cita,
             veterinarios,
             veterinario,
-            colors,
+            mostrarEstadoCita,
             guardarCita,
+            desabilitaFechaAnterior,
             mostrarCalendarioNac,
             mostrarDetalle,
             mostrarSelectSingleTipo,
@@ -874,6 +955,7 @@ export default {
             mostrarSelectMultipleCargos,
             obtenerCitas,
             obtenerCliente,
+            obtenerDate,
             obtenerHora,
             obtenerTipoId,
             obtenerTipoCita,
@@ -888,6 +970,7 @@ export default {
         this.mostrarCalendarioNac()
         this.obtenerCitas()
         this.obtenerCliente()
+        this.obtenerDate()
         this.obtenerHora()
         this.obtenerVerinarios()
         this.obtenerEspecialidad()
