@@ -73,6 +73,7 @@ Route::get('/mascotas/cliente/{id}', [App\Http\Controllers\MascotaController::cl
 Route::post('/mascotas', [App\Http\Controllers\MascotaController::class, 'store'])->name('store');
 Route::put('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'update'])->name('update');
 Route::delete('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'destroy'])->name('destroy');
+Route::get('/mascotas/{idMascota}/citas', [App\Http\Controllers\MascotaController::class, 'obtenerCitasPorMascota'])->name('mascotas.citas');
 
 Route::get('/citas', [App\Http\Controllers\CitaController::class, 'index'])->name('index');
 Route::get('/citas/{id}', [App\Http\Controllers\CitaController::class, 'show'])->name('show');

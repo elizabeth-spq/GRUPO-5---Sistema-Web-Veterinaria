@@ -14,8 +14,8 @@ class Mascota extends Model
 
     protected $table = 'mascotas';
     protected $primaryKey = 'id';
-    protected $foreingKeyAnimal = 'animal_id';
-    protected $foreingKeyCliente = 'cliente_id';
+    protected $foreignKeyAnimal = 'animal_id';
+    protected $foreignKeyCliente = 'cliente_id';
 
     public function animal(): BelongsTo
     {

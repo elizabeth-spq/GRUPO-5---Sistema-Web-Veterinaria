@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Animal;
 use App\Models\Cliente;
 use App\Models\Mascota;
+use App\Models\Cita;
 use Illuminate\Http\Request;
 
 class MascotaController extends Controller
@@ -110,5 +111,14 @@ class MascotaController extends Controller
     {
         $mascotas = Mascota::whereIn('cliente_id',[$id])->get();
         return response()->json($mascotas);
+    }
+    public function obtenerCitasPorMascota($idMascota)
+    {
+        try {
+            $citas = Cita::where('mascota_id', $idMascota)->get();
+            return response()->json($citas);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

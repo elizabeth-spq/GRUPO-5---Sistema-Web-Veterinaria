@@ -79,40 +79,67 @@
               <!-- Segunda Columna - Otros Campos o Contenido -->
               <div class="col-12 col-md-6">
                 <h3>Citas de la mascota</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Fecha de Inicio</th>
-                            <th scope="col">Fecha de Fin</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Estado</th>
-                            <th scope="col">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="cita in citas" :key="cita.id">
-                            <td>{{ cita.fec_ini }}</td>
-                            <td>{{ cita.fec_fin }}</td>
-                            <td>{{ cita.observaciones || 'Sin descripción' }}</td>
-                            <td>{{ cita.estado_cita === 1 ? 'Activa' : 'Inactiva' }}</td>
-                            <td>{{ cita.total }}</td>
-                            <!-- Puedes agregar más columnas según la estructura de tus citas -->
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="accordion accordion-flush" id="accordion">
+                    <div v-for="(cita, index) in citas" :key="index" class="accordion-item border rounded" style="background-color:rgb(223, 223, 223);">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" style="background-color: rgb(185, 185, 185);" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + index" aria-expanded="false" :aria-controls="'collapse' + index">
+                                {{ cita.fec_ini }} - {{ cita.observaciones || 'Sin descripción' }}
+                            </button>
+                        </h2>
+                        <div :id="'collapse' + index" class="accordion-collapse collapse" :aria-labelledby="'heading' + index" data-bs-parent="#accordion">
+                            <div class="accordion-body">
+                                <!-- Detalles de la cita, puedes personalizar esta sección según tus necesidades -->
+                                <p>Fecha de Fin: {{ cita.fec_fin }}</p>
+
+                                <p>Estado: {{ cita.estado_cita === 1 ? 'Activa' : 'Inactiva' }}</p>
+                                <p>Total: {{ cita.total }}</p>
+                                <!-- Agrega más detalles según tu estructura de datos -->
+                                <label for="notas_cita">Notas de la cita:</label>
+                                <textarea v-model="historia.notas_cita" class="form-control"></textarea>
+
+                                <label for="receta">Receta:</label>
+                                <textarea v-model="historia.receta" class="form-control"></textarea>
+
+                                <label for="procedimiento">Procedimiento:</label>
+                                <textarea v-model="historia.procedimiento" class="form-control"></textarea>
+
+                                <label for="resultados_examenes">Resultados de examenes:</label>
+                                <textarea v-model="historia.resultados_examenes" class="form-control"></textarea>
+
+                                <label for="fecha_creacion">fecha de Creacion:</label>
+                                <input type="date" v-model="historia.fecha_creacion" class="form-control">
+
+                                <label for="archivos_adjuntos">Archivos complementarios:</label>
+                                <input type="file" @change="handleFileUpload" class="form-control" multiple>
+                                <div id="requiredNombre" class="form-text text-danger">
+                                    Opcional, ejemplo: radiografias, docs, etc.
+                                </div>
+                                <br>
+                                <div class="col-12">
+                                    <h6>Estado</h6>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="vetStatus"
+                                            v-model="historia.estado_historia" :checked="historia.estado_historia == 1 ? true : false">
+                                        <label class="form-check-label" for="vetStatus">
+                                            <span v-if="historia.estado_historia > 0">Activo</span>
+                                            <span v-else>Inactivo</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary">Guardar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="citas.length === 0">
+                    <p>No hay citas registradas para esta mascota.</p>
+                </div>
               </div>
             </div><!--row-->
           </div><!--container-->
         </div><!--modal-body-->
-        <div class="modal-footer mb-3">
-          <button
-            type="button"
-            class="btn btn-primary"
-            @click="guardarMascota"
-          >
-            Guardar registro
-          </button>
-        </div>
       </div>
     </div>
   </template>  
@@ -159,7 +186,7 @@ export default {
             archivos_adjuntos: "",
             vacunacion: "",
             foto: "",
-            estado: 0
+            estado_historia: 0
         })
         const imagenSeleccionada = ref(""); // Almacena la ruta de la imagen seleccionada
 
@@ -243,38 +270,32 @@ export default {
                     console.error("There was an error!", error);
                 });
         }
-        function obtenerInformacionClientes() {
+        async function obtenerInformacionClientes() {
             // Iterar sobre la lista de mascotas y obtener la información del cliente para cada una
-            mascotas.value.forEach((mascota) => {
-                fetch(`http://127.0.0.1:8000/clientes/${mascota.cliente_id}`, {
-                    method: "GET",
-                })
-                    .then(async (response) => {
-                        const data = await response.json();
-                        if (!response.ok) {
-                            const error =
-                                data && data.detail ? data.detail : response.statusText;
-                            return Promise.reject(error);
-                        }
-
-                        // Asignar la información del cliente a la mascota correspondiente
-                        mascota.cliente = data;
-
-                    })
-                    .catch((error) => {
-                        error_message.value = error;
-                        console.error("There was an error!", error);
-                    });
-            });
-        }
-        function obtenerInformacionRazas() {
-            mascotas.value.forEach((mascota) => {
-                fetch(`http://127.0.0.1:8000/razas/details/${mascota.raza_id}`, {
-                    method: "GET",
-                })
-                .then(async (response) => {
+            for (const mascota of mascotas.value) {
+                try {
+                    const response = await fetch(`http://127.0.0.1:8000/clientes/${mascota.cliente_id}`);
                     const data = await response.json();
-                    console.log("Información de la raza:", data); // Agrega esta línea
+
+                    if (!response.ok) {
+                        const error = data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+
+                    // Asignar la información del cliente a la mascota correspondiente
+                    mascota.cliente = data;
+                } catch (error) {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                }
+            }
+        }
+        async function obtenerInformacionRazas() {
+            for (const mascota of mascotas.value) {
+                try {
+                    const response = await fetch(`http://127.0.0.1:8000/razas/details/${mascota.raza_id}`);
+                    const data = await response.json();
+
                     if (!response.ok) {
                         const error = data && data.detail ? data.detail : response.statusText;
                         return Promise.reject(error);
@@ -282,29 +303,28 @@ export default {
 
                     // Asignar la información de la raza a la mascota correspondiente
                     mascota.raza = data;
-                })
-                .catch((error) => {
+                } catch (error) {
                     error_message.value = error;
                     console.error("There was an error!", error);
-                });
-            });
-        }
-        function obtenerCitas(idMascota) {
-            fetch(`http://127.0.0.1:8000/mascotas/${idMascota}/citas`, {
-                method: "GET",
-            })
-            .then(async (response) => {
-                const data = await response.json();
-                if (!response.ok) {
-                    const error = data && data.detail ? data.detail : response.statusText;
-                    return Promise.reject(error);
                 }
+            }
+        }
+        async function obtenerCitas(idMascota) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/mascotas/${idMascota}/citas`);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error('Error en la respuesta:', data);
+                    return Promise.reject(data);
+                }
+
+                // Asignar la lista de citas a la variable citas
                 citas.value = data;
-            })
-            .catch((error) => {
+            } catch (error) {
+                console.error('Error en la solicitud:', error);
                 error_message.value = error;
-                console.error("There was an error!", error);
-            });
+            }
         }
         function mostrarInformacionCliente() {
             const mascotaSeleccionada = mascotas.value.find(m => m.id === historia.mascota_id);
@@ -343,7 +363,6 @@ export default {
         }
     },
     mounted() {
-
         console.log('Component mounted.')
         this.obtenerHistorias();
         this.obtenerMascotas();
