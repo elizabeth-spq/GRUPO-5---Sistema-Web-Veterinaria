@@ -1,3 +1,12 @@
+// Fonts
+@import url('https://fonts.bunny.net/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
 #auth {
     align-items: center;
     background: url(/public/images/fondo.jpg) no-repeat center center fixed;
@@ -48,6 +57,11 @@
                                     font-size: 16px;
                                     font-weight: bolder;
                                 }
+                            }
+                        }
+                        #formulario{
+                            .container{
+                                height: fit-content;
                             }
                         }
                     }
