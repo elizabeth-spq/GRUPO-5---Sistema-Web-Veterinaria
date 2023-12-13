@@ -11,6 +11,8 @@
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         .rounded {
             width: auto;
@@ -24,81 +26,69 @@
         <div id="auth">
             <div class="overlay">
                 <div class="container">
-                    <main>
-                        <div class="d-flex justify-content-center">
-                            <div class="card">
-                                <div class="card-body p-0">
-                                    <div class="row align-items-center">
-                                        <div class="col-5">
-                                            <img src="https://i.pinimg.com/474x/75/b8/59/75b8594198d0fb111afc7778cbd20fb6.jpg"
-                                                alt="login form" class="img-fluid" />
+                    <div class="row bg-body">
+                        <div class="col-6 p-0">
+                            <img src="{{ URL('images/vet.jpg') }}" class="img-fluid">
+                        </div>
+                        <div class="col-6 p-5">
+
+                            <form id="login" action="{{ route('login') }}" method="post">
+                                @csrf
+                                <div class="d-flex flex-column mb-3">
+                                    <div class="py-2"><h5>¡Bienvenido!</h5> </div>
+                                    <div class="py-2 mb-4"><span>Inicia sesión para continuar... </span></div>
+                                    <div class="mb-3">
+                                        <label for="form2Example17" class="form-label">Usuario</label>
+                                        <input type="email" name="email" class="form-control" id="form2Example17"
+                                            placeholder="name@example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="form2Example27" class="form-label d-flex justify-content-between">
+                                            Contraseña
+                                            <span> <a class="small text-muted" href="{{ route('password.request') }}">Olvidate tu
+                                                contraseña?</a></span>
+                                        </label>
+                                        <input type="password" name="password" class="form-control" id="form2Example27">
+                                    </div>
+                                    <div class="my-3 text-center">
+                                        <button class="btn btn-primary w-100" type="submit">Iniciar Sesión</button>
+                                    </div>
+                                    @if ($errors->has('isDeactivated'))
+                                        <div class="alert alert-danger" role="alert">
+                                            {{ $errors->first('isDeactivated') }}
                                         </div>
-                                        <div class="col-7">
-                                            <form action="{{ route('login') }}" method="post">
-                                                @csrf
-                                                <div class="row text-center p-4">
-                                                    <div class="col-12 d-flex justify-content-center">
-                                                        <img src="{{ URL('images/vet.PNG') }}"
-                                                            class="rounded float-start p-0">
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <h1>Iniciar Sesion</h1>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <input type="email" name="email" id="form2Example17"
-                                                            class="form-control" />
-                                                        <label class="form-label" for="form2Example17">Ingresa tu
-                                                            correo electronico
-                                                            o usuario</label>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <input type="password" name="password" id="form2Example27"
-                                                            class="form-control form-control-lg" />
-                                                        <label class="form-label" for="form2Example27">Ingrese su
-                                                            contraseña</label>
-                                                    </div>
-                                                    <div class="pt-1 mb-4">
-                                                        <button class="btn btn-dark btn-lg btn-block"
-                                                            type="submit">Ingresar</button>
-                                                    </div>
+                                    @endif
 
-                                                    @if ($errors->has('isDeactivated'))
-                                                        <div class="alert alert-danger" role="alert">
-                                                            {{ $errors->first('isDeactivated') }}
-                                                        </div>
-                                                    @endif
-
-                                                    @if ($errors->has('invalidCredentials'))
-                                                        <div class="alert alert-danger" role="alert">
-                                                            {{ $errors->first('invalidCredentials') }}
-                                                        </div>
-                                                    @endif
-
-
-                                                    <a class="small text-muted"
-                                                        href="{{ route('password.request') }}">Olvidate tu
-                                                        contraseña?</a>
-                                                    <p class="mb-5 pb-lg-2" style="color: #393f81;">Desea crear una
-                                                        cuenta? <a href="{{ route('register') }}"
-                                                            style="color: #393f81;">Registrarse</a>
-                                                    </p>
-
-                                                    <a href="http://127.0.0.1:8000"
-                                                        class="btn btn-dark btn-lg btn-block" type="button">Ventana
-                                                        inicio -></a>
-                                                    <!--<a href="#!" class="small text-muted">Privacy policy</a>-->
-
-                                                </div>
-
-
-                                            </form>
+                                    @if ($errors->has('invalidCredentials'))
+                                        <div class="alert alert-danger" role="alert">
+                                            {{ $errors->first('invalidCredentials') }}
                                         </div>
+                                    @endif
+                                    <hr>
+                                    <div>
+                                        <p class="mb-2 text-center" >
+                                            <span>
+                                                ¿No tiene una cuenta?
+                                            <a href="{{ route('register') }}" > Regístrate</a>
+                                            </span>
+
+                                        </p>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <span>
+                                            <a href="http://127.0.0.1:8000" id="inicio" >
+                                                <i class="bi bi-arrow-left-circle-fill"></i>
+                                                Volver al inicio
+                                            </a>
+                                        </span>
+
                                     </div>
 
+
                                 </div>
-                            </div>
+                            </form>
                         </div>
-                    </main>
+                    </div>
                 </div>
             </div>
         </div>

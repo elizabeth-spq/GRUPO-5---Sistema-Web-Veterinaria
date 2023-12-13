@@ -40,13 +40,15 @@
                                                 @else
                                                     <div class="text-center">
                                                         <button type="button" class="btn btn-primary">
-                                                            <a href="{{ route('login') }}">Log in</a>
+                                                            <a href="{{ route('login') }}">Iniciar Sesión</a>
                                                         </button>
                                                     </div>
                                                     @if (Route::has('register'))
-                                                        <button type="button" class="btn btn-primary">
-                                                            <a href="{{ route('register') }}">Register</a>
-                                                        </button>
+                                                    <div class="text-center">
+                                                        <a  class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                                                        href="{{ route('register') }}">Registrar un nuevo usuario</a>
+                                                    </div>
+
                                                     @endif
                                                 @endauth
                                             </div>

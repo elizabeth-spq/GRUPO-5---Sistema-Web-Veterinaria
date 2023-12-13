@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-
         <div class="mt-3">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -37,20 +36,22 @@
                         </div>
                     </div>
                     <div class="col-12 text-center">
-                        <button @click="obtenerDate(next_last_dates.last_start_week,next_last_dates.last_end_week)"><i class="bi bi-chevron-left fs-5"></i></button>
-                        <button @click="obtenerDate(next_last_dates.next_start_week,next_last_dates.next_end_week)"><i class="bi bi-chevron-right fs-5"></i></button>
+                        <button @click="obtenerDate(next_last_dates.last_start_week, next_last_dates.last_end_week)"><i
+                                class="bi bi-chevron-left fs-5"></i></button>
+                        <button @click="obtenerDate(next_last_dates.next_start_week, next_last_dates.next_end_week)"><i
+                                class="bi bi-chevron-right fs-5"></i></button>
                     </div>
                     <div class="container text-center mt-2">
                         <div class="row row-cols-6">
                             <div class="col-2 border border-bottom-0"></div>
                             <div class="col-2 border border-bottom-0" v-for="(dia, index) in dias">
-                                <div  v-html="dia"></div>
+                                <div v-html="dia"></div>
                             </div>
                         </div>
                         <div class="row row-cols-6">
                             <div class="col-2 border-start">Horas</div>
                             <div class="col-2 border-start border-end" v-for="(date, index) in fechas">
-                                <div  v-html="date"></div>
+                                <div v-html="date"></div>
                             </div>
                         </div>
 
@@ -62,10 +63,10 @@
                             <div class="col-2 border border-start-0" v-for="(date, index) in fechas">
                                 <div class="d-flex" v-for="veterinario in veterinarios">
                                     <button class="btn rounded-circle m-1"
-                                    :class="mostrarEstadoCita(veterinario, hora.hora_ini,hora.hora_fin, date)"
-                                    @click="reservarCita(veterinario, hora.hora_ini,hora.hora_fin, date)"
-                                    :disabled="desabilitaFechaAnterior(date)">
-                                        {{veterinario.especialidad.codigo }}
+                                        :class="mostrarEstadoCita(veterinario, hora.hora_ini, hora.hora_fin, date)"
+                                        @click="reservarCita(veterinario, hora.hora_ini, hora.hora_fin, date)"
+                                        :disabled="desabilitaFechaAnterior(date)">
+                                        {{ veterinario.especialidad.codigo }}
                                     </button>
                                 </div>
                             </div>
@@ -124,132 +125,262 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" v-if="cita.id > 0">Editar Cita</h5>
-                    <h5 class="modal-title" v-else>Registrar Cita</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                                data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane"
+                                aria-selected="true">Cita</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                                data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane"
+                                aria-selected="false">Pago</button>
+                        </li>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </ul>
                 </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <h6>Veterinario</h6>
-                                <select class="form-select" v-model="cita.vet_id" disabled>
-                                    <option></option>
-                                    <option v-for="(veterinario, index) in veterinarios" :value="veterinario.id">{{
-                                        veterinario.nombre }} {{ veterinario.apellido }}</option>
-                                </select>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <h6>Especialidad</h6>
-                                <select class="form-select" v-model="cita.espec_id" disabled>
-                                    <option></option>
-                                    <option v-for="(especialidad, index) in especialidades" :value="especialidad.id">{{
-                                        especialidad.nombre }}</option>
-                                </select>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <h6>Fecha y hora</h6>
-                                <input id="fecNac" type="text" class="form-control" disabled />
-                            </div>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+                        tabindex="0">
+                        <div>
+                            <h5 class="modal-title" v-if="cita.id > 0">Editar Cita</h5>
+                            <h5 class="modal-title" v-else>Registrar Cita</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <h6>Veterinario</h6>
+                                        <select class="form-select" v-model="cita.vet_id" disabled>
+                                            <option></option>
+                                            <option v-for="(veterinario, index) in veterinarios" :value="veterinario.id">{{
+                                                veterinario.nombre }} {{ veterinario.apellido }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <h6>Especialidad</h6>
+                                        <select class="form-select" v-model="cita.espec_id" disabled>
+                                            <option></option>
+                                            <option v-for="(especialidad, index) in especialidades"
+                                                :value="especialidad.id">{{
+                                                    especialidad.nombre }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <h6>Fecha y hora</h6>
+                                        <input id="fecNac" type="text" class="form-control" disabled />
+                                    </div>
 
 
-                            <div class="col-12 mb-3">
-                                <h6>Cliente</h6>
-                                <select class="form-select" id="single-select-cliente"
-                                    data-placeholder="Seleccione un cliente">
-                                    <option></option>
-                                    <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.nombre }} {{
-                                        cliente.apellido }}</option>
-                                </select>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <h6>Mascota</h6>
-                                <select class="form-select" id="single-select-mascota"
-                                    data-placeholder="Seleccione una mascota"
-                                    :disabled="cita.cliente_id == 0 ? true : false">
-                                    <option></option>
-                                    <option v-for="mascota in mascotas" :value="mascota.id">{{ mascota.nombre }}</option>
-                                </select>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <h6>Tipo de cita</h6>
-                                <select class="form-select" id="single-select-tipo-cita"
-                                    data-placeholder="Seleccione un tipo de cita">
-                                    <option></option>
-                                    <option v-for="(tipo, index) in tipos" :value="tipo.id">{{ tipo.nombre }}</option>
-                                </select>
-                            </div>
+                                    <div class="col-12 mb-3">
+                                        <h6>Cliente</h6>
+                                        <select class="form-select" id="single-select-cliente"
+                                            data-placeholder="Seleccione un cliente">
+                                            <option></option>
+                                            <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.nombre }} {{
+                                                cliente.apellido }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <h6>Mascota</h6>
+                                        <select class="form-select" id="single-select-mascota"
+                                            data-placeholder="Seleccione una mascota"
+                                            :disabled="cita.cliente_id == 0 ? true : false">
+                                            <option></option>
+                                            <option v-for="mascota in mascotas" :value="mascota.id">{{ mascota.nombre }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <h6>Tipo de cita</h6>
+                                        <select class="form-select" id="single-select-tipo-cita"
+                                            data-placeholder="Seleccione un tipo de cita">
+                                            <option></option>
+                                            <option v-for="(tipo, index) in tipos" :value="tipo.id">{{ tipo.nombre }}
+                                            </option>
+                                        </select>
+                                    </div>
 
-                            <div class="form-floating col-12 mb-3">
-                                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
-                                    style="height: 100px" v-model="cita.observaciones"></textarea>
-                                <label class="ms-3" for="floatingTextarea2">Observaciones</label>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <h6>Cargos Adicionales</h6>
-                                <select class="col-12 form-select" id="multiple-cargos-adicionales"
-                                    data-placeholder="Seleccione Cargos Adicionales" multiple>
-                                    <option value="50.00">Baño de la mascota</option>
-                                    <option value="35.00">Corte de pelo</option>
-                                </select>
-                            </div>
-                            <div class="col-12  mt-3">
-                                <select class="form-select" v-show="cita.id > 0" v-model="cita.estado_cita">
-                                    <option value="1" selected>Programada</option>
-                                    <option value="2">En atención</option>
-                                    <option value="3">Atendida</option>
-                                    <option value="4">Cancelada</option>
-                                </select>
-                            </div>
-                            <div class="col-12 mt-4 d-flex">
-                                <label for="staticSubtotal" class="col-sm-5 col-form-label">Sub total (S/.)</label>
-                                <div class="col-sm-7">
-                                    <input type="text" readonly class="form-control-plaintext" id="staticSubtotal"
-                                        v-model="cita.subtotal">
+                                    <div class="form-floating col-12 mb-3">
+                                        <textarea class="form-control" placeholder="Leave a comment here"
+                                            id="floatingTextarea2" style="height: 100px"
+                                            v-model="cita.observaciones"></textarea>
+                                        <label class="ms-3" for="floatingTextarea2">Observaciones</label>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <h6>Cargos Adicionales</h6>
+                                        <select class="col-12 form-select" id="multiple-cargos-adicionales"
+                                            data-placeholder="Seleccione Cargos Adicionales" multiple>
+                                            <option value="50.00">Baño de la mascota</option>
+                                            <option value="35.00">Corte de pelo</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12  mt-3">
+                                        <select class="form-select" v-show="cita.id > 0" v-model="cita.estado_cita">
+                                            <option value="1" selected>Programada</option>
+                                            <option value="2">En atención</option>
+                                            <option value="3">Atendida</option>
+                                            <option value="4">Cancelada</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mt-4 d-flex">
+                                        <label for="staticSubtotal" class="col-sm-5 col-form-label">Sub total (S/.)</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" readonly class="form-control-plaintext" id="staticSubtotal"
+                                                v-model="cita.subtotal">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-2 d-flex">
+                                        <label for="staticMonto" class="col-sm-5 col-form-label">Monto Adicional
+                                            (S/.)</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" readonly class="form-control-plaintext" id="staticMonto"
+                                                v-model="cita.monto_adicional">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-2 d-flex">
+                                        <label for="staticTotal" class="col-sm-5 col-form-label">Total (S/.)</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" readonly class="form-control-plaintext" id="staticTotal"
+                                                v-model="cita.total">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-2 d-flex">
+                                        <label for="staticPagoPrevio" class="col-sm-5 col-form-label">Pago previo
+                                            (S/.)</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" readonly class="form-control-plaintext" id="staticPagoPrevio"
+                                                v-model="cita.pago_previo">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-2 d-flex">
+                                        <label for="staticPagoPendiente" class="col-sm-5 col-form-label">Pago pendiente
+                                            (S/.)</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" readonly class="form-control-plaintext"
+                                                id="staticPagoPendiente" v-model="cita.pago_pendiente">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-12 mt-2 d-flex">
-                                <label for="staticMonto" class="col-sm-5 col-form-label">Monto Adicional (S/.)</label>
-                                <div class="col-sm-7">
-                                    <input type="text" readonly class="form-control-plaintext" id="staticMonto"
-                                        v-model="cita.monto_adicional">
-                                </div>
-                            </div>
-                            <div class="col-12 mt-2 d-flex">
-                                <label for="staticTotal" class="col-sm-5 col-form-label">Total (S/.)</label>
-                                <div class="col-sm-7">
-                                    <input type="text" readonly class="form-control-plaintext" id="staticTotal"
-                                        v-model="cita.total">
-                                </div>
-                            </div>
-                            <div class="col-12 mt-2 d-flex">
-                                <label for="staticPagoPrevio" class="col-sm-5 col-form-label">Pago previo (S/.)</label>
-                                <div class="col-sm-7">
-                                    <input type="text" readonly class="form-control-plaintext" id="staticPagoPrevio"
-                                        v-model="cita.pago_previo">
-                                </div>
-                            </div>
-                            <div class="col-12 mt-2 d-flex">
-                                <label for="staticPagoPendiente" class="col-sm-5 col-form-label">Pago pendiente
-                                    (S/.)</label>
-                                <div class="col-sm-7">
-                                    <input type="text" readonly class="form-control-plaintext" id="staticPagoPendiente"
-                                        v-model="cita.pago_pendiente">
-                                </div>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" v-if="cita.id > 0"
+                                @click="actualizarCita(cita.id)">Actualizar registro</button>
+                            <button type="button" class="btn btn-primary" v-else @click="guardarCita()">
+                                Guardar registro
+                            </button>
+                        </div>
 
+                    </div>
+                    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
+                        tabindex="0">
+                        <div class="container">
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="inputPassword6" class="col-form-label">Tipo de documento</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="password" id="inputPassword6" class="form-control"
+                                        aria-describedby="passwordHelpInline">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="inputPassword6" class="col-form-label">Documento</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="password" id="inputPassword6" class="form-control"
+                                        aria-describedby="passwordHelpInline">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="inputPassword6" class="col-form-label">RUC / DNI / Pasapote / Carné</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="password" id="inputPassword6" class="form-control"
+                                        aria-describedby="passwordHelpInline">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="inputPassword6" class="col-form-label">Nombre</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="password" id="inputPassword6" class="form-control"
+                                        aria-describedby="passwordHelpInline">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="inputPassword6" class="col-form-label">Dirección</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="password" id="inputPassword6" class="form-control"
+                                        aria-describedby="passwordHelpInline">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="inputPassword6" class="col-form-label">Fecha de emisión</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="password" id="inputPassword6" class="form-control"
+                                        aria-describedby="passwordHelpInline">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="inputPassword6" class="col-form-label">Fecha de vencimiento</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="password" id="inputPassword6" class="form-control"
+                                        aria-describedby="passwordHelpInline">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="inputPassword6" class="col-form-label">Moneda</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="password" id="inputPassword6" class="form-control"
+                                        aria-describedby="passwordHelpInline">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="inputPassword6" class="col-form-label">Subtotal</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="password" id="inputPassword6" class="form-control"
+                                        aria-describedby="passwordHelpInline">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="inputPassword6" class="col-form-label">Impuesto</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="password" id="inputPassword6" class="form-control"
+                                        aria-describedby="passwordHelpInline">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="inputPassword6" class="col-form-label">Monto Total</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="password" id="inputPassword6" class="form-control"
+                                        aria-describedby="passwordHelpInline">
+                                </div>
+                            </div>
 
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" v-if="cita.id > 0"
-                        @click="actualizarCita(cita.id)">Actualizar registro</button>
-                    <button type="button" class="btn btn-primary" v-else @click="guardarCita()">
-                        Guardar registro
-                    </button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -390,11 +521,11 @@ export default {
         })
         const citas = ref([])
         const fechas = ref([])
-        const next_last_dates=reactive({
-            next_start_week:"",
-            next_end_week:"",
-            last_start_week:"",
-            last_end_week:"",
+        const next_last_dates = reactive({
+            next_start_week: "",
+            next_end_week: "",
+            last_start_week: "",
+            last_end_week: "",
         })
         const dias = ref([])
 
@@ -533,13 +664,13 @@ export default {
         function closeModal() {
             modal_cita.mdl_cita.hide()
         }
-        function desabilitaFechaAnterior(fec){
+        function desabilitaFechaAnterior(fec) {
             //const todayDate = new Date().toISOString().slice(0, 10);
             //const todayDate = new Date().toLocaleDateString('az', {timeZone: 'America/Lima'})
             const todayDate = moment().format('YYYY-MM-DD');
-            if(fec<todayDate){
+            if (fec < todayDate) {
                 return true
-            }else{
+            } else {
                 return false
             }
         }
@@ -589,7 +720,7 @@ export default {
             $("#fecNac").on("change", function () {
                 cita.fec_ini = $("#fecNac").val();
                 cita.fec_fin = moment(cita.fec_ini).startOf('hours').add(0.5, 'hours').format('YYYY-MM-DD HH:mm');
-                console.log(cita.fec_ini+ '-'+ cita.fec_fin)
+                console.log(cita.fec_ini + '-' + cita.fec_fin)
             });
         }
         function mostrarDetalle(cita_table) {
@@ -712,15 +843,17 @@ export default {
                     console.error("There was an error!", error);
                 });
         }
-        function obtenerDate(start,end) {
+        function obtenerDate(start, end) {
             fetch("http://127.0.0.1:8000/horas/date", {
                 method: "POST",
                 headers: {
                     Accept: "Application/json",
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ start_date: start,
-                                    end_date:end})
+                body: JSON.stringify({
+                    start_date: start,
+                    end_date: end
+                })
             })
                 .then(async (response) => {
                     const data = await response.json();
@@ -732,10 +865,10 @@ export default {
                     console.log(data)
                     fechas.value = data.fechas;
                     dias.value = data.dias;
-                    next_last_dates.next_start_week=data.nextStartDate
-                    next_last_dates.next_end_week=data.nextEndDate
-                    next_last_dates.last_start_week=data.lastStartDate
-                    next_last_dates.last_end_week=data.lastEndDate
+                    next_last_dates.next_start_week = data.nextStartDate
+                    next_last_dates.next_end_week = data.nextEndDate
+                    next_last_dates.last_start_week = data.lastStartDate
+                    next_last_dates.last_end_week = data.lastEndDate
                     console.log(next_last_dates)
 
                 })
@@ -886,29 +1019,29 @@ export default {
         function openModalReservarCita() {
             modal_cita.mdl_cita.show()
         }
-        function reservarCita(veterinario_calendar, hora_ini,hora_fin, fecha) {
+        function reservarCita(veterinario_calendar, hora_ini, hora_fin, fecha) {
             cleanForm()
             cita.vet_id = veterinario_calendar.id
             cita.espec_id = veterinario_calendar.espec_id
-            $("#fecNac").val(fecha +' '+hora_ini).trigger("change");
+            $("#fecNac").val(fecha + ' ' + hora_ini).trigger("change");
             openModalReservarCita()
         }
-        function mostrarEstadoCita(vet,hora_ini,hora_fin,date) {
+        function mostrarEstadoCita(vet, hora_ini, hora_fin, date) {
 
 
             let reservas_list = citas.value
             console.log(reservas_list)
             let estado = 'bg-secondary-subtle'
-            let fec_initial = date+' '+hora_ini
-            reservas_list.map((item)=> {
-                if( item.fec_ini == fec_initial && item.vet_id == vet.id){
-                    if(item.estado_cita==1){
+            let fec_initial = date + ' ' + hora_ini
+            reservas_list.map((item) => {
+                if (item.fec_ini == fec_initial && item.vet_id == vet.id) {
+                    if (item.estado_cita == 1) {
                         estado = 'bg-success-subtle'
-                    }else if(item.estado_cita==2){
+                    } else if (item.estado_cita == 2) {
                         estado = 'bg-warning-subtle'
-                    }else if(item.estado_cita==3){
+                    } else if (item.estado_cita == 3) {
                         estado = 'bg-info-subtle'
-                    }else{
+                    } else {
                         estado = 'bg-danger-subtle'
                     }
                 }
