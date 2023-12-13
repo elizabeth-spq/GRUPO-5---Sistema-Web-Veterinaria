@@ -32,7 +32,7 @@ class VerifyCsrfToken extends Middleware
         "/especialidades/",
         "/horas/",
         "/horas/*",
-
+        "/historias",
 
     ];
 }

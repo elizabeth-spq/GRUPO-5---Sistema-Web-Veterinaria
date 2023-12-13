@@ -22,7 +22,7 @@
   
                   <input class="mt-5" type="file" name="foto" id="foto" accept="image/*"
                     @change="cargarImagen"/>
-                  <div id="requiredNombre" class="form-text text-danger" v-if="historia.foto == ''">
+                  <div id="requiredFoto" class="form-text text-danger" v-if="historia.foto == ''">
                     Archivos no superiores a 5 Mbs
                   </div>
                   <h3>Seleccione la Mascota</h3>
@@ -80,7 +80,7 @@
               <div class="col-12 col-md-6">
                 <h3>Citas de la mascota</h3>
                 <div class="accordion accordion-flush" id="accordion">
-                    <div v-for="(cita, index) in citas" :key="index" class="accordion-item border rounded" style="background-color:rgb(223, 223, 223);">
+                    <div v-for="(cita, index) in citas" :key="index" :id="'accordionItem' + index" class="accordion-item border rounded" style="background-color:rgb(223, 223, 223);">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" style="background-color: rgb(185, 185, 185);" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + index" aria-expanded="false" :aria-controls="'collapse' + index">
                                 {{ cita.fec_ini }} - {{ cita.observaciones || 'Sin descripción' }}
@@ -88,9 +88,10 @@
                         </h2>
                         <div :id="'collapse' + index" class="accordion-collapse collapse" :aria-labelledby="'heading' + index" data-bs-parent="#accordion">
                             <div class="accordion-body">
+                                <input type="hidden" v-model="historia.cita_id">
                                 <!-- Detalles de la cita, puedes personalizar esta sección según tus necesidades -->
                                 <p>Fecha de Fin: {{ cita.fec_fin }}</p>
-
+                                <p>Veterinario: {{ cita.vet_id.nombre }} {{ cita.vet_id.apellido }}</p>
                                 <p>Estado: {{ cita.estado_cita === 1 ? 'Activa' : 'Inactiva' }}</p>
                                 <p>Total: {{ cita.total }}</p>
                                 <!-- Agrega más detalles según tu estructura de datos -->
@@ -127,7 +128,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-primary">Guardar</button>
+                                    <button @click="guardarHistoria(index)" class="btn btn-primary">Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -139,10 +140,33 @@
               </div>
             </div><!--row-->
           </div><!--container-->
+
+
+          <!-- Modal -->
+            <div class="modal" :class="{ 'd-none': !mostrarModal }" tabindex="-1" role="dialog">
+            <!-- Contenido del modal -->
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mensaje de Éxito</h5>
+                    <button type="button" class="btn-close" @click="mostrarModal = false" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Registro guardado exitosamente.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="mostrarModal = false">Cerrar</button>
+                </div>
+                </div>
+            </div>
+            </div>
+          <!-- Modal -->
+
+          
         </div><!--modal-body-->
       </div>
     </div>
-  </template>  
+</template>  
 
 <script>
 import { ref, reactive } from 'vue';
@@ -188,8 +212,9 @@ export default {
             foto: "",
             estado_historia: 0
         })
+        const mascotaSeleccionada = ref(null);
         const imagenSeleccionada = ref(""); // Almacena la ruta de la imagen seleccionada
-
+        const mostrarModal = ref(false);
         function cargarImagen(event) {
             const input = event.target;
             if (input.files && input.files[0]) {
@@ -202,31 +227,58 @@ export default {
                 reader.readAsDataURL(input.files[0]);
             }
         }
+        async function guardarHistoria(index) {
+            try {
+                const cita = citas.value[index];
+                const requestBody = {
+                    cita_id: historia.cita_id,
+                    mascota_id: historia.mascota_id,
+                    notas_cita: historia.notas_cita,
+                    receta: historia.receta,
+                    procedimiento: historia.procedimiento,
+                    fecha_creacion: historia.fecha_creacion,
+                    resultados_examenes: historia.resultados_examenes,
+                    archivos_adjuntos: historia.archivos_adjuntos,
+                    vacunacion: historia.vacunacion,
+                    foto: historia.foto,
+                    estado_historia: historia.estado_historia,
+                }
 
-        
-        function guardarHistoria() {
-            fetch("http://127.0.0.1:8000/historias", {
-                method: "POST",
-                headers: {
-                    Accept: "Application/json",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(historia),
-            })
-                .then(async (response) => {
-                    if (!response.ok) {
-                        const error =
-                            "error";
-                        return Promise.reject(error);
-                    }
+                if (mascotaSeleccionada) {
+                    requestBody.cliente_id = mascotaSeleccionada.cliente_id;
+                } else {
+                    console.error('mascotaSeleccionada no está definida');
+                }
 
-                })
-                .catch((error) => {
-                    error_message.value = error;
-                    console.error("There was an error!", error);
+                const response = await fetch("http://127.0.0.1:8000/historias", {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(requestBody),
                 });
-            obtenerHistorias();
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Error en la respuesta:', errorText);
+                    return;
+                }
+
+                const jsonResponse = await response.json();
+                console.log('Respuesta exitosa del servidor:', jsonResponse);
+
+                // Mostrar un mensaje de éxito al usuario
+                mostrarModal.value = true;
+                setTimeout(() => {
+                    mostrarModal.value = false;
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error en la solicitud:', error);
+                error_message.value = error;
+            }
         }
+
         function obtenerMascotas() {
             fetch("http://127.0.0.1:8000/mascotas", {
                 method: "GET",
@@ -319,7 +371,21 @@ export default {
                     return Promise.reject(data);
                 }
 
-                // Asignar la lista de citas a la variable citas
+                // Obtener información del veterinario para cada cita
+                for (const cita of data) {
+                    if (cita.vet_id) {
+                        const vetResponse = await fetch(`http://127.0.0.1:8000/veterinarios/${cita.vet_id}`);
+                        const vetData = await vetResponse.json();
+
+                        if (vetResponse.ok && typeof vetData === 'object') {
+                            // Verificar que la respuesta es un objeto antes de asignar propiedades
+                            cita.vet_id = vetData;  // Asignar todo el objeto del veterinario
+                        }
+                    }
+                }
+
+                // Asignar las citas a la variable citas
+                console.log('Datos de citas:', data);
                 citas.value = data;
             } catch (error) {
                 console.error('Error en la solicitud:', error);
@@ -351,6 +417,8 @@ export default {
             citas,
             razas,
             animales,
+            mostrarModal,
+            mascotaSeleccionada,
 
             obtenerMascotas,
             obtenerHistorias,

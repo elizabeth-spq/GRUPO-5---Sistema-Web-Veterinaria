@@ -22,11 +22,20 @@ class HistoriaController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'mascota_id' => 'required', // Asegúrate de que el campo mascota_id esté presente y sea requerido
+            'foto' => 'nullable', // Puedes ajustar las reglas de validación según tus necesidades
+            'documentos' => 'nullable',
+            'estado_historia' => 'required',
+            // Agrega otras validaciones según los campos de tu formulario
+        ]);
+
         $historia = new Historia();
         $historia->mascota_id = $request->mascota_id;
         $historia->foto = $request->foto;
         $historia->documentos = $request->documentos;
         $historia->estado_historia = $request->estado;
+        $historia->cita_id = $request->cita_id;
 
         $historia->save();
 
