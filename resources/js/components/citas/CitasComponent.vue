@@ -13,25 +13,24 @@
 
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
                     tabindex="0">
-                    <div id="leyenda">
-                        <h5>Leyenda</h5>
-                        <h6>Especialidades</h6>
-                        <div class="d-flex flex-wrap">
-
-                            <div v-for="especialidad in especialidades" class="m-1">
-                                <span v-html="especialidad.codigo + ': '"></span>
-                                <span v-html="especialidad.nombre + ' / '"></span>
-                            </div>
-                        </div>
+                    <div id="leyenda" class="mt-3">
                         <h6>Estados de cita</h6>
                         <div class="d-flex flex-wrap">
                             <div class="mt-1 me-2">
-                                <i class="bi bi-circle-fill text-black-50 text-opacity-25"></i>
-                                <span> Disponible </span>
-                            </div>
-                            <div class="mt-1 me-2">
                                 <i class="bi bi-circle-fill text-success"></i>
                                 <span> Programada </span>
+                            </div>
+                            <div class="mt-1 me-2">
+                                <i class="bi bi-circle-fill text-warning"></i>
+                                <span> En atención </span>
+                            </div>
+                            <div class="mt-1 me-2">
+                                <i class="bi bi-circle-fill text-info"></i>
+                                <span> Atendida </span>
+                            </div>
+                            <div class="mt-1 me-2">
+                                <i class="bi bi-circle-fill text-danger"></i>
+                                <span> Cancelada </span>
                             </div>
                         </div>
                     </div>
@@ -41,7 +40,7 @@
                         <button @click="obtenerDate(next_last_dates.next_start_week, next_last_dates.next_end_week)"><i
                                 class="bi bi-chevron-right fs-5"></i></button>
                     </div>
-                    <div class="container text-center mt-2">
+                    <div id="calendario" class="container text-center mt-2">
                         <div class="row row-cols-6">
                             <div class="col-2 border border-bottom-0"></div>
                             <div class="col-2 border border-bottom-0" v-for="(dia, index) in dias">
@@ -60,12 +59,13 @@
                                 <input type="text" class="d-none" v-model="hora.hora_ini">
                                 <input type="text" class="d-none" v-model="hora.hora_fin">
                             </div>
-                            <div class="col-2 border border-start-0" v-for="(date, index) in fechas">
-                                <div class="d-flex" v-for="veterinario in veterinarios">
-                                    <button class="btn rounded-circle m-1"
+                            <div class="col-2 border border-start-0 d-flex flex-wrap" v-for="(date, index) in fechas">
+                                <div v-for="veterinario in veterinarios">
+                                    <button id="estado" class="btn rounded-circle m-1"
                                         :class="mostrarEstadoCita(veterinario, hora.hora_ini, hora.hora_fin, date)"
                                         @click="reservarCita(veterinario, hora.hora_ini, hora.hora_fin, date)"
-                                        :disabled="desabilitaFechaAnterior(date)">
+                                        :disabled="desabilitaFechaAnterior(date)"
+                                        :data-hover="veterinario.especialidad.nombre">
                                         {{ veterinario.especialidad.codigo }}
                                     </button>
                                 </div>
@@ -110,7 +110,8 @@
                                 <td>
                                     <div class="row g-1">
                                         <div class="col"> <button type="button" class="btn btn-warning w-100"
-                                                @click="mostrarDetalle(cita)">Detalle</button></div>
+                                                @click="mostrarDetalle(cita)">Detalle</button>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -1027,8 +1028,6 @@ export default {
             openModalReservarCita()
         }
         function mostrarEstadoCita(vet, hora_ini, hora_fin, date) {
-
-
             let reservas_list = citas.value
             console.log(reservas_list)
             let estado = 'bg-secondary-subtle'
