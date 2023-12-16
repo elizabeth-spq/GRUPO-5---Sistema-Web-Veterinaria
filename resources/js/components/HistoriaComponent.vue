@@ -94,6 +94,7 @@
                                 <p>Veterinario: {{ cita.vet_id.nombre }} {{ cita.vet_id.apellido }}</p>
                                 <p>Estado: {{ cita.estado_cita === 1 ? 'Activa' : 'Inactiva' }}</p>
                                 <p>Total: {{ cita.total }}</p>
+                                <p>ID de la Cita: {{ cita.id }}</p>
                                 <!-- Agrega más detalles según tu estructura de datos -->
                                 <label for="notas_cita">Notas de la cita:</label>
                                 <textarea v-model="historia.notas_cita" class="form-control"></textarea>
@@ -140,30 +141,7 @@
               </div>
             </div><!--row-->
           </div><!--container-->
-
-
-          <!-- Modal -->
-            <div class="modal" :class="{ 'd-none': !mostrarModal }" tabindex="-1" role="dialog">
-            <!-- Contenido del modal -->
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Mensaje de Éxito</h5>
-                    <button type="button" class="btn-close" @click="mostrarModal = false" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Registro guardado exitosamente.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="mostrarModal = false">Cerrar</button>
-                </div>
-                </div>
-            </div>
-            </div>
-          <!-- Modal -->
-
-          
-        </div><!--modal-body-->
+        </div>
       </div>
     </div>
 </template>  
@@ -175,10 +153,10 @@ window.bootstrap = bootstrap;
 export default {
     setup() {
         const error_message = ref("")
-        const animales = ref([])
-        const citas = ref([])
-        const razas = ref([])
-        const mascotas = ref([])
+        const animales = ref([]);
+        const citas = ref([]);
+        const razas = ref([]);
+        const mascotas = ref([]);
         const mascota = reactive({
             id: 0,
             nombre: "",
@@ -195,8 +173,8 @@ export default {
             estado: 0,
             raza: {}
         })
-        const clientes = ref([])
-        const historias = ref([])
+        const clientes = ref([]);
+        const historias = ref([]);
         const historia = reactive({
             id: 0,
             cita_id: 0,
@@ -214,7 +192,6 @@ export default {
         })
         const mascotaSeleccionada = ref(null);
         const imagenSeleccionada = ref(""); // Almacena la ruta de la imagen seleccionada
-        const mostrarModal = ref(false);
         function cargarImagen(event) {
             const input = event.target;
             if (input.files && input.files[0]) {
@@ -229,26 +206,40 @@ export default {
         }
         async function guardarHistoria(index) {
             try {
+                console.log('Antes de la llamada a guardarHistoria:', historia.cliente_id, historia.mascota_id);
+
+                if (!historia.mascota_id || !historia.cliente_id) {
+                    console.error('Error: mascotaSeleccionada o cliente_id no están definidos');
+                    return;
+                }
+
+                const clienteId = parseInt(historia.cliente_id);
+
+                console.log('Valor de clienteId después de parseInt:', clienteId);
+
+                if (isNaN(clienteId) || clienteId <= 0) {
+                    console.error('Error: cliente_id no es un número válido o es menor o igual a 0:', clienteId);
+                    return;
+                }
+
                 const cita = citas.value[index];
+
                 const requestBody = {
-                    cita_id: historia.cita_id,
+                    cita_id: cita.id,
                     mascota_id: historia.mascota_id,
+                    cliente_id: clienteId,
                     notas_cita: historia.notas_cita,
                     receta: historia.receta,
                     procedimiento: historia.procedimiento,
-                    fecha_creacion: historia.fecha_creacion,
+                    fecha_creacion: historia.fecha_creacion || null,
                     resultados_examenes: historia.resultados_examenes,
                     archivos_adjuntos: historia.archivos_adjuntos,
                     vacunacion: historia.vacunacion,
                     foto: historia.foto,
                     estado_historia: historia.estado_historia,
-                }
+                };
 
-                if (mascotaSeleccionada) {
-                    requestBody.cliente_id = mascotaSeleccionada.cliente_id;
-                } else {
-                    console.error('mascotaSeleccionada no está definida');
-                }
+                console.log('Cuerpo de la solicitud:', requestBody);
 
                 const response = await fetch("http://127.0.0.1:8000/historias", {
                     method: "POST",
@@ -258,6 +249,7 @@ export default {
                     },
                     body: JSON.stringify(requestBody),
                 });
+
                 if (!response.ok) {
                     const errorText = await response.text();
                     console.error('Error en la respuesta:', errorText);
@@ -266,18 +258,12 @@ export default {
 
                 const jsonResponse = await response.json();
                 console.log('Respuesta exitosa del servidor:', jsonResponse);
-
-                // Mostrar un mensaje de éxito al usuario
-                mostrarModal.value = true;
-                setTimeout(() => {
-                    mostrarModal.value = false;
-                }, 3000);
-
             } catch (error) {
                 console.error('Error en la solicitud:', error);
                 error_message.value = error;
             }
         }
+        
 
         function obtenerMascotas() {
             fetch("http://127.0.0.1:8000/mascotas", {
@@ -392,7 +378,7 @@ export default {
                 error_message.value = error;
             }
         }
-        function mostrarInformacionCliente() {
+        async function mostrarInformacionCliente() {
             const mascotaSeleccionada = mascotas.value.find(m => m.id === historia.mascota_id);
             if (mascotaSeleccionada) {
                 historia.mascota = mascotaSeleccionada;
@@ -403,7 +389,14 @@ export default {
                 historia.alturaMascota = mascotaSeleccionada.altura;
                 historia.pesoMascota = mascotaSeleccionada.peso;
                 historia.esterilizadoMascota = mascotaSeleccionada.estirilizado === 1 ? 'Sí' : 'No';
-                obtenerCitas(historia.mascota_id);
+
+                // Asignar el cliente_id de manera explícita
+                historia.cliente_id = mascotaSeleccionada.cliente_id;
+
+                console.log('cliente_id antes de obtenerCitas:', historia.cliente_id);
+
+                // Ahora que hemos asignado el cliente_id, podemos llamar a obtenerCitas
+                await obtenerCitas(historia.mascota_id);
             }
         }
         return {
@@ -417,7 +410,6 @@ export default {
             citas,
             razas,
             animales,
-            mostrarModal,
             mascotaSeleccionada,
 
             obtenerMascotas,

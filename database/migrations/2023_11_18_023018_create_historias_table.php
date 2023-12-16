@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('notas_cita')->nullable();
             $table->text('receta')->nullable();
             $table->text('procedimiento')->nullable();
-            $table->date('fecha_creacion');
+            $table->date('fecha_creacion')->nullable();
             $table->text('resultados_examenes')->nullable();
             $table->text('archivos_adjuntos')->nullable();
             $table->text('vacunacion')->nullable();

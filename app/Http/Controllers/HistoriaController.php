@@ -24,18 +24,27 @@ class HistoriaController extends Controller
     {
         $request->validate([
             'mascota_id' => 'required', // Asegúrate de que el campo mascota_id esté presente y sea requerido
+            'cliente_id' => 'required',
             'foto' => 'nullable', // Puedes ajustar las reglas de validación según tus necesidades
-            'documentos' => 'nullable',
+            'archivos_adjuntos' => 'nullable',
             'estado_historia' => 'required',
             // Agrega otras validaciones según los campos de tu formulario
         ]);
 
         $historia = new Historia();
+        $historia->foto = $request->has('foto') ? $request->foto : null;
         $historia->mascota_id = $request->mascota_id;
-        $historia->foto = $request->foto;
-        $historia->documentos = $request->documentos;
-        $historia->estado_historia = $request->estado;
+        $historia->cliente_id = $request->cliente_id;
         $historia->cita_id = $request->cita_id;
+        $historia->notas_cita = $request->has('notas_cita') ? $request->notas_cita : null;
+        $historia->receta = $request->has('receta') ? $request->receta : null;
+        $historia->procedimiento = $request->has('procedimiento') ? $request->procedimiento : null;
+        $historia->fecha_creacion = $request->has('fecha_creacion') ? $request->fecha_creacion : null;
+        $historia->resultados_examenes = $request->has('resultados_examenes') ? $request->resultados_examenes : null;
+        $historia->archivos_adjuntos = $request->has('archivos_adjuntos') ? $request->archivos_adjuntos : null;
+        $historia->vacunacion = $request->has('vacunacion') ? $request->vacunacion : null;
+        $historia->estado_historia = $request->estado_historia;
+       
 
         $historia->save();
 
@@ -60,8 +69,8 @@ class HistoriaController extends Controller
     {
         $historia = Historia::find($id);
         $historia->foto = $request->foto;
-        $historia->documentos = $request->documentos;
-        $historia->estado_historia = $request->estado;
+        $historia->archivos_adjuntos = $request->archivos_adjuntos;
+        $historia->estado_historia = $request->estado_historia;
 
         if ($historia->save()) {
             $message = "El registro ha sido actualizado";
