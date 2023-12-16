@@ -26,7 +26,8 @@ class HistoriaController extends Controller
             'mascota_id' => 'required', // Asegúrate de que el campo mascota_id esté presente y sea requerido
             'cliente_id' => 'required',
             'foto' => 'nullable', // Puedes ajustar las reglas de validación según tus necesidades
-            'archivos_adjuntos' => 'nullable',
+            'archivos_adjuntos' => 'nullable|array',
+            'archivos_adjuntos.*' => 'file|mimes:jpeg,png,jpg,gif|max:2048',
             'estado_historia' => 'required',
             // Agrega otras validaciones según los campos de tu formulario
         ]);
@@ -44,13 +45,29 @@ class HistoriaController extends Controller
         $historia->archivos_adjuntos = $request->has('archivos_adjuntos') ? $request->archivos_adjuntos : null;
         $historia->vacunacion = $request->has('vacunacion') ? $request->vacunacion : null;
         $historia->estado_historia = $request->estado_historia;
-       
+
+        if ($request->has('archivos_adjuntos')) {
+            $archivosAdjuntos = [];
+
+            foreach ($request->file('archivos_adjuntos') as $archivo) {
+                // Utiliza el sistema de archivos de Laravel para almacenar el archivo
+                $rutaDestino = Storage::disk('public')->put('fotoHistorias', $archivo);
+
+                // Obtiene el nombre del archivo a partir de la ruta
+                $nombreArchivo = pathinfo($rutaDestino, PATHINFO_BASENAME);
+
+                // Agrega el nombre del archivo a la lista
+                $archivosAdjuntos[] = $nombreArchivo;
+            }
+
+            // Almacena la lista de nombres de archivos en la base de datos
+            $historia->archivos_adjuntos = $archivosAdjuntos;
+        }
 
         $historia->save();
 
         return response()->json($historia);
     }
-
     /**
      * Display the specified resource.
      */
@@ -100,7 +117,7 @@ class HistoriaController extends Controller
 
         return response()->json($response);
     }
-    public function subirFoto(Request $request)
+    /*public function subirFoto(Request $request)
     {
         $request->validate([
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -110,5 +127,5 @@ class HistoriaController extends Controller
         $path = $file->store('fotoHistorias'); // Guarda la imagen en la carpeta "fotoHistorias"
 
         return response()->json(['path' => $path]);
-    }
+    }*/
 }

@@ -27,5 +27,20 @@ class HistoriaSeeder extends Seeder
             'foto' => 'ruta_de_la_foto.jpg',
             'estado_historia' => 1,
         ]);
+
+        Historia::create([
+            'cita_id' => 2,
+            'mascota_id' => 1,
+            'cliente_id' => 1,
+            'notas_cita' => 'probando2',
+            'receta' => 'probando2',
+            'procedimiento' => 'probando2',
+            'fecha_creacion' => now(),
+            'resultados_examenes' => 'probando2',
+            'archivos_adjuntos' => 'probando2.pdf',
+            'vacunacion' => 'probando2',
+            'foto' => 'probando2.jpg',
+            'estado_historia' => 1,
+        ]);
     }
 }
