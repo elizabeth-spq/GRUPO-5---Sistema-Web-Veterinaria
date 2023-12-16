@@ -28,6 +28,8 @@ class RolePermissionSeeder extends Seeder
             'editar-cliente',
             'crear-mascota',
             'editar-mascota',
+            'detalle-cita',
+            'editar-historia-clinica',
         ])->pluck('id'));
 
         $recepcionista->permissions()->sync($allPermissions->whereIn('slug', [
@@ -35,6 +37,9 @@ class RolePermissionSeeder extends Seeder
             'editar-cliente',
             'crear-mascota',
             'editar-mascota',
+            'detalle-cita',
+            'registrar-cita',
+            'registrar-pago',
         ])->pluck('id'));
     }
 }

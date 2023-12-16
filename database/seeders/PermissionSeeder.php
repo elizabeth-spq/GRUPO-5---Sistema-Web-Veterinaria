@@ -29,5 +29,10 @@ class PermissionSeeder extends Seeder
         Permission::create(['nombre' => 'Editar mascota', 'slug' => 'editar-mascota']);
         Permission::create(['nombre' => 'Eliminar mascota', 'slug' => 'eliminar-mascota']);
 
+        Permission::create(['nombre' => 'Detalle cita', 'slug' => 'detalle-cita']);
+        Permission::create(['nombre' => 'Registrar cita', 'slug' => 'registrar-cita']);
+        Permission::create(['nombre' => 'Registrar pago', 'slug' => 'registrar-pago']);
+        Permission::create(['nombre' => 'Editar historia clinica', 'slug' => 'editar-historia-clinica']);
+
     }
 }

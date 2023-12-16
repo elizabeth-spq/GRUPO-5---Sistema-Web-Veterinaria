@@ -3,7 +3,9 @@
         <div class="mt-5">
             <button type="button" class="btn btn-primary px-4" @click="nuevoCliente()" v-if="canCreate">Nuevo Cliente </button>
         </div>
+
         <div class="mt-5">
+            <input type="text" v-model="busqueda" placeholder="Buscando..." class="form-control mb-3" style="max-width: 300px; margin: 0 ;"/>
             <table class="table table-hover">
                 <thead>
                     <tr class="table-dark align-middle text-center">
@@ -20,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(cliente, index) in clientes" class="text-center align-middle">
+                    <tr v-for="(cliente, index) in filtrarClientes" :key="cliente.id" class="text-center align-middle">
                         <th scope="row">{{ index + 1 }}</th>
                         <td class="text-start">{{ cliente.nombre }}</td>
                         <td class="text-start">{{ cliente.apellido }}</td>
@@ -201,7 +203,7 @@
 </template>
 
 <script>
-import { ref, reactive, watch } from 'vue';
+import { ref, computed ,reactive, watch } from 'vue';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 export default {
@@ -229,6 +231,17 @@ export default {
             email: "",
             estado: 0,
         })
+        const busqueda = ref('');
+        const filtrarClientes = computed(() => {
+        const terminoBusqueda = busqueda.value.toLowerCase();
+        return clientes.value.filter(cliente =>
+            cliente.nombre.toLowerCase().includes(terminoBusqueda) ||
+            cliente.apellido.toLowerCase().includes(terminoBusqueda) ||
+            cliente.documento.includes(terminoBusqueda) ||
+            cliente.email.includes(terminoBusqueda)
+        );
+        });
+
 
         function actualizarCliente(Id) {
             //console.log(cliente)
@@ -460,7 +473,10 @@ export default {
             canCreate,
             canEdit,
             canDelete,
+            busqueda,
+            filtrarClientes,
 
+            obtenerClientes,
             actualizarCliente,
             cleanNombres,
             consultarDni,
