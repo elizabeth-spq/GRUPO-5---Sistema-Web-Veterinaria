@@ -81,6 +81,7 @@ Route::post('/citas', [App\Http\Controllers\CitaController::class, 'store'])->na
 Route::put('/citas/{id}', [App\Http\Controllers\CitaController::class, 'update'])->name('update');
 Route::put('/citas/status/{id}', [App\Http\Controllers\CitaController::class, 'status'])->name('status');
 Route::delete('/citas/{id}', [App\Http\Controllers\CitaController::class, 'destroy'])->name('destroy');
+Route::get('/citas/{citaId}/tipocitas', [App\Http\Controllers\CitaController::class, 'obtenerTipoCitasPorCita'])->name('tipocitas.citas');
 
 Route::get('/historias', [App\Http\Controllers\HistoriaController::class, 'index'])->name('index');
 Route::get('/historias/{id}', [App\Http\Controllers\HistoriaController::class, 'show'])->name('show');

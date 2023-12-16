@@ -19,7 +19,7 @@
                     Archivos no superiores a 5 Mbs
                   </div>
                   <h3>Seleccione la Mascota</h3>
-                  <select class="form-select" id="Mascota" aria-label="Floating label select example" aria-describedby="requiredMascota" v-model="historia.mascota_id">
+                  <select class="form-select" id="Mascota" aria-label="Floating label select example" aria-describedby="requiredMascota" v-model="historia.mascota_id" @change="filtrarHistorias">
                     <option value="0" disabled>Seleccione...</option>
                     <option v-for="mascota in mascotas" :value="mascota.id">
                       <p style="font-size: 20px; font-weight: lighter;">{{ mascota.nombre }}</p>
@@ -32,25 +32,27 @@
   
               <div class="col-12 col-md-6">
                 <h3>Citas de la mascota</h3>
-                <div class="mt-5">
-                    <button type="button" class="btn btn-primary px-4" @click="nuevaHistoria()"  v-if="canCreate">Nueva Historia </button>
+                <div class="mt-5 mb-3">
+                    <button type="button" class="btn btn-primary px-4" @click="nuevaHistoria()" v-if="canCreate">Nueva Historia</button>
+                    <button type="button" class="btn btn-info px-4 ms-2" @click="mostrarTodasLasHistorias">Lista de Historias</button>
                 </div>
+
                 <br>
                 <div class="accordion accordion-flush" id="accordionHistorias">
-                  <template v-if="historias.length > 0">
-                    <div v-for="(historia, historiaIndex) in historias" :key="historiaIndex">
+                  <template v-if="historiasFiltradas.length > 0">
+                    <div v-for="(historia, historiaIndex) in historiasFiltradas" :key="historiaIndex">
                       <div class="accordion-item">
                         <h2 class="accordion-header" :id="'headingHistoria' + historiaIndex">
                           <button class="accordion-button rounded mb-1" style="background-color: rgb(224, 224, 224);" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapseHistoria' + historiaIndex" aria-expanded="true" :aria-controls="'collapseHistoria' + historiaIndex">
                             Historia N° {{ historiaIndex + 1 }}
                           </button>
                         </h2>
-                        <div :id="'collapseHistoria' + historiaIndex" class="accordion-collapse collapse show" :aria-labelledby="'headingHistoria' + historiaIndex" data-bs-parent="#accordionHistorias">
+                        <div :id="'collapseHistoria' + historiaIndex" class="accordion-collapse collapse" :aria-labelledby="'headingHistoria' + historiaIndex" data-bs-parent="#accordionHistorias">
                           <div class="accordion-body">
                             <!-- Detalles de la historia clínica -->
                             <p>Nombre del paciente: {{ historia.mascota.nombre }}</p>
-                            <p></p>
-                            <p>Tipo de cita: {{ getNombreTipoCita(historia.cita_id) }}</p>
+                            <p>Id de la cita: {{ historia.cita_id }}</p>
+                            <p>Tipo de cita: {{ getNombreTipoCita(historia.tipo_id) }}</p>
                             <p>Notas de la Cita: {{ historia.notas_cita }}</p>
                             <p>Receta: {{ historia.receta }}</p>
                             <p>Procedimiento: {{ historia.procedimiento }}</p>
@@ -117,12 +119,24 @@
 
                             <div class="col-12 form-floating mb-3">
                                 <select class="form-select" id="Cita" aria-label="Floating label select example"
-                                    aria-describedby="requiredCita" v-model="historia.cita_id">
+                                        aria-describedby="requiredCita" v-model="historia.cita_id" @change="seleccionarTipoCitaPorCita">
                                     <option value="0" disabled>Seleccione...</option>
-                                    <option v-for="cita in citas" :value="cita.id">{{ getNombreTipoCita(cita.tipo_id) }} -
-                                         {{ cita.fec_ini }}</option>
+                                    <option v-for="cita in citas" :value="cita.id">{{ cita.id }} - {{ cita.fec_ini }}</option>
                                 </select>
                                 <label for="cita" class="ms-2">Cita *</label>
+                                <div id="requiredCita" class="form-text text-danger" v-if="historia.cliente_id == 0">
+                                    Obligtorio
+                                </div>
+                            </div>
+
+                            <div class="col-12 form-floating mb-3">
+                                <select class="form-select" id="tipoCita" aria-label="Floating label select example"
+                                    aria-describedby="requiredTipoCita" v-model="historia.tipo_id">
+                                    <option value="0" disabled>Seleccione...</option>
+                                    <option v-for="tipoCita in tiposCitas" :value="tipoCita.id">{{ tipoCita.nombre }} -
+                                         precio: S/.{{ tipoCita.precio }}</option>
+                                </select>
+                                <label for="cita" class="ms-2">Tipo de Cita *</label>
                                 <div id="requiredCita" class="form-text text-danger" v-if="historia.cliente_id == 0">
                                     Obligtorio
                                 </div>
@@ -173,7 +187,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 form-floating mb-3">
+                            <!--<div class="col-12 form-floating mb-3">
                                 <label class="ms-2" for="archivos_adjuntos">archivos complementarios *</label>
                                 <br>
                                 <br>
@@ -181,7 +195,7 @@
                                 <div id="requiredAdjunto" class="form-text text-danger">
                                     Opcional, ejemplo: radiografías, docs, etc.
                                 </div>
-                            </div>
+                            </div>-->
 
                             <div class="col-12 form-floating mb-3">
                                 <input type="text" class="form-control" id="vacunacion" placeholder="vacunacion *"
@@ -219,7 +233,7 @@
 </template>  
 
 <script>
-import { ref, reactive } from 'vue';
+import { ref, reactive, watchEffect } from 'vue';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 export default {
@@ -229,6 +243,12 @@ export default {
         const animales = ref([]);
         const citas = ref([]);
         const tiposCitas = ref([]);
+        const tipoCita = reactive({
+            id: 0,
+            nombre: "",
+            tiempo: 0,
+            precio: 0
+        })
         const razas = ref([]);
         const mascotas = ref([]);
         const mascota = reactive({
@@ -255,6 +275,7 @@ export default {
             cita_id: 0,
             mascota_id: 0,
             cliente_id: 0,
+            tipo_id: 0,
             notas_cita: "",
             receta: "",
             procedimiento: "",
@@ -269,8 +290,21 @@ export default {
             mdl_his: null,
         })
         
+        const historiasFiltradas = ref([]);
+    
+        const filtrarHistorias = () => {
+            if (historia && historia.mascota_id !== undefined) {
+                historiasFiltradas.value = historias.value.filter(
+                    historiaItem => historiaItem.mascota_id === historia.mascota_id
+                );
+            } else {
+                historiasFiltradas.value = historias.value;
+            }
+        };
+        function mostrarTodasLasHistorias() {
+            historiasFiltradas.value = historias.value;
+        }
         function nuevaHistoria() {
-            console.log('Valor de canCreate:', canCreate.value);
             cleanForm()
             historia.estado_historia = 1;
             openModal()
@@ -280,6 +314,7 @@ export default {
                 historia.mascota_id = 0,
                 historia.cliente_id = 0,
                 historia.cita_id = 0,
+                historia.tipo_id= 0,
                 historia.notas_cita = "",
                 historia.receta = "",
                 historia.procedimiento = "",
@@ -325,16 +360,35 @@ export default {
                 obtenerCitasPorMascota(historia.mascota_id);
             }
         };
-        async function guardarHistoria() {
-            try {
-                await enviarDatosFormulario();
+        function guardarHistoria() {
+            fetch("http://127.0.0.1:8000/historias", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(historia),
+            })
+            .then(async (response) => {
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || "Error al guardar la historia");
+                }
 
-            } catch (error) {
-                console.error('Error al guardar la historia:', error);
-                alert('Error al guardar la historia. Por favor, intenta de nuevo.');
-            }
-            obtenerHistorias();
-            closeModal();
+                // Si la respuesta es exitosa, puedes manejarla aquí si es necesario
+                const responseData = await response.json();
+                console.log("Respuesta exitosa:", responseData);
+            })
+            .then(() => {
+                // Realizar acciones adicionales después de una respuesta exitosa
+                obtenerMascotas();
+                closeModal();
+            })
+            .catch((error) => {
+                // Manejar errores de la solicitud o respuestas JSON no exitosas
+                error_message.value = error.message;
+                console.error("Error en la solicitud:", error);
+            });
         }
         function obtenerMascotas() {
             fetch("http://127.0.0.1:8000/mascotas", {
@@ -412,23 +466,50 @@ export default {
                     console.error("There was an error!", error);
                 });
         };
-        function obtenerTiposCitas() {
+        const obtenerTipoCitasPorCita = (citaId) => {
+            fetch(`http://127.0.0.1:8000/citas/${citaId}/tipocitas`, {
+                method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+                    tiposCitas.value = data;
+                    console.log(tiposCitas.value);
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        };
+        const seleccionarTipoCitaPorCita = () => {
+            if (historia.cita_id !== 0 && historia.tipo_id === 0) {
+                const citaSeleccionada = citas.value.find(cita => cita.id === historia.cita_id);
+                if (citaSeleccionada) {
+                    historia.tipo_id = citaSeleccionada.tipo_id;
+                }
+            }
+        };
+
+        const obtenerTiposCitas = () => {
             fetch("http://127.0.0.1:8000/tipocitas", {
                 method: "GET",
             })
             .then(async (response) => {
                 const data = await response.json();
                 if (!response.ok) {
-                    const error = data && data.detail ? data.detail : response.statusText;
-                    return Promise.reject(error);
+                const error = data && data.detail ? data.detail : response.statusText;
+                return Promise.reject(error);
                 }
                 tiposCitas.value = data;
             })
             .catch((error) => {
-                error_message.value = error;
                 console.error("There was an error!", error);
             });
-        }
+        };
         function getNombreTipoCita(tipoCitaId) {
             const tipoCita = tiposCitas.value.find(tipo => tipo.id === tipoCitaId);
             return tipoCita ? tipoCita.nombre : 'Desconocido';
@@ -452,45 +533,6 @@ export default {
             const files = event.target.files;
             historia.archivos_adjuntos = files;
         };
-        const enviarDatosFormulario = async () => {
-            const formData = new FormData();
-
-            for (const file of historia.archivos_adjuntos) {
-                const fileName = file.name;
-                formData.append('archivos_adjuntos[]', fileName);
-            }
-
-            // Adjunta otros datos necesarios (puedes agregar más según tus necesidades)
-            formData.append('mascota_id', historia.mascota_id);
-            formData.append('cliente_id', historia.cliente_id);
-            formData.append('cita_id', historia.cita_id);
-            formData.append('notas_cita', historia.notas_cita);
-            formData.append('receta', historia.receta);
-            formData.append('procedimiento', historia.procedimiento);
-            formData.append('fecha_creacion', historia.fecha_creacion);
-            formData.append('resultados_examenes', historia.resultados_examenes);
-            formData.append('vacunacion', historia.vacunacion);
-            formData.append('foto', historia.foto);
-            formData.append('estado_historia', historia.estado_historia);
-            // ... otros datos
-
-            try {
-                const response = await fetch('http://127.0.0.1:8000/historias', {
-                    method: 'POST',
-                    body: formData,
-                });
-                // Imprime la respuesta completa del servidor en la consola del navegador
-                console.log('Respuesta completa del servidor:', response);
-
-                // Imprime la respuesta del servidor en la consola del navegador
-                const responseData = await response.json();
-                console.log('Respuesta del servidor:', responseData);
-            } catch (error) {
-                console.error('Error al realizar la solicitud POST:', error);
-                throw error; // Propaga el error para que pueda ser manejado en la función llamadora (guardarHistoria)
-            }
-        };
-
         return {
             error_message,
             is_disabled,
@@ -502,23 +544,28 @@ export default {
             clientes,
             citas,
             tiposCitas,
+            tipoCita,
             canCreate,
             razas,
             animales,
+            historiasFiltradas,
 
             obtenerMascotas,
             obtenerHistorias,
             obtenerCitas,
             obtenerNomClientes,
             obtenerCitasPorMascota,
+            obtenerTipoCitasPorCita,
             obtenerTiposCitas,
             getNombreTipoCita,
             mostrarCalendario,
             guardarHistoria,
             nuevaHistoria,
             seleccionarDueñoPorMascota,
+            seleccionarTipoCitaPorCita,
             handleFileUpload,
-            enviarDatosFormulario,
+            filtrarHistorias,
+            mostrarTodasLasHistorias,
         }
     },
     mounted() {
@@ -530,6 +577,8 @@ export default {
         this.obtenerTiposCitas();
         this.modal_historia.mdl_his = new bootstrap.Modal('#mdl-historia', {})
         this.mostrarCalendario();
+        this.mostrarTodasLasHistorias();
+        this.seleccionarTipoCitaPorCita();
     }
 }
 </script>

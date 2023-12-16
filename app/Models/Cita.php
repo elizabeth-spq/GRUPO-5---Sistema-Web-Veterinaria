@@ -24,7 +24,7 @@ class Cita extends Model
     }
     public function tipo(): BelongsTo
     {
-        return $this->belongsTo(Tipocita::class);
+        return $this->belongsTo(Tipocita::class, 'tipo_id');
     }
     public function cliente(): BelongsTo
     {

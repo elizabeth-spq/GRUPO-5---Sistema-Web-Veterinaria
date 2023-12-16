@@ -50,5 +50,24 @@ class CitaSeeder extends Seeder
             'estado_cita' => 1,
 
         ]);
+
+        Cita::create([
+            'tipo_id' => 3,
+            'cliente_id' => 2,
+            'mascota_id' => 2,
+            'espec_id' => 1,
+            'fec_ini' => "2023-11-04 8:00:00",
+            'fec_fin' => "2023-11-04 8:30:00",
+            'vet_id' => 1,
+            'observaciones' => "soy una prueba",
+            'cargos_adicionales' =>null,
+            'subtotal' => 30.00,
+            'monto_adicional' => 0.00,
+            'total' => 30.00,
+            'pago_previo' => 0.00,
+            'pago_pendiente' => 30.00,
+            'estado_cita' => 1,
+
+        ]);
     }
 }

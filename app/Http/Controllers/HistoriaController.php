@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Mascota;
 use App\Models\Historia;
+use App\Models\Cita;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage; 
 
 class HistoriaController extends Controller
 {
@@ -25,6 +27,7 @@ class HistoriaController extends Controller
         $request->validate([
             'mascota_id' => 'required', // Asegúrate de que el campo mascota_id esté presente y sea requerido
             'cliente_id' => 'required',
+            'tipo_id' => 'required',
             'foto' => 'nullable', // Puedes ajustar las reglas de validación según tus necesidades
             'archivos_adjuntos' => 'nullable|array',
             'archivos_adjuntos.*' => 'file|mimes:jpeg,png,jpg,gif|max:2048',
@@ -32,41 +35,32 @@ class HistoriaController extends Controller
             // Agrega otras validaciones según los campos de tu formulario
         ]);
 
+        $citaExistente = Cita::find($request->cita_id);
+
+        if (!$citaExistente) {
+            // Manejar el caso donde la cita no existe
+            return response()->json(['error' => 'La cita no existe'], 404);
+        }
+
         $historia = new Historia();
         $historia->foto = $request->has('foto') ? $request->foto : null;
         $historia->mascota_id = $request->mascota_id;
         $historia->cliente_id = $request->cliente_id;
         $historia->cita_id = $request->cita_id;
+        $historia->tipo_id = $request->tipo_id;
         $historia->notas_cita = $request->has('notas_cita') ? $request->notas_cita : null;
         $historia->receta = $request->has('receta') ? $request->receta : null;
         $historia->procedimiento = $request->has('procedimiento') ? $request->procedimiento : null;
         $historia->fecha_creacion = $request->has('fecha_creacion') ? $request->fecha_creacion : null;
         $historia->resultados_examenes = $request->has('resultados_examenes') ? $request->resultados_examenes : null;
-        $historia->archivos_adjuntos = $request->has('archivos_adjuntos') ? $request->archivos_adjuntos : null;
+        $historia->archivos_adjuntos = null; // Establecer como null por defecto
         $historia->vacunacion = $request->has('vacunacion') ? $request->vacunacion : null;
         $historia->estado_historia = $request->estado_historia;
-
-        if ($request->has('archivos_adjuntos')) {
-            $archivosAdjuntos = [];
-
-            foreach ($request->file('archivos_adjuntos') as $archivo) {
-                // Utiliza el sistema de archivos de Laravel para almacenar el archivo
-                $rutaDestino = Storage::disk('public')->put('fotoHistorias', $archivo);
-
-                // Obtiene el nombre del archivo a partir de la ruta
-                $nombreArchivo = pathinfo($rutaDestino, PATHINFO_BASENAME);
-
-                // Agrega el nombre del archivo a la lista
-                $archivosAdjuntos[] = $nombreArchivo;
-            }
-
-            // Almacena la lista de nombres de archivos en la base de datos
-            $historia->archivos_adjuntos = $archivosAdjuntos;
-        }
 
         $historia->save();
 
         return response()->json($historia);
+
     }
     /**
      * Display the specified resource.

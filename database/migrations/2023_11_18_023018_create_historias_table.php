@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedInteger('cita_id');
             $table->unsignedInteger('mascota_id');
             $table->unsignedInteger('cliente_id');
+            $table->unsignedInteger('tipo_id');
 
             $table->text('notas_cita')->nullable();
             $table->text('receta')->nullable();
@@ -37,6 +38,8 @@ return new class extends Migration
                 ->on('mascotas');
             $table->foreign('cliente_id')->references('id')
                 ->on('clientes');
+            $table->foreign('tipo_id')->references('id')
+                ->on('tipocitas');
         });
     }
 

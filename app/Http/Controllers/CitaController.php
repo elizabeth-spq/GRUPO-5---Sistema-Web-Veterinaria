@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cita;
+use App\Models\Tipocita;
 use Illuminate\Http\Request;
 
 class CitaController extends Controller
@@ -146,5 +147,16 @@ class CitaController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function obtenerTipoCitasPorCita($idCita)
+    {
+        try {
+            $cita = Cita::findOrFail($idCita);
+            $tipocitas = $cita->tipo;
+
+            return response()->json($tipocitas);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }
