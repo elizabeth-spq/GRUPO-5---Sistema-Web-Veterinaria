@@ -56,7 +56,7 @@ class VeterinarioController extends Controller
             $veterinario->tip_doc = $request->tip_doc;
             $veterinario->documento = $request->documento;
             $veterinario->num_telefono = $request->num_telefono;
-            $veterinario->especialidad = $request->especialidad;
+            $veterinario->espec_id = $request->espec_id;
             $veterinario->estado = $request->estado;
             $veterinario->horario_id = $request->horario_id;
             $veterinario->usu_registro = auth()->user()->id;
@@ -88,7 +88,7 @@ class VeterinarioController extends Controller
         $veterinario->tip_doc = $request->tip_doc;
         $veterinario->documento = $request->documento;
         $veterinario->num_telefono = $request->num_telefono;
-        $veterinario->especialidad = $request->especialidad;
+        $veterinario->espec_id = $request->espec_id;
         $veterinario->estado = $request->estado;
         $veterinario->horario_id = $request->horario_id;
         $veterinario->usu_ult_mod = auth()->user()->id;

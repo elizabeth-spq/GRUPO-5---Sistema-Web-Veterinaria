@@ -49,7 +49,6 @@ class ClienteController extends Controller
      */
     public function show(string $id)
     {
-
         $cliente = Cliente::find($id);
 
         return response()->json($cliente);

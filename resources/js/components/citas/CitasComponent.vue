@@ -3,15 +3,14 @@
         <div class="mt-3">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
-                        type="button" role="tab" aria-controls="nav-home" aria-selected="true">Calendario</button>
-                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
-                        type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Lista</button>
+                    <button class="nav-link active" id="calendario-tab" data-bs-toggle="tab" data-bs-target="#calendario"
+                        type="button" role="tab" aria-controls="calendario" aria-selected="true">Calendario</button>
+                    <button class="nav-link" id="tabla-tab" data-bs-toggle="tab" data-bs-target="#tabla" type="button"
+                        role="tab" aria-controls="tabla" aria-selected="false">Lista</button>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
-
-                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
+                <div class="tab-pane fade show active" id="calendario" role="tabpanel" aria-labelledby="calendario-tab"
                     tabindex="0">
                     <div id="leyenda" class="mt-3">
                         <h6>Estados de cita</h6>
@@ -20,6 +19,7 @@
                                 <i class="bi bi-circle-fill text-success"></i>
                                 <span> Programada </span>
                             </div>
+                            <!--
                             <div class="mt-1 me-2">
                                 <i class="bi bi-circle-fill text-warning"></i>
                                 <span> En atención </span>
@@ -31,7 +31,7 @@
                             <div class="mt-1 me-2">
                                 <i class="bi bi-circle-fill text-danger"></i>
                                 <span> Cancelada </span>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="col-12 text-center">
@@ -40,7 +40,7 @@
                         <button @click="obtenerDate(next_last_dates.next_start_week, next_last_dates.next_end_week)"><i
                                 class="bi bi-chevron-right fs-5"></i></button>
                     </div>
-                    <div id="calendario" class="container text-center mt-2">
+                    <div id="semana" class="container text-center mt-2">
                         <div class="row row-cols-6">
                             <div class="col-2 border border-bottom-0"></div>
                             <div class="col-2 border border-bottom-0" v-for="(dia, index) in dias">
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                <div class="tab-pane fade" id="tabla" role="tabpanel" aria-labelledby="tabla-tab" tabindex="0">
                     <table class="table table-hover">
                         <thead>
                             <tr class="table-dark align-middle text-center">
@@ -109,9 +109,21 @@
                                 </td>
                                 <td>
                                     <div class="row g-1">
+                                        <!--
                                         <div class="col"> <button type="button" class="btn btn-warning w-100"
                                                 @click="mostrarDetalle(cita)">Detalle</button>
                                         </div>
+                                        <div class="col">
+                                            <button type="button" class="btn btn-primary" @click="enviarEmail()">Enviar
+                                            e-mail</button>
+                                        </div> -->
+                                        <div class="col">
+                                            <button type="button" class="btn btn-primary" @click="imprimirPdf(cita.id)">
+                                            Descargar PDF
+                                        </button>
+                                        </div>
+
+
                                     </div>
                                 </td>
                             </tr>
@@ -126,6 +138,13 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title" v-if="cita.id > 0">Editar Cita</h5>
+                        <h5 class="modal-title" v-else>Registrar Cita</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
@@ -137,17 +156,10 @@
                                 data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane"
                                 aria-selected="false">Pago</button>
                         </li>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </ul>
-                </div>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
-                        tabindex="0">
-                        <div>
-                            <h5 class="modal-title" v-if="cita.id > 0">Editar Cita</h5>
-                            <h5 class="modal-title" v-else>Registrar Cita</h5>
-                        </div>
-                        <div class="modal-body">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+                            tabindex="0">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-12 mb-3">
@@ -227,7 +239,7 @@
                                     <div class="col-12 mt-4 d-flex">
                                         <label for="staticSubtotal" class="col-sm-5 col-form-label">Sub total (S/.)</label>
                                         <div class="col-sm-7">
-                                            <input type="text" readonly class="form-control-plaintext" id="staticSubtotal"
+                                            <input type="number" readonly class="form-control-plaintext" id="staticSubtotal"
                                                 v-model="cita.subtotal">
                                         </div>
                                     </div>
@@ -235,14 +247,14 @@
                                         <label for="staticMonto" class="col-sm-5 col-form-label">Monto Adicional
                                             (S/.)</label>
                                         <div class="col-sm-7">
-                                            <input type="text" readonly class="form-control-plaintext" id="staticMonto"
+                                            <input type="number" readonly class="form-control-plaintext" id="staticMonto"
                                                 v-model="cita.monto_adicional">
                                         </div>
                                     </div>
                                     <div class="col-12 mt-2 d-flex">
                                         <label for="staticTotal" class="col-sm-5 col-form-label">Total (S/.)</label>
                                         <div class="col-sm-7">
-                                            <input type="text" readonly class="form-control-plaintext" id="staticTotal"
+                                            <input type="number" readonly class="form-control-plaintext" id="staticTotal"
                                                 v-model="cita.total">
                                         </div>
                                     </div>
@@ -250,136 +262,133 @@
                                         <label for="staticPagoPrevio" class="col-sm-5 col-form-label">Pago previo
                                             (S/.)</label>
                                         <div class="col-sm-7">
-                                            <input type="text" readonly class="form-control-plaintext" id="staticPagoPrevio"
-                                                v-model="cita.pago_previo">
+                                            <input type="number" readonly class="form-control-plaintext"
+                                                id="staticPagoPrevio" v-model="cita.pago_previo">
                                         </div>
                                     </div>
                                     <div class="col-12 mt-2 d-flex">
                                         <label for="staticPagoPendiente" class="col-sm-5 col-form-label">Pago pendiente
                                             (S/.)</label>
                                         <div class="col-sm-7">
-                                            <input type="text" readonly class="form-control-plaintext"
+                                            <input type="number" readonly class="form-control-plaintext"
                                                 id="staticPagoPendiente" v-model="cita.pago_pendiente">
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" v-if="cita.id > 0"
-                                @click="actualizarCita(cita.id)">Actualizar registro</button>
-                            <button type="button" class="btn btn-primary" v-else @click="guardarCita()">
-                                Guardar registro
-                            </button>
+
+                        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
+                            tabindex="0">
+                            <div class="container">
+                                <div class="row g-3 align-items-center my-2">
+                                    <div class="col-6">
+                                        <label for="tipDocumento" class="col-form-label">Tipo de documento</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" id="tipDocumento" class="form-control"
+                                            v-show="pago_cliente.tip_doc == 1" value="DNI" disabled>
+                                        <input type="text" id="tipDocumento" class="form-control"
+                                            v-show="pago_cliente.tip_doc == 2" value="Pasaporte" disabled>
+                                        <input type="text" id="tipDocumento" class="form-control"
+                                            v-show="pago_cliente.tip_doc == 3" value="Carné" disabled>
+                                    </div>
+                                </div>
+                                <div class="row g-3 align-items-center mb-2">
+                                    <div class="col-6">
+                                        <label for="numDocumento" class="col-form-label">DNI / Pasapote /
+                                            Carné</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" id="numDocumento" class="form-control"
+                                            v-model="pago_cliente.documento" disabled>
+                                    </div>
+                                </div>
+                                <div class="row g-3 align-items-center mb-2">
+                                    <div class="col-6">
+                                        <label for="nombre" class="col-form-label">Nombre</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" id="nombre" class="form-control" v-model="pago_cliente.nombre"
+                                            disabled>
+                                    </div>
+                                </div>
+                                <div class="row g-3 align-items-center mb-2">
+                                    <div class="col-6">
+                                        <label for="apellido" class="col-form-label">Apellido</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" id="apellido" class="form-control"
+                                            v-model="pago_cliente.apellido" disabled>
+                                    </div>
+                                </div>
+                                <div class="row g-3 align-items-center mb-2">
+                                    <div class="col-6">
+                                        <label for="direccion" class="col-form-label">Dirección</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" id="direccion" class="form-control"
+                                            v-model="pago_cliente.direccion" disabled>
+                                    </div>
+                                </div>
+                                <div class="row g-3 align-items-center mb-2">
+                                    <div class="col-6">
+                                        <label for="fecEmi" class="col-form-label">Fecha de emisión</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" id="fecEmi" class="form-control" v-model="pago_cliente.fecha_emi"
+                                            disabled>
+                                    </div>
+                                </div>
+                                <div class="row g-3 align-items-center mb-2">
+                                    <div class="col-6">
+                                        <label for="fecVen" class="col-form-label">Fecha de vencimiento</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" id="fecVen" class="form-control" v-model="pago_cliente.fecha_ven"
+                                            disabled>
+                                    </div>
+                                </div>
+                                <div class="row g-3 align-items-center mb-2">
+                                    <div class="col-6">
+                                        <label for="moneda" class="col-form-label">Moneda</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" id="moneda" class="form-control" v-model="pago_cliente.moneda"
+                                            disabled>
+                                    </div>
+                                </div>
+                                <div class="row g-3 align-items-center mb-2">
+                                    <div class="col-6">
+                                        <label for="subtotal" class="col-form-label">Subtotal</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="number" id="subtotal" class="form-control"
+                                            v-model="pago_cliente.subtotal" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 align-items-center mb-2">
+                                    <div class="col-6">
+                                        <label for="inputPassword6" class="col-form-label">Monto Total</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="number" id="inputPassword6" class="form-control"
+                                            v-model="pago_cliente.total" disabled>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" @click="guardarCita()">
+                                        Reservar
+                                    </button>
+                                </div>
+
+                            </div>
                         </div>
 
                     </div>
-                    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
-                        tabindex="0">
-                        <div class="container">
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label for="inputPassword6" class="col-form-label">Tipo de documento</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="password" id="inputPassword6" class="form-control"
-                                        aria-describedby="passwordHelpInline">
-                                </div>
-                            </div>
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label for="inputPassword6" class="col-form-label">Documento</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="password" id="inputPassword6" class="form-control"
-                                        aria-describedby="passwordHelpInline">
-                                </div>
-                            </div>
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label for="inputPassword6" class="col-form-label">RUC / DNI / Pasapote / Carné</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="password" id="inputPassword6" class="form-control"
-                                        aria-describedby="passwordHelpInline">
-                                </div>
-                            </div>
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label for="inputPassword6" class="col-form-label">Nombre</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="password" id="inputPassword6" class="form-control"
-                                        aria-describedby="passwordHelpInline">
-                                </div>
-                            </div>
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label for="inputPassword6" class="col-form-label">Dirección</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="password" id="inputPassword6" class="form-control"
-                                        aria-describedby="passwordHelpInline">
-                                </div>
-                            </div>
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label for="inputPassword6" class="col-form-label">Fecha de emisión</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="password" id="inputPassword6" class="form-control"
-                                        aria-describedby="passwordHelpInline">
-                                </div>
-                            </div>
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label for="inputPassword6" class="col-form-label">Fecha de vencimiento</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="password" id="inputPassword6" class="form-control"
-                                        aria-describedby="passwordHelpInline">
-                                </div>
-                            </div>
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label for="inputPassword6" class="col-form-label">Moneda</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="password" id="inputPassword6" class="form-control"
-                                        aria-describedby="passwordHelpInline">
-                                </div>
-                            </div>
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label for="inputPassword6" class="col-form-label">Subtotal</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="password" id="inputPassword6" class="form-control"
-                                        aria-describedby="passwordHelpInline">
-                                </div>
-                            </div>
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label for="inputPassword6" class="col-form-label">Impuesto</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="password" id="inputPassword6" class="form-control"
-                                        aria-describedby="passwordHelpInline">
-                                </div>
-                            </div>
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label for="inputPassword6" class="col-form-label">Monto Total</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="password" id="inputPassword6" class="form-control"
-                                        aria-describedby="passwordHelpInline">
-                                </div>
-                            </div>
 
-                        </div>
-                    </div>
                 </div>
 
             </div>
@@ -390,7 +399,7 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Detaller de Cita</h5>
+                    <h5 class="modal-title">Detalle de Cita</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -542,6 +551,22 @@ export default {
             email: "",
             estado: 0,
         })
+        const pago_cliente = reactive({
+            id: 0,
+            nombre: "",
+            apellido: "",
+            tip_doc: 0,
+            documento: "",
+            telefono: "",
+            direccion: "",
+            email: "",
+            estado: 0,
+            fecha_emi: "16/12/2023",
+            fecha_ven: "16/12/2023",
+            moneda: "SOLES",
+            subtotal: 0.0,
+            total: 0.0
+        })
         const especialidades = ref([])
         const especialidad = reactive({
             id: 0,
@@ -645,6 +670,20 @@ export default {
             veterinario.nombre = ""
             veterinario.apellido = ""
             veterinario.especialidad = 0
+            pago_cliente.id = 0
+            pago_cliente.nombre = ""
+            pago_cliente.apellido = ""
+            pago_cliente.tip_doc = 0
+            pago_cliente.documento = ""
+            pago_cliente.telefono = ""
+            pago_cliente.direccion = ""
+            pago_cliente.email = ""
+            pago_cliente.estado = 0
+            pago_cliente.fecha_emi = "16/12/2023",
+                pago_cliente.fecha_ven = "16/12/2023",
+                pago_cliente.moneda = "SOLES",
+                pago_cliente.subtotal = 0.0,
+                pago_cliente.total = 0.0
         }
         function cleanMascota() {
             mascotas.value = []
@@ -677,7 +716,7 @@ export default {
         }
         function guardarCita() {
             cita.estado_cita = 1
-            fetch("http://127.0.0.1:8000/citas", {
+            fetch("http://127.0.0.1:8000/cita", {
                 method: "POST",
                 headers: {
                     Accept: "Application/json",
@@ -692,7 +731,7 @@ export default {
                             "error";
                         return Promise.reject(error);
                     }
-                    console.log(data)
+
                     if (data.message) {
                         cleanForm()
                         //openModalRegistrado()
@@ -707,6 +746,9 @@ export default {
                     console.error("There was an error!", error);
                 });
         }
+        function imprimirPdf(id) {
+            location.href = "http://127.0.0.1:8000/pdf/"+id;
+        }
         function mostrarCalendarioNac() {
             $('#fecNac').daterangepicker({
                 singleDatePicker: true,
@@ -715,13 +757,12 @@ export default {
                 minDate: moment().startOf('hour'),
                 maxDate: moment().startOf('year').add(1, 'year'),
                 locale: {
-                    format: 'YYYY-MM-DD HH:mm'
+                    format: 'YYYY-MM-DD HH:mm:ss'
                 }
             });
             $("#fecNac").on("change", function () {
                 cita.fec_ini = $("#fecNac").val();
-                cita.fec_fin = moment(cita.fec_ini).startOf('hours').add(0.5, 'hours').format('YYYY-MM-DD HH:mm');
-                console.log(cita.fec_ini + '-' + cita.fec_fin)
+                cita.fec_fin = moment(cita.fec_ini).startOf('hours').add(0.5, 'hours').format('YYYY-MM-DD HH:mm:ss');
             });
         }
         function mostrarDetalle(cita_table) {
@@ -742,6 +783,7 @@ export default {
             cita.pago_previo = cita_table.pago_previo
             cita.pago_pendiente = cita_table.pago_pendiente
             cita.estado_cita = cita_table.estado_cita
+
             openModalDetalle()
         }
         function mostrarSelectSingleTipo() {
@@ -768,6 +810,7 @@ export default {
                 cita.cliente_id = $("#single-select-cliente").val();
                 if (cita.cliente_id > 0) {
                     obenerMascotasByCliente(cita.cliente_id);
+                    obtenerClienteById(cita.cliente_id)
                 }
 
             });
@@ -783,8 +826,6 @@ export default {
                 cita.mascota_id = $("#single-select-mascota").val();
             });
         }
-
-
         function mostrarSelectMultipleCargos() {
             $('#multiple-cargos-adicionales').select2({
                 theme: "bootstrap-5",
@@ -795,20 +836,28 @@ export default {
             });
             $("#multiple-cargos-adicionales").on("change", function () {
                 const cargos = $("#multiple-cargos-adicionales").select2('data')
-                //console.log(cargos)
                 cita.cargos_adicionales = JSON.stringify($("#multiple-cargos-adicionales").val())
-                let total = 0
+                let total = 0.0
                 for (let e of cargos) {
                     total += parseFloat(e.element.value);
                 }
-                cita.monto_adicional = total
-                cita.total = cita.monto_adicional + cita.subtotal
-                cita.pago_previo = 0.0
-                cita.pago_pendiente = cita.total
+                if (cargos.length > 0) {
+                    cita.monto_adicional = total
+                    cita.total = cita.monto_adicional + cita.subtotal
+                    pago_cliente.total = cita.monto_adicional + cita.subtotal
+                    cita.pago_previo = 0.0
+                    cita.pago_pendiente = cita.total
+                } else {
+                    cita.monto_adicional = 0.0
+                    cita.total = cita.monto_adicional + cita.subtotal
+                    pago_cliente.total = cita.monto_adicional + cita.subtotal
+                    cita.pago_previo = 0.0
+                    cita.pago_pendiente = cita.total
+                }
             });
         }
         function obtenerCitas() {
-            fetch("http://127.0.0.1:8000/citas", {
+            fetch("http://127.0.0.1:8000/cita", {
                 method: "GET",
             })
                 .then(async (response) => {
@@ -836,8 +885,35 @@ export default {
                             data && data.detail ? data.detail : response.statusText;
                         return Promise.reject(error);
                     }
-                    console.log(data)
                     clientes.value = data;
+                })
+                .catch((error) => {
+                    error_message.value = error;
+                    console.error("There was an error!", error);
+                });
+        }
+        function obtenerClienteById(id) {
+            fetch("http://127.0.0.1:8000/clientes/" + id, {
+                method: "GET",
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error =
+                            data && data.detail ? data.detail : response.statusText;
+                        return Promise.reject(error);
+                    }
+
+                    pago_cliente.id = data.id
+                    pago_cliente.nombre = data.nombre
+                    pago_cliente.apellido = data.apellido
+                    pago_cliente.tip_doc = data.tip_doc
+                    pago_cliente.documento = data.documento
+                    pago_cliente.telefono = data.telefono
+                    pago_cliente.direccion = data.direccion
+                    pago_cliente.email = data.email
+                    pago_cliente.estado = data.estado
+
                 })
                 .catch((error) => {
                     error_message.value = error;
@@ -863,14 +939,14 @@ export default {
                             data && data.detail ? data.detail : response.statusText;
                         return Promise.reject(error);
                     }
-                    console.log(data)
+
                     fechas.value = data.fechas;
                     dias.value = data.dias;
                     next_last_dates.next_start_week = data.nextStartDate
                     next_last_dates.next_end_week = data.nextEndDate
                     next_last_dates.last_start_week = data.lastStartDate
                     next_last_dates.last_end_week = data.lastEndDate
-                    console.log(next_last_dates)
+
 
                 })
                 .catch((error) => {
@@ -944,13 +1020,22 @@ export default {
                             data && data.detail ? data.detail : response.statusText;
                         return Promise.reject(error);
                     }
+                    if (!data.precio) {
+                        cita.subtotal = 0.0
+                        pago_cliente.subtotal = 0.0
+                        cita.total = 0.0
+                        pago_cliente.total = 0.0
+                        cita.pago_previo = 0.0
+                        cita.pago_pendiente = 0.0
 
-                    tiempo_cita.value = data.tiempo
-                    cita.subtotal = data.precio
-                    cita.total = cita.subtotal + cita.monto_adicional
-                    cita.pago_previo = 0.0
-                    cita.pago_pendiente = cita.total
-
+                    } else {
+                        cita.subtotal = data.precio
+                        pago_cliente.subtotal = data.precio
+                        cita.total = cita.subtotal + cita.monto_adicional
+                        pago_cliente.total = cita.subtotal + cita.monto_adicional
+                        cita.pago_previo = 0.0
+                        cita.pago_pendiente = cita.total
+                    }
                 })
                 .catch((error) => {
                     error_message.value = error;
@@ -968,7 +1053,7 @@ export default {
                             data && data.detail ? data.detail : response.statusText;
                         return Promise.reject(error);
                     }
-                    console.log(data)
+
                     tipos.value = data;
                 })
                 .catch((error) => {
@@ -1029,7 +1114,6 @@ export default {
         }
         function mostrarEstadoCita(vet, hora_ini, hora_fin, date) {
             let reservas_list = citas.value
-            console.log(reservas_list)
             let estado = 'bg-secondary-subtle'
             let fec_initial = date + ' ' + hora_ini
             reservas_list.map((item) => {
@@ -1071,6 +1155,7 @@ export default {
             mascotas,
             mascota,
             next_last_dates,
+            pago_cliente,
             tipos,
             tipo,
             tiempo_cita,
@@ -1079,6 +1164,7 @@ export default {
             mostrarEstadoCita,
             guardarCita,
             desabilitaFechaAnterior,
+            imprimirPdf,
             mostrarCalendarioNac,
             mostrarDetalle,
             mostrarSelectSingleTipo,

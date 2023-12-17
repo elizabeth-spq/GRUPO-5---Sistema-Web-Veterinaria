@@ -395,7 +395,7 @@ export default {
                 veterinario.fec_nac == "" ||
                 veterinario.tip_doc == 0 ||
                 veterinario.num_telefono == "" ||
-                veterinario.especialidad == 0 ||
+                //veterinario.espec_id == 0 ||
                 veterinario.horario_id == 0 ? true : false;
             console.log(is_disabled.value)
         }

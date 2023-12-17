@@ -45,6 +45,9 @@ Route::get('/admin/historias', function () {
     return view('admin/historias/index');
 });
 
+
+Route::get('/pdf/{id}', [App\Http\Controllers\PdfController::class, 'imprimir']);
+
 Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('index');
 Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('show');
 Route::post('/users', [App\Http\Controllers\UserController::class, 'store'])->name('store');
@@ -75,13 +78,13 @@ Route::put('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'up
 Route::delete('/mascotas/{id}', [App\Http\Controllers\MascotaController::class, 'destroy'])->name('destroy');
 Route::get('/mascotas/{idMascota}/citas', [App\Http\Controllers\MascotaController::class, 'obtenerCitasPorMascota'])->name('mascotas.citas');
 
-Route::get('/citas', [App\Http\Controllers\CitaController::class, 'index'])->name('index');
-Route::get('/citas/{id}', [App\Http\Controllers\CitaController::class, 'show'])->name('show');
-Route::post('/citas', [App\Http\Controllers\CitaController::class, 'store'])->name('store');
-Route::put('/citas/{id}', [App\Http\Controllers\CitaController::class, 'update'])->name('update');
-Route::put('/citas/status/{id}', [App\Http\Controllers\CitaController::class, 'status'])->name('status');
-Route::delete('/citas/{id}', [App\Http\Controllers\CitaController::class, 'destroy'])->name('destroy');
-Route::get('/citas/{citaId}/tipocitas', [App\Http\Controllers\CitaController::class, 'obtenerTipoCitasPorCita'])->name('tipocitas.citas');
+
+Route::get('/cita', [App\Http\Controllers\CitaController::class, 'index'])->name('index');
+Route::get('/cita/{id}', [App\Http\Controllers\CitaController::class, 'show'])->name('show');
+Route::post('/cita', [App\Http\Controllers\CitaController::class, 'store'])->name('store');
+Route::put('/cita/{id}', [App\Http\Controllers\CitaController::class, 'update'])->name('update');
+Route::put('/cita/status/{id}', [App\Http\Controllers\CitaController::class, 'status'])->name('status');
+Route::delete('/cita/{id}', [App\Http\Controllers\CitaController::class, 'destroy'])->name('destroy');
 
 Route::get('/historias', [App\Http\Controllers\HistoriaController::class, 'index'])->name('index');
 Route::get('/historias/{id}', [App\Http\Controllers\HistoriaController::class, 'show'])->name('show');
